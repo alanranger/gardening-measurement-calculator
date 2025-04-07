@@ -160,12 +160,13 @@ p {
   padding: var(--spacing);
 }
 
+/* Make sure tab panels are properly hidden/shown */
 .tab-panel {
   display: none;
 }
 
 .tab-panel.active {
-  display: block;
+  display: block !important;
 }
 
 /* Cards */

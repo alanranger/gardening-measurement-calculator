@@ -1070,6 +1070,10 @@ function populateProductDropdowns() {
 
 // Initialize the application
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOM loaded")
+  console.log("Tab buttons found:", tabButtons.length)
+  console.log("Tab panels found:", tabPanels.length)
+
   initTabs()
   initGuideTabs()
   initProductCalculator()
@@ -1084,15 +1088,32 @@ function initTabs() {
   tabButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const tabId = button.getAttribute("data-tab")
+      console.log("Tab clicked:", tabId) // Debug log
 
       // Update active tab button
       tabButtons.forEach((btn) => btn.classList.remove("active"))
       button.classList.add("active")
 
       // Update active tab panel
-      tabPanels.forEach((panel) => panel.classList.remove("active"))
-      document.getElementById(`${tabId}-panel`).classList.add("active")
+      tabPanels.forEach((panel) => {
+        panel.classList.remove("active")
+        console.log("Panel ID:", panel.id) // Debug log
+      })
+
+      const targetPanel = document.getElementById(`${tabId}-panel`)
+      if (targetPanel) {
+        targetPanel.classList.add("active")
+        console.log("Activating panel:", targetPanel.id) // Debug log
+      } else {
+        console.error(`Panel with ID ${tabId}-panel not found`) // Debug error
+      }
     })
+  })
+
+  // Debug log all tab panels
+  console.log("Available tab panels:")
+  tabPanels.forEach((panel) => {
+    console.log(panel.id)
   })
 }
 
@@ -1694,7 +1715,7 @@ function handleWaterPresetSelect(preset) {
 
   // Set water amount and unit
   waterVolumeInput.value = preset.waterAmount
-  waterVolumeUnitSelect.value = preset.waterUnit
+  waterVolumeUnitSelect.value = preset.waterVolumeUnit
 
   // Hide presets panel
   waterPresetsPanel.classList.add("hidden")
