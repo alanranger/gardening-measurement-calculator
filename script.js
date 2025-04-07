@@ -98,6 +98,197 @@ const COMMON_PRODUCTS = [
     defaultWaterUnit: "sq_m",
     instructions: "Apply 35g per square metre and work into the soil surface.",
   },
+  // New products from the provided data
+  {
+    id: "miracle-gro-all-purpose-soluble",
+    name: "Miracle-Gro All Purpose Soluble Plant Food",
+    type: "liquid_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 15,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 4.5,
+    defaultWaterUnit: "l",
+    instructions:
+      "Feed every two weeks from March to September; promotes healthy growth and abundant blooms. 1kg makes up to 360 liters of feed.",
+  },
+  {
+    id: "levington-tomorite-organic",
+    name: "Levington Tomorite Organic Concentrate",
+    type: "liquid_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 20,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 4.5,
+    defaultWaterUnit: "l",
+    instructions:
+      "Ideal for fruiting plants; feed every 7 days during the growing season. 1 liter makes up to 225 liters of feed.",
+  },
+  {
+    id: "bronte-tub-basket",
+    name: "Bronte Heritage Collection Tub & Basket Plant Food",
+    type: "liquid_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 100,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 4.5,
+    defaultWaterUnit: "l",
+    instructions:
+      "Feed every 7-14 days during the growing season; reduce rate for sensitive or young plants. Apply diluted feed to the base of plants.",
+  },
+  {
+    id: "ecofective-basket-tub",
+    name: "ecofective® Basket & Tub Feed",
+    type: "liquid_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 30,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 4.5,
+    defaultWaterUnit: "l",
+    instructions:
+      "Organic feed; safe for children, pets, and beneficial insects; feed every 7-14 days. Covers up to 6 square meters.",
+  },
+  {
+    id: "miracle-gro-orchid",
+    name: "Miracle-Gro Orchid Plant Food",
+    type: "liquid_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 5,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions:
+      "Apply every 7-14 days. For best results, apply when the compost is moist. Suitable for all orchid varieties.",
+  },
+  {
+    id: "baby-bio-citrus",
+    name: "Baby Bio Citrus Food",
+    type: "liquid_fertilizer",
+    measurementType: "cap",
+    defaultDosage: 1,
+    defaultDosageUnit: "cap",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions: "Feed every 2 weeks during the growing season (March to October) and monthly during winter.",
+    capSize: {
+      fullCapML: 5,
+      markings: { half: 2.5, full: 5 },
+    },
+  },
+  {
+    id: "westland-houseplant-feed",
+    name: "Westland Houseplant Feed",
+    type: "liquid_fertilizer",
+    measurementType: "cap",
+    defaultDosage: 1,
+    defaultDosageUnit: "cap",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions: "Feed every 2 weeks during the growing season. Reduce to once a month in winter.",
+    capSize: {
+      fullCapML: 10,
+      markings: { half: 5, full: 10 },
+    },
+  },
+  {
+    id: "maxicrop-seaweed",
+    name: "Maxicrop Original Seaweed Extract",
+    type: "liquid_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 20,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 4.5,
+    defaultWaterUnit: "l",
+    instructions: "Apply every 2 weeks during the growing season. Can be used as a foliar feed or soil drench.",
+  },
+  {
+    id: "seasol-seaweed",
+    name: "Seasol Seaweed Plant Tonic",
+    type: "liquid_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 30,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 9,
+    defaultWaterUnit: "l",
+    instructions:
+      "Apply every 2-4 weeks throughout the year. Ideal for reducing transplant shock and improving stress tolerance.",
+  },
+  {
+    id: "neudorff-organic-tomato",
+    name: "Neudorff Organic Tomato Feed",
+    type: "liquid_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 15,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 2,
+    defaultWaterUnit: "l",
+    instructions: "Apply weekly during the growing season. Suitable for all fruiting vegetables.",
+  },
+  {
+    id: "vitax-organic-liquid",
+    name: "Vitax Organic Liquid Seaweed",
+    type: "liquid_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 20,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 4.5,
+    defaultWaterUnit: "l",
+    instructions: "Apply every 2 weeks during the growing season. Suitable for all plants.",
+  },
+  {
+    id: "chempak-formula-4",
+    name: "Chempak Formula 4 High Potash Feed",
+    type: "granular_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 4,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 4.5,
+    defaultWaterUnit: "l",
+    instructions: "Dissolve in water and apply every 10-14 days. Ideal for flowering and fruiting plants.",
+  },
+  {
+    id: "miracle-gro-bonsai",
+    name: "Miracle-Gro Bonsai Plant Food",
+    type: "liquid_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 5,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions: "Apply every 7 days during the growing season. Reduce to once a month in winter.",
+  },
+  {
+    id: "osmocote-controlled-release",
+    name: "Osmocote Controlled Release Plant Food",
+    type: "granular_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 5,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions: "Mix into compost before planting or apply as a top dressing. Feeds for up to 6 months.",
+  },
+  {
+    id: "miracle-gro-azalea",
+    name: "Miracle-Gro Azalea, Camellia & Rhododendron Food",
+    type: "liquid_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 15,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 4.5,
+    defaultWaterUnit: "l",
+    instructions: "Apply every 1-2 weeks during the growing season. Specially formulated for acid-loving plants.",
+  },
+  {
+    id: "growth-technology-orchid-myst",
+    name: "Growth Technology Orchid Myst",
+    type: "liquid_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 10,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "plant",
+    instructions: "Spray directly onto leaves and aerial roots. Use 2-3 times per week during active growth.",
+  },
 ]
 
 // Area Treatment Products
@@ -146,6 +337,200 @@ const AREA_TREATMENT_PRODUCTS = [
     defaultWaterUnit: "l",
     instructions: "Dilute 10ml in 1 litre of water. Apply at 100ml of diluted product per square metre.",
   },
+  // New products from the provided data
+  {
+    id: "miracle-gro-evergreen-complete",
+    name: "Miracle-Gro EverGreen Complete 4-in-1",
+    type: "lawn_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 35,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions: "Apply using a spreader; avoid mowing for 3-4 days after application. Treats up to 400m².",
+  },
+  {
+    id: "westland-safelawn",
+    name: "Westland SafeLawn Natural Lawn Feed",
+    type: "lawn_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 35,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions:
+      "Apply every 3-4 weeks from February to September; safe for children and pets. A 2.8kg box covers 80m².",
+  },
+  {
+    id: "miracle-gro-performance-organics",
+    name: "Miracle-Gro Performance Organics All Purpose Plant Food",
+    type: "granular_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 50,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions:
+      "Mix into soil before planting or apply around the base of established plants. Apply as top-dressing; feeds for up to 6 weeks.",
+  },
+  {
+    id: "westland-growmore",
+    name: "Westland Growmore",
+    type: "granular_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 70,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions:
+      "Suitable for all around the garden; apply every 4-6 weeks during the growing season. Apply as a top dressing and work into the soil.",
+  },
+  {
+    id: "after-plant-evergreen",
+    name: "After Plant Evergreen Fertiliser",
+    type: "granular_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 25,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions: "Apply around the base; enhances soil quality with beneficial microbes. 1kg bag covers 40m².",
+  },
+  {
+    id: "miracle-gro-rose-shrub",
+    name: "Miracle-Gro Premium Rose & Shrub Continuous Release Plant Food",
+    type: "granular_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 25,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "plant",
+    instructions: "Apply at the beginning of the growing season; feeds for up to 6 months. 900g feeds up to 45 plants.",
+  },
+  {
+    id: "roundup-fast-action",
+    name: "Roundup Fast Action Weedkiller",
+    type: "weed_killer",
+    measurementType: "volume",
+    defaultDosage: 25,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions: "Apply when weeds are actively growing. Visible results in 1-2 days. Rainproof in 1 hour.",
+  },
+  {
+    id: "weedol-lawn-weedkiller",
+    name: "Weedol Lawn Weed Killer",
+    type: "weed_killer",
+    measurementType: "volume",
+    defaultDosage: 10,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions: "Apply when weeds are actively growing. Do not mow for 3 days before or after treatment.",
+  },
+  {
+    id: "scotts-turf-builder",
+    name: "Scotts Turf Builder Lawn Food",
+    type: "lawn_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 35,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions:
+      "Apply using a spreader. Water in if no rain falls within 48 hours. Apply every 8-10 weeks during growing season.",
+  },
+  {
+    id: "nemasys-leatherjacket-killer",
+    name: "Nemasys Leatherjacket Killer",
+    type: "pest_control",
+    measurementType: "volume",
+    defaultDosage: 500,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 50,
+    defaultWaterUnit: "sq_m",
+    instructions: "Apply when soil temperature is above 10°C. Water the area before and after application.",
+  },
+  {
+    id: "vitax-q4",
+    name: "Vitax Q4 Fertilizer",
+    type: "granular_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 70,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions: "Apply in spring and summer. Rake into the soil surface. Water in well after application.",
+  },
+  {
+    id: "westland-bone-meal",
+    name: "Westland Bone Meal",
+    type: "granular_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 100,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions:
+      "Apply before planting or as a top dressing. Rake into the soil surface. Ideal for bulbs and root development.",
+  },
+  {
+    id: "doff-slug-killer",
+    name: "Doff Slug Killer Blue Mini Pellets",
+    type: "pest_control",
+    measurementType: "weight",
+    defaultDosage: 5,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions: "Scatter pellets thinly around vulnerable plants. Reapply after heavy rain.",
+  },
+  {
+    id: "evergreen-moss-control",
+    name: "Evergreen Moss Control Lawn Food",
+    type: "lawn_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 35,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions: "Apply using a spreader. Do not apply during drought conditions or when rain is imminent.",
+  },
+  {
+    id: "miracle-gro-moisture-control",
+    name: "Miracle-Gro Moisture Control Compost",
+    type: "mulch",
+    measurementType: "volume",
+    defaultDosage: 5,
+    defaultDosageUnit: "l",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions: "Apply a 5cm layer around plants. Ideal for containers and hanging baskets.",
+  },
+  {
+    id: "westland-garden-lime",
+    name: "Westland Garden Lime",
+    type: "lime",
+    measurementType: "weight",
+    defaultDosage: 100,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions: "Apply in autumn or winter. Rake into the soil surface. Do not apply to acid-loving plants.",
+  },
+  {
+    id: "bayer-provado-ultimate",
+    name: "Bayer Provado Ultimate Bug Killer",
+    type: "pest_control",
+    measurementType: "volume",
+    defaultDosage: 10,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions:
+      "Apply as a foliar spray. Repeat after 14 days if necessary. Effective against a wide range of pests.",
+  },
 ]
 
 // Water Treatment Products
@@ -183,6 +568,145 @@ const WATER_TREATMENT_PRODUCTS = [
     defaultWaterUnit: "l",
     instructions: "Add 25ml per 1000 litres of pond water. Repeat after 2 weeks if necessary.",
   },
+  // New products from the provided data
+  {
+    id: "bermuda-greenwater",
+    name: "Bermuda Greenwater Treatment",
+    type: "pond_treatment",
+    measurementType: "volume",
+    defaultDosage: 50,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1000,
+    defaultWaterUnit: "l",
+    instructions: "Clears green water algae; safe for fish and wildlife. 500ml treats up to 10,000 liters.",
+  },
+  {
+    id: "cloverleaf-absolute-ct",
+    name: "Cloverleaf Absolute CT Anti Bacterial",
+    type: "pond_treatment",
+    measurementType: "weight",
+    defaultDosage: 10,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 4546,
+    defaultWaterUnit: "l",
+    instructions:
+      "Treats bacterial infections in fish; ensure adequate oxygenation during treatment. Apply daily for up to 4 days.",
+  },
+  {
+    id: "api-pond-salt",
+    name: "API Pond Salt",
+    type: "pond_treatment",
+    measurementType: "weight",
+    defaultDosage: 120,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 100,
+    defaultWaterUnit: "l",
+    instructions:
+      "Dissolve in water before adding to pond. Use for fish stress, disease prevention, and to improve gill function.",
+  },
+  {
+    id: "tetra-pond-ph-minus",
+    name: "Tetra Pond pH Minus",
+    type: "water_clarifier",
+    measurementType: "volume",
+    defaultDosage: 50,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1000,
+    defaultWaterUnit: "l",
+    instructions: "Add gradually over several days. Test pH regularly. Ideal pH for most pond fish is 7.0-8.5.",
+  },
+  {
+    id: "blagdon-pond-guardian",
+    name: "Blagdon Pond Guardian",
+    type: "pond_treatment",
+    measurementType: "volume",
+    defaultDosage: 25,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1000,
+    defaultWaterUnit: "l",
+    instructions:
+      "Add directly to pond water. Treats a wide range of fish diseases. Safe for plants and filter bacteria.",
+  },
+  {
+    id: "nishikoi-health-treatment",
+    name: "Nishikoi Health Treatment",
+    type: "fish_medication",
+    measurementType: "volume",
+    defaultDosage: 25,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1000,
+    defaultWaterUnit: "l",
+    instructions:
+      "Add directly to pond water. Treats ulcers, fin rot, and bacterial infections. Safe for plants and filter bacteria.",
+  },
+  {
+    id: "oase-aquaactiv-biokick",
+    name: "Oase AquaActiv BioKick",
+    type: "pond_treatment",
+    measurementType: "volume",
+    defaultDosage: 10,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1000,
+    defaultWaterUnit: "l",
+    instructions:
+      "Add when setting up a new pond or after cleaning the filter. Contains live bacteria to establish biological filtration.",
+  },
+  {
+    id: "pondcare-algaefix-plus",
+    name: "PondCare AlgaeFix Plus",
+    type: "algaecide",
+    measurementType: "volume",
+    defaultDosage: 10,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1000,
+    defaultWaterUnit: "l",
+    instructions: "Add weekly to control algae. Safe for fish and plants when used as directed.",
+  },
+  {
+    id: "tetra-pond-crystal-water",
+    name: "Tetra Pond Crystal Water",
+    type: "water_clarifier",
+    measurementType: "volume",
+    defaultDosage: 25,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1000,
+    defaultWaterUnit: "l",
+    instructions: "Add directly to pond water. Clears cloudy water. Safe for fish and plants.",
+  },
+  {
+    id: "pondcare-accu-clear",
+    name: "PondCare Accu-Clear",
+    type: "water_clarifier",
+    measurementType: "volume",
+    defaultDosage: 15,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1000,
+    defaultWaterUnit: "l",
+    instructions:
+      "Add directly to pond water. Clumps suspended particles for easy filter removal. Safe for fish and plants.",
+  },
+  {
+    id: "api-pond-ammo-lock",
+    name: "API Pond Ammo-Lock",
+    type: "pond_treatment",
+    measurementType: "volume",
+    defaultDosage: 10,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 100,
+    defaultWaterUnit: "l",
+    instructions: "Add during water changes or when ammonia is detected. Detoxifies ammonia immediately.",
+  },
+  {
+    id: "laguna-plant-grow",
+    name: "Laguna Plant Grow Fertilizer",
+    type: "plant_nutrient",
+    measurementType: "volume",
+    defaultDosage: 5,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 100,
+    defaultWaterUnit: "l",
+    instructions: "Add weekly during the growing season. Promotes healthy plant growth without encouraging algae.",
+  },
 ]
 
 // Conversion factors
@@ -211,6 +735,7 @@ const AREA_CONVERSIONS = {
   sq_yd: 0.836127,
   acre: 4046.86,
   hectare: 10000,
+  plant: 0.25, // Approximate area per plant
 }
 
 const LENGTH_CONVERSIONS = {
@@ -454,10 +979,12 @@ function initProductCalculator() {
 
   // Toggle product search panel
   findProductBtn.addEventListener("click", () => {
-    productSearchPanel.classList.toggle("hidden")
-    if (!productSearchPanel.classList.contains("hidden")) {
+    if (productSearchPanel.classList.contains("hidden")) {
+      productSearchPanel.classList.remove("hidden")
       presetsPanel.classList.add("hidden")
       productSearchInput.focus()
+    } else {
+      productSearchPanel.classList.add("hidden")
     }
   })
 
@@ -471,10 +998,12 @@ function initProductCalculator() {
 
   // Toggle presets panel
   myPresetsBtn.addEventListener("click", () => {
-    presetsPanel.classList.toggle("hidden")
-    if (!presetsPanel.classList.contains("hidden")) {
+    if (presetsPanel.classList.contains("hidden")) {
+      presetsPanel.classList.remove("hidden")
       productSearchPanel.classList.add("hidden")
       loadPresets("gardenerPresets", presetsList, handlePresetSelect)
+    } else {
+      presetsPanel.classList.add("hidden")
     }
   })
 
@@ -539,10 +1068,12 @@ function initAreaCalculator() {
 
   // Toggle product search panel
   findAreaProductBtn.addEventListener("click", () => {
-    areaProductSearchPanel.classList.toggle("hidden")
-    if (!areaProductSearchPanel.classList.contains("hidden")) {
+    if (areaProductSearchPanel.classList.contains("hidden")) {
+      areaProductSearchPanel.classList.remove("hidden")
       areaPresetsPanel.classList.add("hidden")
       areaProductSearchInput.focus()
+    } else {
+      areaProductSearchPanel.classList.add("hidden")
     }
   })
 
@@ -558,10 +1089,12 @@ function initAreaCalculator() {
 
   // Toggle presets panel
   areaPresetsBtn.addEventListener("click", () => {
-    areaPresetsPanel.classList.toggle("hidden")
-    if (!areaPresetsPanel.classList.contains("hidden")) {
+    if (areaPresetsPanel.classList.contains("hidden")) {
+      areaPresetsPanel.classList.remove("hidden")
       areaProductSearchPanel.classList.add("hidden")
       loadPresets("gardenerAreaPresets", areaPresetsList, handleAreaPresetSelect)
+    } else {
+      areaPresetsPanel.classList.add("hidden")
     }
   })
 
@@ -625,10 +1158,12 @@ function initWaterCalculator() {
 
   // Toggle product search panel
   findWaterProductBtn.addEventListener("click", () => {
-    waterProductSearchPanel.classList.toggle("hidden")
-    if (!waterProductSearchPanel.classList.contains("hidden")) {
+    if (waterProductSearchPanel.classList.contains("hidden")) {
+      waterProductSearchPanel.classList.remove("hidden")
       waterPresetsPanel.classList.add("hidden")
       waterProductSearchInput.focus()
+    } else {
+      waterProductSearchPanel.classList.add("hidden")
     }
   })
 
@@ -644,10 +1179,12 @@ function initWaterCalculator() {
 
   // Toggle presets panel
   waterPresetsBtn.addEventListener("click", () => {
-    waterPresetsPanel.classList.toggle("hidden")
-    if (!waterPresetsPanel.classList.contains("hidden")) {
+    if (waterPresetsPanel.classList.contains("hidden")) {
+      waterPresetsPanel.classList.remove("hidden")
       waterProductSearchPanel.classList.add("hidden")
       loadPresets("gardenerWaterPresets", waterPresetsList, handleWaterPresetSelect)
+    } else {
+      waterPresetsPanel.classList.add("hidden")
     }
   })
 
@@ -824,6 +1361,11 @@ function handlePresetSelect(preset) {
     capSizeInput.value = preset.capSize || 10
   } else {
     capSizeGroup.classList.add("hidden")
+  }
+
+  // Set has scoop
+  document.querySelector(`input[name="has-scoop"][value="${preset.hasScoopMeasure ? "yes" : "no"}"]`).checked = true
+  if (preset.hasScoopMeasure) {
   }
 
   // Set has scoop
@@ -1345,7 +1887,7 @@ function calculateProductDosage() {
   if (calculationMode === "water_to_product" && productNameValue) {
     wateringCanTitle.textContent = `For your ${waterQty} ${waterUnit} watering can:`
 
-    // Format the manufacturer's measurement unit (cap, scoop, etc.)
+    // Get the manufacturer's measurement unit (cap, scoop, etc.)
     let manufacturerText = ""
 
     if (measurementType === "cap") {
