@@ -709,6 +709,24 @@ const WATER_TREATMENT_PRODUCTS = [
   },
 ]
 
+// Additional product arrays for merging
+const ADDITIONAL_COMMON_PRODUCTS = [
+  // Additional common products can be added here
+]
+
+const ADDITIONAL_AREA_PRODUCTS = [
+  // Additional area products can be added here
+]
+
+const ADDITIONAL_WATER_PRODUCTS = [
+  // Additional water products can be added here
+]
+
+// Merge the additional products with the existing ones
+COMMON_PRODUCTS = [...COMMON_PRODUCTS, ...ADDITIONAL_COMMON_PRODUCTS]
+AREA_TREATMENT_PRODUCTS = [...AREA_TREATMENT_PRODUCTS, ...ADDITIONAL_AREA_PRODUCTS]
+WATER_TREATMENT_PRODUCTS = [...WATER_TREATMENT_PRODUCTS, ...ADDITIONAL_WATER_PRODUCTS]
+
 // Conversion factors
 const WEIGHT_CONVERSIONS = {
   g: 1,
@@ -766,136 +784,155 @@ const PRODUCT_TYPE_HINTS = {
   plant_nutrient: "Typical usage: 5ml per 50 liters of water",
 }
 
-// DOM Elements - Main Tabs
-const tabButtons = document.querySelectorAll(".tab-button")
-const tabPanels = document.querySelectorAll(".tab-panel")
+// Initialize the application
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOM loaded - Initializing application")
 
-// DOM Elements - Guide Tabs
-const guideTabs = document.querySelectorAll(".guide-tab")
-const guideTabPanels = document.querySelectorAll(".guide-tab-panel")
+  // Initialize tabs
+  initTabs()
 
-// DOM Elements - Product Calculator
-const productTypeSelect = document.getElementById("product-type")
-const productTypeHint = document.getElementById("product-type-hint")
-const measurementTypeRadios = document.querySelectorAll('input[name="measurement-type"]')
-const capSizeGroup = document.getElementById("cap-size-group")
-const capSizeInput = document.getElementById("cap-size")
-const hasScoopRadios = document.querySelectorAll('input[name="has-scoop"]')
-const scoopSizeGroup = document.getElementById("scoop-size-group")
-const calculationModeRadios = document.querySelectorAll('input[name="calculation-mode"]')
-const calculationModePanels = document.querySelectorAll(".calculation-mode-panel")
-const findProductBtn = document.getElementById("find-product-btn")
-const productSearchPanel = document.getElementById("product-search-panel")
-const productSearchInput = document.getElementById("product-search")
-const productSearchResults = document.getElementById("product-search-results")
-const myPresetsBtn = document.getElementById("my-presets-btn")
-const presetsPanel = document.getElementById("presets-panel")
-const presetsList = document.getElementById("presets-list")
-const productNameInput = document.getElementById("product-name")
-const productInstructions = document.getElementById("product-instructions")
-const instructionsText = document.getElementById("instructions-text")
-const ratioLabel = document.getElementById("ratio-label")
-const ratioLabel2 = document.getElementById("ratio-label-2")
-const savePresetBtn = document.getElementById("save-preset-btn")
-const calculateBtn = document.getElementById("calculate-btn")
-const metricResult = document.getElementById("metric-result")
-const imperialResult = document.getElementById("imperial-result")
-const capResultCard = document.getElementById("cap-result-card")
-const capResult = document.getElementById("cap-result")
-const scoopResultCard = document.getElementById("scoop-result-card")
-const scoopResult = document.getElementById("scoop-result")
-const alternativeResult = document.getElementById("alternative-result")
-const wateringCanSection = document.getElementById("watering-can-section")
-const wateringCanTitle = document.getElementById("watering-can-title")
-const wateringCanResult = document.getElementById("watering-can-result")
-const wateringCanInfo = document.getElementById("watering-can-info")
-const debugTrigger = document.getElementById("debug-trigger")
-const debugContent = document.getElementById("debug-content")
-const debugInfo = document.getElementById("debug-info")
-const copyDebugBtn = document.getElementById("copy-debug-btn")
-const productDropdown = document.getElementById("product-dropdown")
+  // Populate product dropdowns
+  populateProductDropdowns()
 
-// DOM Elements - Area Calculator
-const areaShapeRadios = document.querySelectorAll('input[name="area-shape"]')
-const rectangleInputs = document.getElementById("rectangle-inputs")
-const circleInputs = document.getElementById("circle-inputs")
-const lengthInput = document.getElementById("length")
-const widthInput = document.getElementById("width")
-const areaUnitSelect = document.getElementById("area-unit")
-const diameterInput = document.getElementById("diameter")
-const circleUnitSelect = document.getElementById("circle-unit")
-const calculatedAreaDiv = document.getElementById("calculated-area")
-const areaResultText = document.getElementById("area-result")
-const findAreaProductBtn = document.getElementById("find-area-product-btn")
-const areaProductSearchPanel = document.getElementById("area-product-search-panel")
-const areaProductSearchInput = document.getElementById("area-product-search")
-const areaProductSearchResults = document.getElementById("area-product-search-results")
-const areaPresetsBtn = document.getElementById("area-presets-btn")
-const areaPresetsPanel = document.getElementById("area-presets-panel")
-const areaPresetsList = document.getElementById("area-presets-list")
-const areaProductTypeSelect = document.getElementById("area-product-type")
-const areaProductTypeHint = document.getElementById("area-product-type-hint")
-const areaProductNameInput = document.getElementById("area-product-name")
-const areaProductInstructions = document.getElementById("area-product-instructions")
-const areaInstructionsText = document.getElementById("area-instructions-text")
-const applicationRateInput = document.getElementById("application-rate")
-const rateUnitSelect = document.getElementById("rate-unit")
-const rateAreaUnitSelect = document.getElementById("rate-area-unit")
-const saveAreaPresetBtn = document.getElementById("save-area-preset-btn")
-const calculateAreaBtn = document.getElementById("calculate-area-btn")
-const totalAmountResult = document.getElementById("total-amount-result")
-const alternativeAmountResult = document.getElementById("alternative-amount-result")
-const metricRateResult = document.getElementById("metric-rate-result")
-const imperialRateResult = document.getElementById("imperial-rate-result")
-const areaDebugTrigger = document.getElementById("area-debug-trigger")
-const areaDebugContent = document.getElementById("area-debug-content")
-const areaDebugInfo = document.getElementById("area-debug-info")
-const copyAreaDebugBtn = document.getElementById("copy-area-debug-btn")
-const areaProductDropdown = document.getElementById("area-product-dropdown")
+  // Initialize other components
+  initProductCalculator()
+  initAreaCalculator()
+  initWaterCalculator()
+  initAccordion()
+  initGuideTabs()
+})
 
-// DOM Elements - Water Calculator
-const containerShapeRadios = document.querySelectorAll('input[name="container-shape"]')
-const rectangularInputs = document.getElementById("rectangular-inputs")
-const circularInputs = document.getElementById("circular-inputs")
-const dimensionUnitSelect = document.getElementById("dimension-unit")
-const containerLengthInput = document.getElementById("container-length")
-const containerWidthInput = document.getElementById("container-width")
-const containerHeightInput = document.getElementById("container-height")
-const containerDiameterInput = document.getElementById("container-diameter")
-const containerDepthInput = document.getElementById("container-depth")
-const calculatedVolumeDiv = document.getElementById("calculated-volume")
-const volumeResultText = document.getElementById("volume-result")
-const volumeConversionText = document.getElementById("volume-conversion")
-const waterVolumeInput = document.getElementById("water-volume")
-const waterVolumeUnitSelect = document.getElementById("water-volume-unit")
-const findWaterProductBtn = document.getElementById("find-water-product-btn")
-const waterProductSearchPanel = document.getElementById("water-product-search-panel")
-const waterProductSearchInput = document.getElementById("water-product-search")
-const waterProductSearchResults = document.getElementById("water-product-search-results")
-const waterPresetsBtn = document.getElementById("water-presets-btn")
-const waterPresetsPanel = document.getElementById("water-presets-panel")
-const waterPresetsList = document.getElementById("water-presets-list")
-const waterProductTypeSelect = document.getElementById("water-product-type")
-const waterProductTypeHint = document.getElementById("water-product-type-hint")
-const waterProductNameInput = document.getElementById("water-product-name")
-const waterProductInstructions = document.getElementById("water-product-instructions")
-const waterInstructionsText = document.getElementById("water-instructions-text")
-const dosageAmountInput = document.getElementById("dosage-amount")
-const dosageUnitSelect = document.getElementById("dosage-unit")
-const saveWaterPresetBtn = document.getElementById("save-water-preset-btn")
-const calculateWaterBtn = document.getElementById("calculate-water-btn")
-const waterTotalAmountResult = document.getElementById("water-total-amount-result")
-const waterMetricDosageResult = document.getElementById("water-metric-dosage-result")
-const waterImperialDosageResult = document.getElementById("water-imperial-dosage-result")
-const waterAlternativeDosageResult = document.getElementById("water-alternative-dosage-result")
-const waterDebugTrigger = document.getElementById("water-debug-trigger")
-const waterDebugContent = document.getElementById("water-debug-content")
-const waterDebugInfo = document.getElementById("water-debug-info")
-const copyWaterDebugBtn = document.getElementById("copy-water-debug-btn")
-const waterProductDropdown = document.getElementById("water-product-dropdown")
+// Initialize tabs
+function initTabs() {
+  console.log("Initializing tabs with robust implementation")
 
-// DOM Elements - Accordion
-const accordionTriggers = document.querySelectorAll(".accordion-trigger")
+  // Get all tab buttons and panels
+  const tabButtons = document.querySelectorAll(".tab-button")
+  const tabPanels = document.querySelectorAll(".tab-panel")
+
+  console.log(`Found ${tabButtons.length} tab buttons and ${tabPanels.length} tab panels`)
+
+  // First, ensure all panels are hidden except the active one
+  tabPanels.forEach((panel) => {
+    if (panel.classList.contains("active")) {
+      panel.style.display = "block"
+    } else {
+      panel.style.display = "none"
+    }
+  })
+
+  // Add click event listeners to tab buttons
+  tabButtons.forEach((button) => {
+    // Remove any existing event listeners by cloning and replacing
+    const newButton = button.cloneNode(true)
+    button.parentNode.replaceChild(newButton, button)
+
+    newButton.addEventListener("click", function (e) {
+      e.preventDefault()
+      const tabId = this.getAttribute("data-tab")
+      console.log(`Tab clicked: ${tabId}`)
+
+      // Remove active class from all buttons
+      tabButtons.forEach((btn) => btn.classList.remove("active"))
+
+      // Add active class to clicked button
+      this.classList.add("active")
+
+      // Hide all tab panels
+      tabPanels.forEach((panel) => {
+        panel.classList.remove("active")
+        panel.style.display = "none"
+      })
+
+      // Show the selected tab panel
+      const targetPanel = document.getElementById(tabId + "-panel")
+      if (targetPanel) {
+        targetPanel.classList.add("active")
+        targetPanel.style.display = "block"
+        console.log(`Activated panel: ${targetPanel.id}`)
+      } else {
+        console.error(`Panel not found: ${tabId}-panel`)
+      }
+    })
+  })
+
+  // Ensure the first tab is active if none are
+  if (!document.querySelector(".tab-button.active") && tabButtons.length > 0) {
+    tabButtons[0].classList.add("active")
+    const firstTabId = tabButtons[0].getAttribute("data-tab")
+    const firstPanel = document.getElementById(firstTabId + "-panel")
+    if (firstPanel) {
+      firstPanel.classList.add("active")
+      firstPanel.style.display = "block"
+    }
+  }
+}
+
+// Initialize guide tabs
+function initGuideTabs() {
+  console.log("Initializing guide tabs")
+
+  // Get all guide tabs and panels
+  const guideTabs = document.querySelectorAll(".guide-tab")
+  const guideTabPanels = document.querySelectorAll(".guide-tab-panel")
+
+  console.log(`Found ${guideTabs.length} guide tabs and ${guideTabPanels.length} guide tab panels`)
+
+  // First, ensure all panels are hidden except the active one
+  guideTabPanels.forEach((panel) => {
+    if (panel.classList.contains("active")) {
+      panel.style.display = "block"
+    } else {
+      panel.style.display = "none"
+    }
+  })
+
+  // Add click event listeners to guide tabs
+  guideTabs.forEach((tab) => {
+    // Remove any existing event listeners by cloning and replacing
+    const newTab = tab.cloneNode(true)
+    tab.parentNode.replaceChild(newTab, tab)
+
+    newTab.addEventListener("click", function (e) {
+      e.preventDefault()
+      const tabId = this.getAttribute("data-guide-tab")
+      console.log(`Guide tab clicked: ${tabId}`)
+
+      // Remove active class from all guide tabs
+      guideTabs.forEach((t) => t.classList.remove("active"))
+
+      // Add active class to clicked guide tab
+      this.classList.add("active")
+
+      // Hide all guide tab panels
+      guideTabPanels.forEach((panel) => {
+        panel.classList.remove("active")
+        panel.style.display = "none"
+      })
+
+      // Show the selected guide tab panel
+      const targetPanel = document.getElementById(tabId + "-panel")
+      if (targetPanel) {
+        targetPanel.classList.add("active")
+        targetPanel.style.display = "block"
+        console.log(`Activated guide panel: ${targetPanel.id}`)
+      } else {
+        console.error(`Guide panel not found: ${tabId}-panel`)
+      }
+    })
+  })
+
+  // Ensure the first guide tab is active if none are
+  if (!document.querySelector(".guide-tab.active") && guideTabs.length > 0) {
+    guideTabs[0].classList.add("active")
+    const firstTabId = guideTabs[0].getAttribute("data-guide-tab")
+    const firstPanel = document.getElementById(firstTabId + "-panel")
+    if (firstPanel) {
+      firstPanel.classList.add("active")
+      firstPanel.style.display = "block"
+    }
+  }
+}
 
 // Populate product dropdowns
 function populateProductDropdowns() {
@@ -1076,156 +1113,6 @@ function populateProductDropdowns() {
     }
 
     console.log(`Populated water product dropdown with ${WATER_TREATMENT_PRODUCTS.length} products`)
-  }
-}
-
-// Initialize the application
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("DOM loaded - Initializing application")
-
-  // CRITICAL FIX 1: Properly initialize tabs with direct DOM manipulation
-  initTabs()
-
-  // CRITICAL FIX 2: Populate product dropdowns
-  populateProductDropdowns()
-
-  // Initialize other components
-  initProductCalculator()
-  initAreaCalculator()
-  initWaterCalculator()
-  initAccordion()
-  initGuideTabs()
-})
-
-// CRITICAL FIX 1: Improved tab initialization function
-function initTabs() {
-  console.log("Initializing tabs with robust implementation")
-
-  // Get all tab buttons and panels
-  const tabButtons = document.querySelectorAll(".tab-button")
-  const tabPanels = document.querySelectorAll(".tab-panel")
-
-  console.log(`Found ${tabButtons.length} tab buttons and ${tabPanels.length} tab panels`)
-
-  // First, ensure all panels are hidden except the active one
-  tabPanels.forEach((panel) => {
-    if (panel.classList.contains("active")) {
-      panel.style.display = "block"
-    } else {
-      panel.style.display = "none"
-    }
-  })
-
-  // Add click event listeners to tab buttons
-  tabButtons.forEach((button) => {
-    // Remove any existing event listeners by cloning and replacing
-    const newButton = button.cloneNode(true)
-    button.parentNode.replaceChild(newButton, button)
-
-    newButton.addEventListener("click", function (e) {
-      e.preventDefault()
-      const tabId = this.getAttribute("data-tab")
-      console.log(`Tab clicked: ${tabId}`)
-
-      // Remove active class from all buttons
-      tabButtons.forEach((btn) => btn.classList.remove("active"))
-
-      // Add active class to clicked button
-      this.classList.add("active")
-
-      // Hide all tab panels
-      tabPanels.forEach((panel) => {
-        panel.classList.remove("active")
-        panel.style.display = "none"
-      })
-
-      // Show the selected tab panel
-      const targetPanel = document.getElementById(tabId + "-panel")
-      if (targetPanel) {
-        targetPanel.classList.add("active")
-        targetPanel.style.display = "block"
-        console.log(`Activated panel: ${targetPanel.id}`)
-      } else {
-        console.error(`Panel not found: ${tabId}-panel`)
-      }
-    })
-  })
-
-  // Ensure the first tab is active if none are
-  if (!document.querySelector(".tab-button.active") && tabButtons.length > 0) {
-    tabButtons[0].classList.add("active")
-    const firstTabId = tabButtons[0].getAttribute("data-tab")
-    const firstPanel = document.getElementById(firstTabId + "-panel")
-    if (firstPanel) {
-      firstPanel.classList.add("active")
-      firstPanel.style.display = "block"
-    }
-  }
-}
-
-// Initialize guide tabs
-function initGuideTabs() {
-  console.log("Initializing guide tabs")
-
-  // Get all guide tabs and panels
-  const guideTabs = document.querySelectorAll(".guide-tab")
-  const guideTabPanels = document.querySelectorAll(".guide-tab-panel")
-
-  console.log(`Found ${guideTabs.length} guide tabs and ${guideTabPanels.length} guide tab panels`)
-
-  // First, ensure all panels are hidden except the active one
-  guideTabPanels.forEach((panel) => {
-    if (panel.classList.contains("active")) {
-      panel.style.display = "block"
-    } else {
-      panel.style.display = "none"
-    }
-  })
-
-  // Add click event listeners to guide tabs
-  guideTabs.forEach((tab) => {
-    // Remove any existing event listeners by cloning and replacing
-    const newTab = tab.cloneNode(true)
-    tab.parentNode.replaceChild(newTab, tab)
-
-    newTab.addEventListener("click", function (e) {
-      e.preventDefault()
-      const tabId = this.getAttribute("data-guide-tab")
-      console.log(`Guide tab clicked: ${tabId}`)
-
-      // Remove active class from all guide tabs
-      guideTabs.forEach((t) => t.classList.remove("active"))
-
-      // Add active class to clicked guide tab
-      this.classList.add("active")
-
-      // Hide all guide tab panels
-      guideTabPanels.forEach((panel) => {
-        panel.classList.remove("active")
-        panel.style.display = "none"
-      })
-
-      // Show the selected guide tab panel
-      const targetPanel = document.getElementById(tabId + "-panel")
-      if (targetPanel) {
-        targetPanel.classList.add("active")
-        targetPanel.style.display = "block"
-        console.log(`Activated guide panel: ${targetPanel.id}`)
-      } else {
-        console.error(`Guide panel not found: ${tabId}-panel`)
-      }
-    })
-  })
-
-  // Ensure the first guide tab is active if none are
-  if (!document.querySelector(".guide-tab.active") && guideTabs.length > 0) {
-    guideTabs[0].classList.add("active")
-    const firstTabId = guideTabs[0].getAttribute("data-guide-tab")
-    const firstPanel = document.getElementById(firstTabId + "-panel")
-    if (firstPanel) {
-      firstPanel.classList.add("active")
-      firstPanel.style.display = "block"
-    }
   }
 }
 
