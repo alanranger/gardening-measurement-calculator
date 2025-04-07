@@ -12,6 +12,7 @@
       <header>
           <h1>Gardener's Measurement Calculator</h1>
           <p class="subtitle">Calculate accurate quantities for all your gardening needs</p>
+          <div class="version-number">v1.2.0</div>
       </header>
 
       <div class="tabs">
@@ -24,7 +25,6 @@
 
           <div class="tab-content">
               <!-- Product Dosage Calculator -->
-              <!-- Product Calculator Tab -->
               <div id="product-panel" class="tab-panel active">
                   <div class="card">
                     <div class="card-header">
@@ -35,11 +35,31 @@
                       <!-- Quick Access Buttons -->
                       <div class="quick-access-buttons">
                         <button id="find-product-btn" class="primary-btn">
-                          <i class="fas fa-search"></i> Find Product
+                          <span class="icon">🔍</span> Find Product
                         </button>
                         <button id="my-presets-btn" class="secondary-btn">
-                          <i class="fas fa-star"></i> My Saved Products
+                          <span class="icon">⭐</span> My Saved Products
                         </button>
+                      </div>
+
+                      <!-- Product Selection Dropdown -->
+                      <div class="product-selection-dropdown">
+                        <label for="product-dropdown">Select a product:</label>
+                        <select id="product-dropdown" class="product-dropdown">
+                          <option value="">-- Select a product --</option>
+                          <optgroup label="Liquid Fertilizers">
+                            <!-- Will be populated by JavaScript -->
+                          </optgroup>
+                          <optgroup label="Granular Fertilizers">
+                            <!-- Will be populated by JavaScript -->
+                          </optgroup>
+                          <optgroup label="Plant Foods">
+                            <!-- Will be populated by JavaScript -->
+                          </optgroup>
+                          <optgroup label="Other Products">
+                            <!-- Will be populated by JavaScript -->
+                          </optgroup>
+                        </select>
                       </div>
 
                       <!-- Product Search Panel -->
@@ -59,39 +79,8 @@
                         <div id="presets-list" class="search-results"></div>
                       </div>
 
-                      <!-- Product Selection -->
+                      <!-- Product Details -->
                       <div class="section">
-                          <div class="section-header">
-                              <h3>Product Selection</h3>
-                              <div>
-                                  <button class="button-outline" id="find-product-btn">
-                                      <span class="icon">🔍</span> Find Product
-                                  </button>
-                                  <button class="button-outline" id="my-presets-btn">
-                                      <span class="icon">📋</span> My Presets
-                                  </button>
-                              </div>
-                          </div>
-
-                          <!-- Product Search Panel (hidden by default) -->
-                          <div class="panel hidden" id="product-search-panel">
-                              <div class="form-group">
-                                  <label for="product-search">Search for a product</label>
-                                  <input type="text" id="product-search" placeholder="e.g., Miracle-Gro">
-                              </div>
-                              <div class="search-results" id="product-search-results">
-                                  <!-- Results will be populated by JavaScript -->
-                              </div>
-                          </div>
-
-                          <!-- Presets Panel (hidden by default) -->
-                          <div class="panel hidden" id="presets-panel">
-                              <h4>Saved Presets</h4>
-                              <div class="presets-list" id="presets-list">
-                                  <!-- Presets will be populated by JavaScript -->
-                              </div>
-                          </div>
-
                           <div class="form-row">
                               <div class="form-group">
                                   <label for="product-type">Product Type</label>
@@ -127,7 +116,7 @@
                                   </label>
                                   <label class="radio">
                                       <input type="radio" name="measurement-type" value="volume">
-                                      <span>Volume (ml, l, etc.)</span>
+                                      <span>Volume (ml, litres, etc.)</span>
                                   </label>
                                   <label class="radio">
                                       <input type="radio" name="measurement-type" value="cap">
@@ -190,7 +179,7 @@
                                   </label>
                                   <label class="radio">
                                       <input type="radio" name="calculation-mode" value="ratio_based">
-                                      <span>I know the ratio (e.g., 5ml per liter) - calculate both product and water</span>
+                                      <span>I know the ratio (e.g., 5ml per litre) - calculate both product and water</span>
                                   </label>
                               </div>
                           </div>
@@ -213,7 +202,7 @@
                                               <option value="oz">oz</option>
                                               <option value="lb">lb</option>
                                               <option value="ml">ml</option>
-                                              <option value="l">l</option>
+                                              <option value="l">litres</option>
                                               <option value="tsp">tsp</option>
                                               <option value="tbsp">tbsp</option>
                                               <option value="cup">cup</option>
@@ -227,7 +216,7 @@
                                           <input type="number" id="water-amount" placeholder="e.g., 1">
                                           <select id="water-unit">
                                               <option value="ml">ml</option>
-                                              <option value="l" selected>l</option>
+                                              <option value="l" selected>litres</option>
                                               <option value="gal_uk">gal (UK)</option>
                                           </select>
                                       </div>
@@ -244,7 +233,7 @@
                                           <input type="number" id="water-amount-2" placeholder="e.g., 5">
                                           <select id="water-unit-2">
                                               <option value="ml">ml</option>
-                                              <option value="l" selected>l</option>
+                                              <option value="l" selected>litres</option>
                                               <option value="gal_uk">gal (UK)</option>
                                           </select>
                                       </div>
@@ -253,7 +242,7 @@
                                       <label for="ratio">Ratio (per water unit)</label>
                                       <div class="input-with-label">
                                           <input type="number" id="ratio" placeholder="e.g., 5">
-                                          <span class="input-label" id="ratio-label">ml per liter</span>
+                                          <span class="input-label" id="ratio-label">ml per litre</span>
                                       </div>
                                   </div>
                               </div>
@@ -266,7 +255,7 @@
                                       <label for="ratio-2">Ratio</label>
                                       <div class="input-with-label">
                                           <input type="number" id="ratio-2" placeholder="e.g., 5">
-                                          <span class="input-label" id="ratio-label-2">ml per liter</span>
+                                          <span class="input-label" id="ratio-label-2">ml per litre</span>
                                       </div>
                                   </div>
                                   <div class="form-group">
@@ -275,7 +264,7 @@
                                           <input type="number" id="target-amount" placeholder="e.g., 2">
                                           <select id="target-unit">
                                               <option value="ml">ml</option>
-                                              <option value="l" selected>l</option>
+                                              <option value="l" selected>litres</option>
                                               <option value="gal_uk">gal (UK)</option>
                                           </select>
                                       </div>
@@ -354,7 +343,6 @@
               </div>
 
               <!-- Area Treatments Calculator -->
-              <!-- Area Calculator Tab -->
               <div id="area-panel" class="tab-panel">
                   <div class="card">
                     <div class="card-header">
@@ -365,11 +353,31 @@
                       <!-- Quick Access Buttons -->
                       <div class="quick-access-buttons">
                         <button id="find-area-product-btn" class="primary-btn">
-                          <i class="fas fa-search"></i> Find Area Product
+                          <span class="icon">🔍</span> Find Area Product
                         </button>
                         <button id="area-presets-btn" class="secondary-btn">
-                          <i class="fas fa-star"></i> My Saved Area Products
+                          <span class="icon">⭐</span> My Saved Area Products
                         </button>
+                      </div>
+
+                      <!-- Product Selection Dropdown -->
+                      <div class="product-selection-dropdown">
+                        <label for="area-product-dropdown">Select an area treatment product:</label>
+                        <select id="area-product-dropdown" class="product-dropdown">
+                          <option value="">-- Select a product --</option>
+                          <optgroup label="Lawn Fertilizers">
+                            <!-- Will be populated by JavaScript -->
+                          </optgroup>
+                          <optgroup label="Lawn Seeds">
+                            <!-- Will be populated by JavaScript -->
+                          </optgroup>
+                          <optgroup label="Weed Killers">
+                            <!-- Will be populated by JavaScript -->
+                          </optgroup>
+                          <optgroup label="Other Area Products">
+                            <!-- Will be populated by JavaScript -->
+                          </optgroup>
+                        </select>
                       </div>
 
                       <!-- Product Search Panel -->
@@ -454,36 +462,7 @@
                           </div>
 
                           <div class="section highlight">
-                              <div class="section-header">
-                                  <h3>Product Application</h3>
-                                  <div>
-                                      <button class="button-outline" id="find-area-product-btn">
-                                          <span class="icon">🔍</span> Find Product
-                                      </button>
-                                      <button class="button-outline" id="area-presets-btn">
-                                          <span class="icon">📋</span> My Presets
-                                      </button>
-                                  </div>
-                              </div>
-
-                              <!-- Product Search Panel (hidden by default) -->
-                              <div class="panel hidden" id="area-product-search-panel">
-                                  <div class="form-group">
-                                      <label for="area-product-search">Search for a product</label>
-                                      <input type="text" id="area-product-search" placeholder="e.g., Evergreen">
-                                  </div>
-                                  <div class="search-results" id="area-product-search-results">
-                                      <!-- Results will be populated by JavaScript -->
-                                  </div>
-                              </div>
-
-                              <!-- Presets Panel (hidden by default) -->
-                              <div class="panel hidden" id="area-presets-panel">
-                                  <h4>Saved Presets</h4>
-                                  <div class="presets-list" id="area-presets-list">
-                                      <!-- Presets will be populated by JavaScript -->
-                                  </div>
-                              </div>
+                              <h3>Product Application</h3>
 
                               <div class="form-row">
                                   <div class="form-group">
@@ -522,7 +501,7 @@
                                           <option value="oz">Ounces (oz)</option>
                                           <option value="lb">Pounds (lb)</option>
                                           <option value="ml">Milliliters (ml)</option>
-                                          <option value="l">Liters (l)</option>
+                                          <option value="l">Litres (l)</option>
                                       </select>
                                   </div>
                                   <div class="form-group">
@@ -593,7 +572,6 @@
               </div>
 
               <!-- Water Treatments Calculator -->
-              <!-- Water Calculator Tab -->
               <div id="water-panel" class="tab-panel">
                   <div class="card">
                     <div class="card-header">
@@ -604,11 +582,31 @@
                       <!-- Quick Access Buttons -->
                       <div class="quick-access-buttons">
                         <button id="find-water-product-btn" class="primary-btn">
-                          <i class="fas fa-search"></i> Find Water Product
+                          <span class="icon">🔍</span> Find Water Product
                         </button>
                         <button id="water-presets-btn" class="secondary-btn">
-                          <i class="fas fa-star"></i> My Saved Water Products
+                          <span class="icon">⭐</span> My Saved Water Products
                         </button>
+                      </div>
+
+                      <!-- Product Selection Dropdown -->
+                      <div class="product-selection-dropdown">
+                        <label for="water-product-dropdown">Select a water treatment product:</label>
+                        <select id="water-product-dropdown" class="product-dropdown">
+                          <option value="">-- Select a product --</option>
+                          <optgroup label="Pond Treatments">
+                            <!-- Will be populated by JavaScript -->
+                          </optgroup>
+                          <optgroup label="Algaecides">
+                            <!-- Will be populated by JavaScript -->
+                          </optgroup>
+                          <optgroup label="Water Clarifiers">
+                            <!-- Will be populated by JavaScript -->
+                          </optgroup>
+                          <optgroup label="Other Water Products">
+                            <!-- Will be populated by JavaScript -->
+                          </optgroup>
+                        </select>
                       </div>
 
                       <!-- Product Search Panel -->
@@ -706,7 +704,7 @@
                                   <div class="form-group">
                                       <label for="water-volume-unit">Unit</label>
                                       <select id="water-volume-unit">
-                                          <option value="l">Liters (l)</option>
+                                          <option value="l">Litres (l)</option>
                                           <option value="gal_uk">UK Gallons</option>
                                       </select>
                                   </div>
@@ -714,36 +712,7 @@
                           </div>
 
                           <div class="section highlight">
-                              <div class="section-header">
-                                  <h3>Product Dosage</h3>
-                                  <div>
-                                      <button class="button-outline" id="find-water-product-btn">
-                                          <span class="icon">🔍</span> Find Product
-                                      </button>
-                                      <button class="button-outline" id="water-presets-btn">
-                                          <span class="icon">📋</span> My Presets
-                                      </button>
-                                  </div>
-                              </div>
-
-                              <!-- Product Search Panel (hidden by default) -->
-                              <div class="panel hidden" id="water-product-search-panel">
-                                  <div class="form-group">
-                                      <label for="water-product-search">Search for a product</label>
-                                      <input type="text" id="water-product-search" placeholder="e.g., TetraPond">
-                                  </div>
-                                  <div class="search-results" id="water-product-search-results">
-                                      <!-- Results will be populated by JavaScript -->
-                                  </div>
-                              </div>
-
-                              <!-- Presets Panel (hidden by default) -->
-                              <div class="panel hidden" id="water-presets-panel">
-                                  <h4>Saved Presets</h4>
-                                  <div class="presets-list" id="water-presets-list">
-                                      <!-- Presets will be populated by JavaScript -->
-                                  </div>
-                              </div>
+                              <h3>Product Dosage</h3>
 
                               <div class="form-row">
                                   <div class="form-group">
@@ -756,7 +725,7 @@
                                           <option value="plant_nutrient">Aquatic Plant Nutrient</option>
                                           <option value="custom">Custom Product</option>
                                       </select>
-                                      <p class="hint" id="water-product-type-hint">Typical usage: 5ml per 1000 liters of water</p>
+                                      <p class="hint" id="water-product-type-hint">Typical usage: 5ml per 1000 litres of water</p>
                                   </div>
                                   <div class="form-group">
                                       <label for="water-product-name">Product Name (Optional)</label>
@@ -781,7 +750,7 @@
                                           <option value="g">Grams (g)</option>
                                           <option value="tsp">Teaspoons (tsp)</option>
                                           <option value="tbsp">Tablespoons (tbsp)</option>
-                                      </                                      </select>
+                                      </select>
                                   </div>
                               </div>
 
@@ -928,13 +897,13 @@
                                                   <td>29.57</td>
                                               </tr>
                                               <tr>
-                                                  <td>Liters (l)</td>
+                                                  <td>Litres (l)</td>
                                                   <td>UK Gallons (gal)</td>
                                                   <td>0.220</td>
                                               </tr>
                                               <tr>
                                                   <td>UK Gallons (gal)</td>
-                                                  <td>Liters (l)</td>
+                                                  <td>Litres (l)</td>
                                                   <td>4.546</td>
                                               </tr>
                                               <tr>
@@ -1013,7 +982,7 @@
                                                       <li>General lawn fertilizer: 25-35g per square meter (0.8-1.1 oz per square yard)</li>
                                                       <li>Starter fertilizer: 50g per square meter (1.6 oz per square yard)</li>
                                                       <li>Slow-release fertilizer: 15-25g per square meter (0.5-0.8 oz per square yard)</li>
-                                                      <li>Liquid lawn feed: 10ml per liter of water (1.3 fl oz per gallon)</li>
+                                                      <li>Liquid lawn feed: 10ml per litre of water (1.3 fl oz per gallon)</li>
                                                   </ul>
                                               </div>
                                           </div>
@@ -1021,10 +990,10 @@
                                               <button class="accordion-trigger">Pond Treatment Dosages</button>
                                               <div class="accordion-content">
                                                   <ul>
-                                                      <li>Algaecide: 5-10ml per 1000 liters (0.7-1.3 fl oz per 250 gallons)</li>
-                                                      <li>Water clarifier: 5ml per 1000 liters (0.7 fl oz per 250 gallons)</li>
-                                                      <li>Beneficial bacteria: 10ml per 1000 liters (1.3 fl oz per 250 gallons)</li>
-                                                      <li>Dechlorinator: 5ml per 1000 liters (0.7 fl oz per 250 gallons)</li>
+                                                      <li>Algaecide: 5-10ml per 1000 litres (0.7-1.3 fl oz per 250 gallons)</li>
+                                                      <li>Water clarifier: 5ml per 1000 litres (0.7 fl oz per 250 gallons)</li>
+                                                      <li>Beneficial bacteria: 10ml per 1000 litres (1.3 fl oz per 250 gallons)</li>
+                                                      <li>Dechlorinator: 5ml per 1000 litres (0.7 fl oz per 250 gallons)</li>
                                                   </ul>
                                               </div>
                                           </div>
@@ -1032,10 +1001,10 @@
                                               <button class="accordion-trigger">Plant Fertilizer Measurements</button>
                                               <div class="accordion-content">
                                                   <ul>
-                                                      <li>Liquid plant food: 5ml per liter of water (0.7 fl oz per gallon)</li>
-                                                      <li>Tomato fertilizer: 7ml per liter of water (0.9 fl oz per gallon)</li>
+                                                      <li>Liquid plant food: 5ml per litre of water (0.7 fl oz per gallon)</li>
+                                                      <li>Tomato fertilizer: 7ml per litre of water (0.9 fl oz per gallon)</li>
                                                       <li>Granular fertilizer: 30-60g per square meter (1-2 oz per square yard)</li>
-                                                      <li>Slow-release fertilizer: 1-2g per liter of potting soil (0.035-0.07 oz per quart)</li>
+                                                      <li>Slow-release fertilizer: 1-2g per litre of potting soil (0.035-0.07 oz per quart)</li>
                                                   </ul>
                                               </div>
                                           </div>
