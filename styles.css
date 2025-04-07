@@ -95,6 +95,13 @@ p {
   color: var(--text-light);
 }
 
+.disclaimer {
+  font-size: 0.9rem;
+  color: #d32f2f;
+  margin-bottom: var(--spacing-sm);
+  font-style: italic;
+}
+
 /* Tabs */
 .tabs {
   background-color: var(--background);

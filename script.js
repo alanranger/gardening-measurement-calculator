@@ -813,6 +813,7 @@ const debugTrigger = document.getElementById("debug-trigger")
 const debugContent = document.getElementById("debug-content")
 const debugInfo = document.getElementById("debug-info")
 const copyDebugBtn = document.getElementById("copy-debug-btn")
+const productDropdown = document.getElementById("product-dropdown")
 
 // DOM Elements - Area Calculator
 const areaShapeRadios = document.querySelectorAll('input[name="area-shape"]')
@@ -850,6 +851,7 @@ const areaDebugTrigger = document.getElementById("area-debug-trigger")
 const areaDebugContent = document.getElementById("area-debug-content")
 const areaDebugInfo = document.getElementById("area-debug-info")
 const copyAreaDebugBtn = document.getElementById("copy-area-debug-btn")
+const areaProductDropdown = document.getElementById("area-product-dropdown")
 
 // DOM Elements - Water Calculator
 const containerShapeRadios = document.querySelectorAll('input[name="container-shape"]')
@@ -890,9 +892,181 @@ const waterDebugTrigger = document.getElementById("water-debug-trigger")
 const waterDebugContent = document.getElementById("water-debug-content")
 const waterDebugInfo = document.getElementById("water-debug-info")
 const copyWaterDebugBtn = document.getElementById("copy-water-debug-btn")
+const waterProductDropdown = document.getElementById("water-product-dropdown")
 
 // DOM Elements - Accordion
 const accordionTriggers = document.querySelectorAll(".accordion-trigger")
+
+// Populate product dropdowns
+function populateProductDropdowns() {
+  // Populate main product dropdown
+  if (productDropdown) {
+    // Clear existing options except the first one
+    while (productDropdown.options.length > 1) {
+      productDropdown.remove(1)
+    }
+
+    // Clear existing optgroups
+    const optgroups = productDropdown.querySelectorAll("optgroup")
+    optgroups.forEach((group) => group.remove())
+
+    // Create optgroups
+    const liquidFertilizerGroup = document.createElement("optgroup")
+    liquidFertilizerGroup.label = "Liquid Fertilizers"
+
+    const granularFertilizerGroup = document.createElement("optgroup")
+    granularFertilizerGroup.label = "Granular Fertilizers"
+
+    const plantFoodGroup = document.createElement("optgroup")
+    plantFoodGroup.label = "Plant Foods"
+
+    const otherProductsGroup = document.createElement("optgroup")
+    otherProductsGroup.label = "Other Products"
+
+    // Add products to appropriate groups
+    COMMON_PRODUCTS.forEach((product) => {
+      const option = document.createElement("option")
+      option.value = product.id
+      option.textContent = product.name
+
+      if (product.type === "liquid_fertilizer") {
+        liquidFertilizerGroup.appendChild(option)
+      } else if (product.type === "granular_fertilizer") {
+        granularFertilizerGroup.appendChild(option)
+      } else if (product.type === "plant_food") {
+        plantFoodGroup.appendChild(option)
+      } else {
+        otherProductsGroup.appendChild(option)
+      }
+    })
+
+    // Add optgroups to dropdown
+    if (liquidFertilizerGroup.children.length > 0) {
+      productDropdown.appendChild(liquidFertilizerGroup)
+    }
+    if (granularFertilizerGroup.children.length > 0) {
+      productDropdown.appendChild(granularFertilizerGroup)
+    }
+    if (plantFoodGroup.children.length > 0) {
+      productDropdown.appendChild(plantFoodGroup)
+    }
+    if (otherProductsGroup.children.length > 0) {
+      productDropdown.appendChild(otherProductsGroup)
+    }
+  }
+
+  // Populate area product dropdown
+  if (areaProductDropdown) {
+    // Clear existing options except the first one
+    while (areaProductDropdown.options.length > 1) {
+      areaProductDropdown.remove(1)
+    }
+
+    // Clear existing optgroups
+    const optgroups = areaProductDropdown.querySelectorAll("optgroup")
+    optgroups.forEach((group) => group.remove())
+
+    // Create optgroups
+    const lawnFertilizerGroup = document.createElement("optgroup")
+    lawnFertilizerGroup.label = "Lawn Fertilizers"
+
+    const lawnSeedGroup = document.createElement("optgroup")
+    lawnSeedGroup.label = "Lawn Seeds"
+
+    const weedKillerGroup = document.createElement("optgroup")
+    weedKillerGroup.label = "Weed Killers"
+
+    const otherAreaGroup = document.createElement("optgroup")
+    otherAreaGroup.label = "Other Area Products"
+
+    // Add products to appropriate groups
+    AREA_TREATMENT_PRODUCTS.forEach((product) => {
+      const option = document.createElement("option")
+      option.value = product.id
+      option.textContent = product.name
+
+      if (product.type === "lawn_fertilizer") {
+        lawnFertilizerGroup.appendChild(option)
+      } else if (product.type === "lawn_seed") {
+        lawnSeedGroup.appendChild(option)
+      } else if (product.type === "weed_killer") {
+        weedKillerGroup.appendChild(option)
+      } else {
+        otherAreaGroup.appendChild(option)
+      }
+    })
+
+    // Add optgroups to dropdown
+    if (lawnFertilizerGroup.children.length > 0) {
+      areaProductDropdown.appendChild(lawnFertilizerGroup)
+    }
+    if (lawnSeedGroup.children.length > 0) {
+      areaProductDropdown.appendChild(lawnSeedGroup)
+    }
+    if (weedKillerGroup.children.length > 0) {
+      areaProductDropdown.appendChild(weedKillerGroup)
+    }
+    if (otherAreaGroup.children.length > 0) {
+      areaProductDropdown.appendChild(otherAreaGroup)
+    }
+  }
+
+  // Populate water product dropdown
+  if (waterProductDropdown) {
+    // Clear existing options except the first one
+    while (waterProductDropdown.options.length > 1) {
+      waterProductDropdown.remove(1)
+    }
+
+    // Clear existing optgroups
+    const optgroups = waterProductDropdown.querySelectorAll("optgroup")
+    optgroups.forEach((group) => group.remove())
+
+    // Create optgroups
+    const pondTreatmentGroup = document.createElement("optgroup")
+    pondTreatmentGroup.label = "Pond Treatments"
+
+    const algaecideGroup = document.createElement("optgroup")
+    algaecideGroup.label = "Algaecides"
+
+    const waterClarifierGroup = document.createElement("optgroup")
+    waterClarifierGroup.label = "Water Clarifiers"
+
+    const otherWaterGroup = document.createElement("optgroup")
+    otherWaterGroup.label = "Other Water Products"
+
+    // Add products to appropriate groups
+    WATER_TREATMENT_PRODUCTS.forEach((product) => {
+      const option = document.createElement("option")
+      option.value = product.id
+      option.textContent = product.name
+
+      if (product.type === "pond_treatment") {
+        pondTreatmentGroup.appendChild(option)
+      } else if (product.type === "algaecide") {
+        algaecideGroup.appendChild(option)
+      } else if (product.type === "water_clarifier") {
+        waterClarifierGroup.appendChild(option)
+      } else {
+        otherWaterGroup.appendChild(option)
+      }
+    })
+
+    // Add optgroups to dropdown
+    if (pondTreatmentGroup.children.length > 0) {
+      waterProductDropdown.appendChild(pondTreatmentGroup)
+    }
+    if (algaecideGroup.children.length > 0) {
+      waterProductDropdown.appendChild(algaecideGroup)
+    }
+    if (waterClarifierGroup.children.length > 0) {
+      waterProductDropdown.appendChild(waterClarifierGroup)
+    }
+    if (otherWaterGroup.children.length > 0) {
+      waterProductDropdown.appendChild(otherWaterGroup)
+    }
+  }
+}
 
 // Initialize the application
 document.addEventListener("DOMContentLoaded", () => {
@@ -902,6 +1076,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initAreaCalculator()
   initWaterCalculator()
   initAccordion()
+  populateProductDropdowns() // Add this line
 })
 
 // Initialize tabs
@@ -1035,6 +1210,19 @@ function initProductCalculator() {
   document.getElementById("water-unit-2").addEventListener("change", updateRatioLabels)
   document.getElementById("target-unit").addEventListener("change", updateRatioLabels)
 
+  // Add event listener for product dropdown
+  if (productDropdown) {
+    productDropdown.addEventListener("change", () => {
+      const selectedProductId = productDropdown.value
+      if (selectedProductId) {
+        const product = COMMON_PRODUCTS.find((p) => p.id === selectedProductId)
+        if (product) {
+          handleProductSelect(product)
+        }
+      }
+    })
+  }
+
   // Initial setup
   updateRatioLabels()
 }
@@ -1120,6 +1308,19 @@ function initAreaCalculator() {
     navigator.clipboard.writeText(debugText)
     alert("Debug information copied to clipboard")
   })
+
+  // Add event listener for area product dropdown
+  if (areaProductDropdown) {
+    areaProductDropdown.addEventListener("change", () => {
+      const selectedProductId = areaProductDropdown.value
+      if (selectedProductId) {
+        const product = AREA_TREATMENT_PRODUCTS.find((p) => p.id === selectedProductId)
+        if (product) {
+          handleAreaProductSelect(product)
+        }
+      }
+    })
+  }
 }
 
 // Initialize water calculator
@@ -1210,6 +1411,19 @@ function initWaterCalculator() {
     navigator.clipboard.writeText(debugText)
     alert("Debug information copied to clipboard")
   })
+
+  // Add event listener for water product dropdown
+  if (waterProductDropdown) {
+    waterProductDropdown.addEventListener("change", () => {
+      const selectedProductId = waterProductDropdown.value
+      if (selectedProductId) {
+        const product = WATER_TREATMENT_PRODUCTS.find((p) => p.id === selectedProductId)
+        if (product) {
+          handleWaterProductSelect(product)
+        }
+      }
+    })
+  }
 }
 
 // Initialize accordion
@@ -1611,7 +1825,7 @@ function saveWaterPreset() {
     dosageAmount: dosageAmountInput.value,
     dosageUnit: dosageUnitSelect.value,
     waterAmount: waterVolumeInput.value,
-    waterUnit: waterVolumeUnitSelect.value,
+    waterVolumeUnit: waterVolumeUnitSelect.value,
   }
 
   // Get existing presets
