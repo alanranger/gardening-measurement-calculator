@@ -1071,8 +1071,26 @@ function populateProductDropdowns() {
 // Initialize the application
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM loaded")
-  console.log("Tab buttons found:", tabButtons.length)
-  console.log("Tab panels found:", tabPanels.length)
+
+  // Fix for tab panels - ensure they have proper display styles
+  document.querySelectorAll(".tab-panel").forEach((panel) => {
+    if (panel.classList.contains("active")) {
+      panel.style.display = "block"
+    } else {
+      panel.style.display = "none"
+    }
+  })
+
+  document.querySelectorAll(".guide-tab-panel").forEach((panel) => {
+    if (panel.classList.contains("active")) {
+      panel.style.display = "block"
+    } else {
+      panel.style.display = "none"
+    }
+  })
+
+  console.log("Tab buttons found:", document.querySelectorAll(".tab-button").length)
+  console.log("Tab panels found:", document.querySelectorAll(".tab-panel").length)
 
   initTabs()
   initGuideTabs()
@@ -1085,53 +1103,135 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Initialize tabs
 function initTabs() {
+  console.log("Initializing tabs with direct DOM manipulation")
+
+  // Get all tab buttons
+  const tabButtons = document.querySelectorAll(".tab-button")
+  console.log("Found tab buttons:", tabButtons.length)
+
+  // Log all tab buttons and their data-tab attributes
   tabButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const tabId = button.getAttribute("data-tab")
-      console.log("Tab clicked:", tabId) // Debug log
+    console.log("Tab button:", button.textContent.trim(), "data-tab:", button.getAttribute("data-tab"))
+  })
 
-      // Update active tab button
-      tabButtons.forEach((btn) => btn.classList.remove("active"))
-      button.classList.add("active")
+  // Get all tab panels
+  const tabPanels = document.querySelectorAll(".tab-panel")
+  console.log("Found tab panels:", tabPanels.length)
 
-      // Update active tab panel
-      tabPanels.forEach((panel) => {
-        panel.classList.remove("active")
-        console.log("Panel ID:", panel.id) // Debug log
+  // Log all tab panels and their IDs
+  tabPanels.forEach((panel) => {
+    console.log("Tab panel ID:", panel.id)
+  })
+
+  // Add click event listeners to tab buttons
+  tabButtons.forEach((button) => {
+    button.addEventListener("click", function (e) {
+      e.preventDefault()
+      const tabId = this.getAttribute("data-tab")
+      console.log("Tab clicked:", tabId)
+
+      // Remove active class from all buttons
+      tabButtons.forEach((btn) => {
+        btn.classList.remove("active")
       })
 
-      const targetPanel = document.getElementById(`${tabId}-panel`)
+      // Add active class to clicked button
+      this.classList.add("active")
+
+      // Hide all tab panels
+      tabPanels.forEach((panel) => {
+        panel.classList.remove("active")
+        panel.style.display = "none"
+      })
+
+      // Show the selected tab panel
+      const targetPanel = document.getElementById(tabId + "-panel")
       if (targetPanel) {
         targetPanel.classList.add("active")
-        console.log("Activating panel:", targetPanel.id) // Debug log
+        targetPanel.style.display = "block"
+        console.log("Activated panel:", targetPanel.id)
       } else {
-        console.error(`Panel with ID ${tabId}-panel not found`) // Debug error
+        console.error("Panel not found:", tabId + "-panel")
+        // Log all available panels for debugging
+        console.log("Available panels:")
+        tabPanels.forEach((p) => {
+          console.log(p.id)
+        })
       }
     })
   })
 
-  // Debug log all tab panels
-  console.log("Available tab panels:")
-  tabPanels.forEach((panel) => {
-    console.log(panel.id)
-  })
+  // Make sure the first tab is active on page load
+  if (tabButtons.length > 0 && tabPanels.length > 0) {
+    const firstTabId = tabButtons[0].getAttribute("data-tab")
+    const firstPanel = document.getElementById(firstTabId + "-panel")
+
+    tabButtons[0].classList.add("active")
+    if (firstPanel) {
+      firstPanel.classList.add("active")
+      firstPanel.style.display = "block"
+      console.log("Initialized first tab:", firstTabId)
+    }
+  }
 }
 
 // Initialize guide tabs
 function initGuideTabs() {
+  console.log("Initializing guide tabs with direct DOM manipulation")
+
+  // Get all guide tabs
+  const guideTabs = document.querySelectorAll(".guide-tab")
+  console.log("Found guide tabs:", guideTabs.length)
+
+  // Get all guide tab panels
+  const guideTabPanels = document.querySelectorAll(".guide-tab-panel")
+  console.log("Found guide tab panels:", guideTabPanels.length)
+
+  // Add click event listeners to guide tabs
   guideTabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      const tabId = tab.getAttribute("data-guide-tab")
+    tab.addEventListener("click", function (e) {
+      e.preventDefault()
+      const tabId = this.getAttribute("data-guide-tab")
+      console.log("Guide tab clicked:", tabId)
 
-      // Update active guide tab
-      guideTabs.forEach((t) => t.classList.remove("active"))
-      tab.classList.add("active")
+      // Remove active class from all guide tabs
+      guideTabs.forEach((t) => {
+        t.classList.remove("active")
+      })
 
-      // Update active guide tab panel
-      guideTabPanels.forEach((panel) => panel.classList.remove("active"))
-      document.getElementById(`${tabId}-panel`).classList.add("active")
+      // Add active class to clicked guide tab
+      this.classList.add("active")
+
+      // Hide all guide tab panels
+      guideTabPanels.forEach((panel) => {
+        panel.classList.remove("active")
+        panel.style.display = "none"
+      })
+
+      // Show the selected guide tab panel
+      const targetPanel = document.getElementById(tabId + "-panel")
+      if (targetPanel) {
+        targetPanel.classList.add("active")
+        targetPanel.style.display = "block"
+        console.log("Activated guide panel:", targetPanel.id)
+      } else {
+        console.error("Guide panel not found:", tabId + "-panel")
+      }
     })
   })
+
+  // Make sure the first guide tab is active on page load
+  if (guideTabs.length > 0 && guideTabPanels.length > 0) {
+    const firstTabId = guideTabs[0].getAttribute("data-guide-tab")
+    const firstPanel = document.getElementById(firstTabId + "-panel")
+
+    guideTabs[0].classList.add("active")
+    if (firstPanel) {
+      firstPanel.classList.add("active")
+      firstPanel.style.display = "block"
+      console.log("Initialized first guide tab:", firstTabId)
+    }
+  }
 }
 
 // Initialize product calculator
@@ -2534,4 +2634,3 @@ function calculateWaterDosage() {
 
   waterDebugInfo.textContent = JSON.stringify(debug, null, 2)
 }
-
