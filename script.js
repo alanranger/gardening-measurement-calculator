@@ -697,13 +697,6 @@ function updateRatioLabels() {
     unitText = "g"
   } else if (measurementType === "volume") {
     unitText = "ml"
-  } else {
-    unitText = "g"
-    \
-  }
-  else
-  if (measurementType === "volume") {
-    unitText = "ml"
   } else if (measurementType === "cap") {
     unitText = "cap"
   }
@@ -749,11 +742,11 @@ function renderProductSearchResults(products, resultsElement, selectHandler) {
   let html = "<ul>"
   products.forEach((product) => {
     html += `
-            <li data-id="${product.id}">
-                <div class="font-medium">${product.name}</div>
-                <div class="hint">${product.instructions}</div>
-            </li>
-        `
+          <li data-id="${product.id}">
+              <div class="font-medium">${product.name}</div>
+              <div class="hint">${product.instructions}</div>
+          </li>
+      `
   })
   html += "</ul>"
 
@@ -963,11 +956,11 @@ function loadPresets(storageKey, listElement, selectHandler) {
   let html = "<ul>"
   presets.forEach((preset) => {
     html += `
-            <li data-id="${preset.id}">
-                <div class="font-medium">${preset.name}</div>
-                <div class="hint">${preset.productAmount || preset.applicationRate || preset.dosageAmount} ${preset.productUnit || preset.rateUnit || preset.dosageUnit} per ${preset.waterAmount || "1"} ${preset.waterUnit || preset.rateAreaUnit || "l"}</div>
-            </li>
-        `
+          <li data-id="${preset.id}">
+              <div class="font-medium">${preset.name}</div>
+              <div class="hint">${preset.productAmount || preset.applicationRate || preset.dosageAmount} ${preset.productUnit || preset.rateUnit || preset.dosageUnit} per ${preset.waterAmount || "1"} ${preset.waterUnit || preset.rateAreaUnit || "l"}</div>
+          </li>
+      `
   })
   html += "</ul>"
 
