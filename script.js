@@ -1346,24 +1346,24 @@ function calculateProductDosage() {
     wateringCanTitle.textContent = `For your ${waterQty} ${waterUnit} watering can:`
 
     // Get the manufacturer's measurement unit (cap, scoop, etc.)
-    const manufacturerUnit = ""
-    let manufacturerAmount = ""
+    let manufacturerText = ""
 
     if (measurementType === "cap") {
       // For cap measurements, show both ml and caps
       const capsNeeded = productBaseQty / capSize
 
       // Format the cap measurement in a user-friendly way
+      let capText = ""
       if (capsNeeded < 0.25) {
-        manufacturerAmount = "a few drops"
+        capText = "a few drops"
       } else if (capsNeeded < 0.4) {
-        manufacturerAmount = "about 1/4 cap"
+        capText = "1/4 cap"
       } else if (capsNeeded < 0.6) {
-        manufacturerAmount = "about 1/2 cap"
+        capText = "1/2 cap"
       } else if (capsNeeded < 0.85) {
-        manufacturerAmount = "about 3/4 cap"
+        capText = "3/4 cap"
       } else if (capsNeeded < 1.25) {
-        manufacturerAmount = "1 full cap"
+        capText = "1 full cap"
       } else {
         const wholeCaps = Math.floor(capsNeeded)
         const fraction = capsNeeded - wholeCaps
@@ -1375,10 +1375,10 @@ function calculateProductDosage() {
         else if (fraction < 0.875) fractionText = " and 3/4"
         else fractionText = " and 1"
 
-        manufacturerAmount = `${wholeCaps}${fractionText} caps`
+        capText = `${wholeCaps}${fractionText} caps`
       }
 
-      wateringCanResult.textContent = `Add ${productBaseQty.toFixed(1)} ml (${manufacturerAmount}) of ${productNameValue}`
+      manufacturerText = ` (${capText})`
     } else if (hasScoopMeasure) {
       // For scoop measurements, show both ml/g and scoops
       const scoopSize = Number.parseFloat(document.getElementById("scoop-size").value)
@@ -1396,14 +1396,15 @@ function calculateProductDosage() {
         const scoopsNeeded = productBaseQty / scoopBaseQty
 
         // Format the scoop measurement
+        let scoopText = ""
         if (scoopsNeeded < 0.25) {
-          manufacturerAmount = "a small pinch"
+          scoopText = "a small pinch"
         } else if (scoopsNeeded < 1) {
           const fraction = Math.round(scoopsNeeded * 4) / 4
-          if (fraction === 0.25) manufacturerAmount = "1/4 scoop"
-          else if (fraction === 0.5) manufacturerAmount = "1/2 scoop"
-          else if (fraction === 0.75) manufacturerAmount = "3/4 scoop"
-          else manufacturerAmount = `${fraction} scoops`
+          if (fraction === 0.25) scoopText = "1/4 scoop"
+          else if (fraction === 0.5) scoopText = "1/2 scoop"
+          else if (fraction === 0.75) scoopText = "3/4 scoop"
+          else scoopText = `${fraction} scoops`
         } else {
           const wholeScoops = Math.floor(scoopsNeeded)
           const fraction = scoopsNeeded - wholeScoops
@@ -1415,19 +1416,17 @@ function calculateProductDosage() {
           else if (fraction < 0.875) fractionText = " and 3/4"
           else fractionText = " and 1"
 
-          manufacturerAmount = `${wholeScoops}${fractionText} scoops`
+          scoopText = `${wholeScoops}${fractionText} scoops`
         }
 
-        wateringCanResult.textContent = `Add ${productBaseQty.toFixed(1)} ${measurementType === "weight" ? "g" : "ml"} (${manufacturerAmount}) of ${productNameValue}`
-      } else {
-        wateringCanResult.textContent = `Add ${productBaseQty.toFixed(1)} ${measurementType === "weight" ? "g" : "ml"} of ${productNameValue}`
+        manufacturerText = ` (${scoopText})`
       }
-    } else {
-      // For standard measurements with no manufacturer unit
-      wateringCanResult.textContent = `Add ${productBaseQty.toFixed(1)} ${measurementType === "weight" ? "g" : "ml"} of ${productNameValue}`
     }
 
-    wateringCanInfo.textContent = `Based on the recommended dosage of ${ratio.toFixed(2)} ${measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"} per ${waterUnit === "l" ? "liter" : "gallon"}`
+    // Update the watering can result with both precise measurement and manufacturer's unit
+    wateringCanResult.textContent = `Add ${productBaseQty.toFixed(1)} ${measurementType === "weight" ? "g" : "ml"}${manufacturerText} of ${productNameValue}`
+
+    wateringCanInfo.textContent = `Based on the ratio of ${ratio.toFixed(2)} ${measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"} per ${waterUnit === "l" ? "liter" : "gallon"}`
 
     wateringCanSection.classList.remove("hidden")
   } else {
@@ -1714,50 +1713,6 @@ function calculateWaterDosage() {
 
   // Format results
   const totalAmount = ""
-  if (dosageUnit === "ml" || dosage  // Format results\
-  let totalAmount = ""
-  if (dosageUnit === "ml" || dosageUnit === "g") {
-    if (totalDosage >= 1000) {
-      totalAmount = `${(totalDosage / 1000).toFixed(2)} ${dosageUnit === "ml" ? "l" : "kg"}`
-    } else {
-      totalAmount = `${totalDosage.toFixed(2)} ${dosageUnit}`
-    }
-  } else {
-    totalAmount = `${totalDosage.toFixed(2)} ${dosageUnit}`
+  if (dosageUnit === "ml" || dosageUnit === "l") {
   }
-
-  // Calculate metric dosage (ml or g per liter)
-  const metricDosage = `${(dosagePer1000L / 1000).toFixed(2)} ${dosageUnit} per liter`
-
-  // Calculate imperial dosage (fl oz or oz per gallon)
-  let imperialDosage = ""
-  if (dosageUnit === "ml" || dosageUnit === "tsp" || dosageUnit === "tbsp") {
-    // Convert ml/l to fl oz/gal
-    const flOzPerGal = (dosagePer1000L / 1000) * (4.54609 / 29.5735)
-    imperialDosage = `${flOzPerGal.toFixed(2)} fl oz per gallon`
-    debug.flOzPerGal = flOzPerGal
-  } else {
-    // Convert g/l to oz/gal
-    const ozPerGal = (dosagePer1000L / 1000) * (4.54609 / 28.3495)
-    imperialDosage = `${ozPerGal.toFixed(2)} oz per gallon`
-    debug.ozPerGal = ozPerGal
-  }
-
-  // Calculate alternative dosage (for different water volumes)
-  const alternativeDosage = `${(dosagePer1000L / 10).toFixed(2)} ${dosageUnit} per 100 liters`
-
-  // Update results
-  waterTotalAmountResult.textContent = totalAmount
-  waterMetricDosageResult.textContent = metricDosage
-  waterImperialDosageResult.textContent = imperialDosage
-  waterAlternativeDosageResult.textContent = alternativeDosage
-
-  // Update debug info
-  debug.totalAmount = totalAmount
-  debug.metricDosage = metricDosage
-  debug.imperialDosage = imperialDosage
-  debug.alternativeDosage = alternativeDosage
-
-  waterDebugInfo.textContent = JSON.stringify(debug, null, 2)
-}
 
