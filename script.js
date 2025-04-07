@@ -1345,7 +1345,7 @@ function calculateProductDosage() {
   if (calculationMode === "water_to_product" && productNameValue) {
     wateringCanTitle.textContent = `For your ${waterQty} ${waterUnit} watering can:`
 
-    // Get the manufacturer's measurement unit (cap, scoop, etc.)
+    // Format the manufacturer's measurement unit (cap, scoop, etc.)
     let manufacturerText = ""
 
     if (measurementType === "cap") {
@@ -1712,7 +1712,49 @@ function calculateWaterDosage() {
   debug.totalDosage = totalDosage
 
   // Format results
-  const totalAmount = ""
-  if (dosageUnit === "ml" || dosageUnit === "l") {
+  let totalAmount = ""
+  if (dosageUnit === "ml" || dosageUnit === "g") {
+    if (totalDosage >= 1000) {
+      totalAmount = `${(totalDosage / 1000).toFixed(2)} ${dosageUnit === "ml" ? "l" : "kg"}`
+    } else {
+      totalAmount = `${totalDosage.toFixed(2)} ${dosageUnit}`
+    }
+  } else {
+    totalAmount = `${totalDosage.toFixed(2)} ${dosageUnit}`
   }
+
+  // Calculate metric dosage (ml or g per liter)
+  const metricDosage = `${(dosagePer1000L / 1000).toFixed(2)} ${dosageUnit} per liter`
+
+  // Calculate imperial dosage (fl oz or oz per gallon)
+  let imperialDosage = ""
+  if (dosageUnit === "ml" || dosageUnit === "tsp" || dosageUnit === "tbsp") {
+    // Convert ml/l to fl oz/gal
+    const flOzPerGal = (dosagePer1000L / 1000) * (4.54609 / 29.5735)
+    imperialDosage = `${flOzPerGal.toFixed(2)} fl oz per gallon`
+    debug.flOzPerGal = flOzPerGal
+  } else {
+    // Convert g/l to oz/gal
+    const ozPerGal = (dosagePer1000L / 1000) * (4.54609 / 28.3495)
+    imperialDosage = `${ozPerGal.toFixed(2)} oz per gallon`
+    debug.ozPerGal = ozPerGal
+  }
+
+  // Calculate alternative dosage (for different water volumes)
+  const alternativeDosage = `${(dosagePer1000L / 10).toFixed(2)} ${dosageUnit} per 100 liters`
+
+  // Update results
+  waterTotalAmountResult.textContent = totalAmount
+  waterMetricDosageResult.textContent = metricDosage
+  waterImperialDosageResult.textContent = imperialDosage
+  waterAlternativeDosageResult.textContent = alternativeDosage
+
+  // Update debug info
+  debug.totalAmount = totalAmount
+  debug.metricDosage = metricDosage
+  debug.imperialDosage = imperialDosage
+  debug.alternativeDosage = alternativeDosage
+
+  waterDebugInfo.textContent = JSON.stringify(debug, null, 2)
+}
 
