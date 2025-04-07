@@ -1345,13 +1345,89 @@ function calculateProductDosage() {
   if (calculationMode === "water_to_product" && productNameValue) {
     wateringCanTitle.textContent = `For your ${waterQty} ${waterUnit} watering can:`
 
+    // Get the manufacturer's measurement unit (cap, scoop, etc.)
+    const manufacturerUnit = ""
+    let manufacturerAmount = ""
+
     if (measurementType === "cap") {
-      wateringCanResult.textContent = `Add ${capDosageText.split(" (")[0]} of ${productNameValue}`
+      // For cap measurements, show both ml and caps
+      const capsNeeded = productBaseQty / capSize
+
+      // Format the cap measurement in a user-friendly way
+      if (capsNeeded < 0.25) {
+        manufacturerAmount = "a few drops"
+      } else if (capsNeeded < 0.4) {
+        manufacturerAmount = "about 1/4 cap"
+      } else if (capsNeeded < 0.6) {
+        manufacturerAmount = "about 1/2 cap"
+      } else if (capsNeeded < 0.85) {
+        manufacturerAmount = "about 3/4 cap"
+      } else if (capsNeeded < 1.25) {
+        manufacturerAmount = "1 full cap"
+      } else {
+        const wholeCaps = Math.floor(capsNeeded)
+        const fraction = capsNeeded - wholeCaps
+        let fractionText = ""
+
+        if (fraction < 0.125) fractionText = ""
+        else if (fraction < 0.375) fractionText = " and 1/4"
+        else if (fraction < 0.625) fractionText = " and 1/2"
+        else if (fraction < 0.875) fractionText = " and 3/4"
+        else fractionText = " and 1"
+
+        manufacturerAmount = `${wholeCaps}${fractionText} caps`
+      }
+
+      wateringCanResult.textContent = `Add ${productBaseQty.toFixed(1)} ml (${manufacturerAmount}) of ${productNameValue}`
+    } else if (hasScoopMeasure) {
+      // For scoop measurements, show both ml/g and scoops
+      const scoopSize = Number.parseFloat(document.getElementById("scoop-size").value)
+      const scoopUnit = document.getElementById("scoop-unit").value
+
+      if (!isNaN(scoopSize)) {
+        let scoopBaseQty = scoopSize
+
+        if (WEIGHT_CONVERSIONS[scoopUnit]) {
+          scoopBaseQty = scoopSize * WEIGHT_CONVERSIONS[scoopUnit]
+        } else if (VOLUME_CONVERSIONS[scoopUnit]) {
+          scoopBaseQty = scoopSize * VOLUME_CONVERSIONS[scoopUnit]
+        }
+
+        const scoopsNeeded = productBaseQty / scoopBaseQty
+
+        // Format the scoop measurement
+        if (scoopsNeeded < 0.25) {
+          manufacturerAmount = "a small pinch"
+        } else if (scoopsNeeded < 1) {
+          const fraction = Math.round(scoopsNeeded * 4) / 4
+          if (fraction === 0.25) manufacturerAmount = "1/4 scoop"
+          else if (fraction === 0.5) manufacturerAmount = "1/2 scoop"
+          else if (fraction === 0.75) manufacturerAmount = "3/4 scoop"
+          else manufacturerAmount = `${fraction} scoops`
+        } else {
+          const wholeScoops = Math.floor(scoopsNeeded)
+          const fraction = scoopsNeeded - wholeScoops
+          let fractionText = ""
+
+          if (fraction < 0.125) fractionText = ""
+          else if (fraction < 0.375) fractionText = " and 1/4"
+          else if (fraction < 0.625) fractionText = " and 1/2"
+          else if (fraction < 0.875) fractionText = " and 3/4"
+          else fractionText = " and 1"
+
+          manufacturerAmount = `${wholeScoops}${fractionText} scoops`
+        }
+
+        wateringCanResult.textContent = `Add ${productBaseQty.toFixed(1)} ${measurementType === "weight" ? "g" : "ml"} (${manufacturerAmount}) of ${productNameValue}`
+      } else {
+        wateringCanResult.textContent = `Add ${productBaseQty.toFixed(1)} ${measurementType === "weight" ? "g" : "ml"} of ${productNameValue}`
+      }
     } else {
-      wateringCanResult.textContent = `Add ${productBaseQty.toFixed(2)} ${measurementType === "weight" ? "g" : "ml"} of ${productNameValue}`
+      // For standard measurements with no manufacturer unit
+      wateringCanResult.textContent = `Add ${productBaseQty.toFixed(1)} ${measurementType === "weight" ? "g" : "ml"} of ${productNameValue}`
     }
 
-    wateringCanInfo.textContent = `Based on the ratio of ${ratio.toFixed(2)} ${measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"} per ${waterUnit === "l" ? "liter" : "gallon"}`
+    wateringCanInfo.textContent = `Based on the recommended dosage of ${ratio.toFixed(2)} ${measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"} per ${waterUnit === "l" ? "liter" : "gallon"}`
 
     wateringCanSection.classList.remove("hidden")
   } else {
@@ -1637,6 +1713,8 @@ function calculateWaterDosage() {
   debug.totalDosage = totalDosage
 
   // Format results
+  const totalAmount = ""
+  if (dosageUnit === "ml" || dosage  // Format results\
   let totalAmount = ""
   if (dosageUnit === "ml" || dosageUnit === "g") {
     if (totalDosage >= 1000) {
