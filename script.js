@@ -15,7 +15,91 @@ const COMMON_PRODUCTS = [
       markings: { half: 5, full: 10 },
     },
   },
-  // Other products...
+  {
+    id: "baby-bio-houseplant",
+    name: "Baby Bio Houseplant Food",
+    type: "liquid_fertilizer",
+    measurementType: "cap",
+    defaultDosage: 0.5,
+    defaultDosageUnit: "cap",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions: "Add 5-10 drops to 500ml of water. Apply every watering during growing season.",
+    capSize: {
+      fullCapML: 5,
+      markings: { half: 2.5, full: 5 },
+    },
+  },
+  {
+    id: "tomorite",
+    name: "Levington Tomorite Tomato Food",
+    type: "liquid_fertilizer",
+    measurementType: "cap",
+    defaultDosage: 2,
+    defaultDosageUnit: "cap",
+    defaultWaterAmount: 4.5,
+    defaultWaterUnit: "l",
+    instructions: "Add 20ml to 4.5 litres (1 gallon) of water. Apply twice a week when plants are in flower/fruit.",
+    capSize: {
+      fullCapML: 10,
+      markings: { half: 5, full: 10 },
+    },
+  },
+  {
+    id: "growmore-granular",
+    name: "Growmore Granular Garden Fertilizer",
+    type: "granular_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 70,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions: "Apply 70g per square meter and work into the soil. Apply every 4-6 weeks during growing season.",
+  },
+  {
+    id: "miracle-gro-water-soluble",
+    name: "Miracle-Gro Water Soluble Plant Food",
+    type: "granular_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 7,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 4.5,
+    defaultWaterUnit: "l",
+    instructions: "Dissolve 7g (one scoop) in 4.5 litres (1 gallon) of water. Apply every 1-2 weeks.",
+  },
+  {
+    id: "evergreen-lawn-feed",
+    name: "Evergreen Complete 4-in-1 Lawn Feed",
+    type: "lawn_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 35,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions: "Apply 35g per square metre using a spreader. Water in if no rain falls within 48 hours.",
+  },
+  {
+    id: "weedol-lawn-weedkiller",
+    name: "Weedol Lawn Weedkiller Concentrate",
+    type: "weed_killer",
+    measurementType: "volume",
+    defaultDosage: 10,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions: "Dilute 10ml in 1 litre of water. Apply when weeds are actively growing.",
+  },
+  {
+    id: "tetra-pond-algae",
+    name: "TetraPond AlgoRem",
+    type: "pond_treatment",
+    measurementType: "volume",
+    defaultDosage: 50,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1000,
+    defaultWaterUnit: "l",
+    instructions: "Add 50ml per 1000 litres of pond water. Repeat after 2-3 weeks if necessary.",
+  },
 ]
 
 // Area Treatment Products
@@ -31,7 +115,28 @@ const AREA_TREATMENT_PRODUCTS = [
     defaultWaterUnit: "sq_m",
     instructions: "Apply 35g per square metre using a spreader. Water in if no rain falls within 48 hours.",
   },
-  // Other area products...
+  {
+    id: "growmore-granular",
+    name: "Growmore Granular Garden Fertilizer",
+    type: "granular_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 70,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions: "Apply 70g per square meter and work into the soil. Apply every 4-6 weeks during growing season.",
+  },
+  {
+    id: "weedol-lawn-weedkiller",
+    name: "Weedol Lawn Weedkiller Concentrate",
+    type: "weed_killer",
+    measurementType: "volume",
+    defaultDosage: 10,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions: "Dilute 10ml in 1 litre of water. Apply when weeds are actively growing.",
+  },
 ]
 
 // Water Treatment Products
@@ -47,7 +152,28 @@ const WATER_TREATMENT_PRODUCTS = [
     defaultWaterUnit: "l",
     instructions: "Add 50ml per 1000 litres of pond water. Repeat after 2-3 weeks if necessary.",
   },
-  // Other water products...
+  {
+    id: "api-pond-algaefix",
+    name: "API Pond AlgaeFix",
+    type: "algaecide",
+    measurementType: "volume",
+    defaultDosage: 5,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 100,
+    defaultWaterUnit: "l",
+    instructions: "Add 5ml per 100 litres of pond water. Repeat every 3 days until algae is gone.",
+  },
+  {
+    id: "tetra-aquasafe",
+    name: "Tetra AquaSafe Water Conditioner",
+    type: "water_clarifier",
+    measurementType: "volume",
+    defaultDosage: 5,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 10,
+    defaultWaterUnit: "l",
+    instructions: "Add 5ml per 10 litres of water when adding new water to the pond.",
+  },
 ]
 
 // Conversion factors
@@ -88,7 +214,12 @@ const LENGTH_CONVERSIONS = {
 const PRODUCT_TYPE_HINTS = {
   liquid_fertilizer: "Typical usage: 5-10ml per litre of water",
   granular_fertilizer: "Typical usage: 1-2g per litre of water or 30-60g per sq metre",
-  // Other product type hints...
+  lawn_fertilizer: "Typical usage: 35g per square metre",
+  weed_killer: "Typical usage: 10ml per litre of water",
+  pond_treatment: "Typical usage: 50ml per 1000 litres of water",
+  algaecide: "Typical usage: 5ml per 100 litres of water",
+  water_clarifier: "Typical usage: 5ml per 10 litres of water",
+  custom: "Enter your own measurements for a custom product",
 }
 
 // Initialize the application
@@ -201,6 +332,12 @@ document.addEventListener("DOMContentLoaded", () => {
     VERSION_ELEMENT.textContent = VERSION
     document.body.appendChild(VERSION_ELEMENT)
   }
+
+  // Update version number in header
+  const versionHeader = document.querySelector(".version-header")
+  if (versionHeader) {
+    versionHeader.textContent = "V1.08"
+  }
 })
 
 // Initialize product calculator
@@ -219,13 +356,6 @@ function initProductCalculator() {
   const scoopSizeGroup = document.getElementById("scoop-size-group")
   const calculationModeRadios = document.querySelectorAll('input[name="calculation-mode"]')
   const calculationModePanels = document.querySelectorAll(".calculation-mode-panel")
-  const findProductBtn = document.getElementById("find-product-btn")
-  const productSearchPanel = document.getElementById("product-search-panel")
-  const productSearchInput = document.getElementById("product-search")
-  const productSearchResults = document.getElementById("product-search-results")
-  const myPresetsBtn = document.getElementById("my-presets-btn")
-  const presetsPanel = document.getElementById("presets-panel")
-  const presetsList = document.getElementById("presets-list")
   const productNameInput = document.getElementById("product-name")
   const productInstructions = document.getElementById("product-instructions")
   const instructionsText = document.getElementById("instructions-text")
@@ -233,13 +363,85 @@ function initProductCalculator() {
   const ratioLabel2 = document.getElementById("ratio-label-2")
   const savePresetBtn = document.getElementById("save-preset-btn")
   const calculateBtn = document.getElementById("calculate-btn")
+  const myPresetsBtn = document.getElementById("my-presets-btn")
+  const presetsPanel = document.getElementById("presets-panel")
+  const presetsList = document.getElementById("presets-list")
 
-  // Update product type hint
+  // Create product name dropdown
+  const productNameGroup = document.getElementById("product-name-group")
+  if (productNameGroup) {
+    // Create a container for the dropdown
+    const productNameSelectContainer = document.createElement("div")
+    productNameSelectContainer.id = "product-name-select-container"
+    productNameSelectContainer.className = "form-group"
+
+    // Create label
+    const productNameSelectLabel = document.createElement("label")
+    productNameSelectLabel.htmlFor = "product-name-select"
+    productNameSelectLabel.textContent = "Select Product:"
+
+    // Create select element
+    const productNameSelect = document.createElement("select")
+    productNameSelect.id = "product-name-select"
+    productNameSelect.className = "form-control"
+
+    // Add default option
+    const defaultOption = document.createElement("option")
+    defaultOption.value = ""
+    defaultOption.textContent = "-- Select a product --"
+    productNameSelect.appendChild(defaultOption)
+
+    // Add the elements to the container
+    productNameSelectContainer.appendChild(productNameSelectLabel)
+    productNameSelectContainer.appendChild(productNameSelect)
+
+    // Insert the container before the product name input
+    productNameGroup.insertBefore(productNameSelectContainer, productNameGroup.firstChild)
+
+    // Add event listener to the product name select
+    productNameSelect.addEventListener("change", function () {
+      const selectedProductId = this.value
+      if (selectedProductId) {
+        const product = COMMON_PRODUCTS.find((p) => p.id === selectedProductId)
+        if (product) {
+          handleProductSelect(product)
+        }
+      }
+    })
+  }
+
+  // Update product type hint and filter product name dropdown
   if (productTypeSelect && productTypeHint) {
     productTypeSelect.addEventListener("change", () => {
       const selectedType = productTypeSelect.value
       productTypeHint.textContent = PRODUCT_TYPE_HINTS[selectedType] || ""
+
+      // Update product name dropdown based on selected type
+      updateProductNameDropdown(selectedType)
+
+      // Show/hide custom product name input based on selection
+      const productNameInput = document.getElementById("product-name")
+      const productNameInputGroup = document.querySelector(".input-with-button")
+
+      if (selectedType === "custom") {
+        // For custom type, show the input field and hide the dropdown
+        if (productNameInputGroup) productNameInputGroup.classList.remove("hidden")
+        document.getElementById("product-name-select-container").classList.add("hidden")
+      } else {
+        // For predefined types, show the dropdown and hide the input field
+        if (productNameInputGroup) productNameInputGroup.classList.add("hidden")
+        document.getElementById("product-name-select-container").classList.remove("hidden")
+      }
     })
+
+    // Initial update of product name dropdown
+    updateProductNameDropdown(productTypeSelect.value)
+
+    // Initially hide the product name input for non-custom types
+    const productNameInputGroup = document.querySelector(".input-with-button")
+    if (productNameInputGroup && productTypeSelect.value !== "custom") {
+      productNameInputGroup.classList.add("hidden")
+    }
   }
 
   // Toggle cap size input based on measurement type
@@ -292,34 +494,11 @@ function initProductCalculator() {
     })
   }
 
-  // Toggle product search panel
-  if (findProductBtn && productSearchPanel) {
-    findProductBtn.addEventListener("click", () => {
-      if (productSearchPanel.classList.contains("hidden")) {
-        productSearchPanel.classList.remove("hidden")
-        if (presetsPanel) presetsPanel.classList.add("hidden")
-        if (productSearchInput) productSearchInput.focus()
-      } else {
-        productSearchPanel.classList.add("hidden")
-      }
-    })
-  }
-
-  // Handle product search
-  if (productSearchInput && productSearchResults) {
-    productSearchInput.addEventListener("input", () => {
-      const searchTerm = productSearchInput.value.toLowerCase()
-      const filteredProducts = COMMON_PRODUCTS.filter((product) => product.name.toLowerCase().includes(searchTerm))
-      renderProductSearchResults(filteredProducts, productSearchResults, handleProductSelect)
-    })
-  }
-
   // Toggle presets panel
   if (myPresetsBtn && presetsPanel) {
     myPresetsBtn.addEventListener("click", () => {
       if (presetsPanel.classList.contains("hidden")) {
         presetsPanel.classList.remove("hidden")
-        if (productSearchPanel) productSearchPanel.classList.add("hidden")
         loadPresets("gardenerPresets", presetsList, handlePresetSelect)
       } else {
         presetsPanel.classList.add("hidden")
@@ -379,6 +558,47 @@ function initProductCalculator() {
       })
     }
   })
+
+  // Remove the find product button as it's no longer needed
+  const findProductBtn = document.getElementById("find-product-btn")
+  if (findProductBtn) {
+    findProductBtn.parentNode.removeChild(findProductBtn)
+  }
+}
+
+// Function to update product name dropdown based on selected product type
+function updateProductNameDropdown(selectedType) {
+  const productNameSelect = document.getElementById("product-name-select")
+  if (!productNameSelect) return
+
+  // Clear existing options except the first one
+  while (productNameSelect.options.length > 1) {
+    productNameSelect.remove(1)
+  }
+
+  // Filter products by selected type
+  const filteredProducts = COMMON_PRODUCTS.filter((product) => product.type === selectedType)
+
+  // Add filtered products to dropdown
+  filteredProducts.forEach((product) => {
+    const option = document.createElement("option")
+    option.value = product.id
+    option.textContent = product.name
+    productNameSelect.appendChild(option)
+  })
+
+  // Show/hide the dropdown based on whether there are products
+  const productNameSelectContainer = document.getElementById("product-name-select-container")
+  if (productNameSelectContainer) {
+    if (filteredProducts.length === 0 && selectedType !== "custom") {
+      productNameSelectContainer.classList.add("hidden")
+      // Show the manual input if no products are available
+      const productNameInputGroup = document.querySelector(".input-with-button")
+      if (productNameInputGroup) productNameInputGroup.classList.remove("hidden")
+    } else {
+      productNameSelectContainer.classList.remove("hidden")
+    }
+  }
 }
 
 // Initialize area calculator
@@ -396,16 +616,56 @@ function initAreaCalculator() {
   const circleUnitSelect = document.getElementById("circle-unit")
   const calculatedAreaDiv = document.getElementById("calculated-area")
   const areaResultText = document.getElementById("area-result")
-  const findAreaProductBtn = document.getElementById("find-area-product-btn")
-  const areaProductSearchPanel = document.getElementById("area-product-search-panel")
-  const areaProductSearchInput = document.getElementById("area-product-search")
-  const areaProductSearchResults = document.getElementById("area-product-search-results")
-  const areaPresetsBtn = document.getElementById("area-presets-btn")
-  const areaPresetsPanel = document.getElementById("area-presets-panel")
-  const areaPresetsList = document.getElementById("area-presets-list")
   const areaProductTypeSelect = document.getElementById("area-product-type")
   const areaProductTypeHint = document.getElementById("area-product-type-hint")
   const calculateAreaBtn = document.getElementById("calculate-area-btn")
+  const areaPresetsBtn = document.getElementById("area-presets-btn")
+  const areaPresetsPanel = document.getElementById("area-presets-panel")
+  const areaPresetsList = document.getElementById("area-presets-list")
+  const saveAreaPresetBtn = document.getElementById("save-area-preset-btn")
+
+  // Create area product name dropdown
+  const areaProductNameGroup = document.getElementById("area-product-name-group")
+  if (areaProductNameGroup) {
+    // Create a container for the dropdown
+    const areaProductNameSelectContainer = document.createElement("div")
+    areaProductNameSelectContainer.id = "area-product-name-select-container"
+    areaProductNameSelectContainer.className = "form-group"
+
+    // Create label
+    const areaProductNameSelectLabel = document.createElement("label")
+    areaProductNameSelectLabel.htmlFor = "area-product-name-select"
+    areaProductNameSelectLabel.textContent = "Select Product:"
+
+    // Create select element
+    const areaProductNameSelect = document.createElement("select")
+    areaProductNameSelect.id = "area-product-name-select"
+    areaProductNameSelect.className = "form-control"
+
+    // Add default option
+    const defaultOption = document.createElement("option")
+    defaultOption.value = ""
+    defaultOption.textContent = "-- Select a product --"
+    areaProductNameSelect.appendChild(defaultOption)
+
+    // Add the elements to the container
+    areaProductNameSelectContainer.appendChild(areaProductNameSelectLabel)
+    areaProductNameSelectContainer.appendChild(areaProductNameSelect)
+
+    // Insert the container before the product name input
+    areaProductNameGroup.insertBefore(areaProductNameSelectContainer, areaProductNameGroup.firstChild)
+
+    // Add event listener to the product name select
+    areaProductNameSelect.addEventListener("change", function () {
+      const selectedProductId = this.value
+      if (selectedProductId) {
+        const product = AREA_TREATMENT_PRODUCTS.find((p) => p.id === selectedProductId)
+        if (product) {
+          handleAreaProductSelect(product)
+        }
+      }
+    })
+  }
 
   // Toggle area shape inputs
   if (areaShapeRadios && areaShapeRadios.length > 0 && rectangleInputs && circleInputs) {
@@ -433,36 +693,38 @@ function initAreaCalculator() {
     }
   })
 
-  // Update product type hint
+  // Update product type hint and filter product name dropdown
   if (areaProductTypeSelect && areaProductTypeHint) {
     areaProductTypeSelect.addEventListener("change", () => {
       const selectedType = areaProductTypeSelect.value
       areaProductTypeHint.textContent = PRODUCT_TYPE_HINTS[selectedType] || ""
-    })
-  }
 
-  // Toggle product search panel
-  if (findAreaProductBtn && areaProductSearchPanel) {
-    findAreaProductBtn.addEventListener("click", () => {
-      if (areaProductSearchPanel.classList.contains("hidden")) {
-        areaProductSearchPanel.classList.remove("hidden")
-        if (areaPresetsPanel) areaPresetsPanel.classList.add("hidden")
-        if (areaProductSearchInput) areaProductSearchInput.focus()
+      // Update product name dropdown based on selected type
+      updateAreaProductNameDropdown(selectedType)
+
+      // Show/hide custom product name input based on selection
+      const areaProductNameInput = document.getElementById("area-product-name")
+      const areaProductNameInputGroup = document.querySelector("#area-product-name-group .input-with-button")
+
+      if (selectedType === "custom") {
+        // For custom type, show the input field and hide the dropdown
+        if (areaProductNameInputGroup) areaProductNameInputGroup.classList.remove("hidden")
+        document.getElementById("area-product-name-select-container").classList.add("hidden")
       } else {
-        areaProductSearchPanel.classList.add("hidden")
+        // For predefined types, show the dropdown and hide the input field
+        if (areaProductNameInputGroup) areaProductNameInputGroup.classList.add("hidden")
+        document.getElementById("area-product-name-select-container").classList.remove("hidden")
       }
     })
-  }
 
-  // Handle product search
-  if (areaProductSearchInput && areaProductSearchResults) {
-    areaProductSearchInput.addEventListener("input", () => {
-      const searchTerm = areaProductSearchInput.value.toLowerCase()
-      const filteredProducts = AREA_TREATMENT_PRODUCTS.filter((product) =>
-        product.name.toLowerCase().includes(searchTerm),
-      )
-      renderProductSearchResults(filteredProducts, areaProductSearchResults, handleAreaProductSelect)
-    })
+    // Initial update of product name dropdown
+    updateAreaProductNameDropdown(areaProductTypeSelect.value)
+
+    // Initially hide the product name input for non-custom types
+    const areaProductNameInputGroup = document.querySelector("#area-product-name-group .input-with-button")
+    if (areaProductNameInputGroup && areaProductTypeSelect.value !== "custom") {
+      areaProductNameInputGroup.classList.add("hidden")
+    }
   }
 
   // Toggle presets panel
@@ -470,11 +732,17 @@ function initAreaCalculator() {
     areaPresetsBtn.addEventListener("click", () => {
       if (areaPresetsPanel.classList.contains("hidden")) {
         areaPresetsPanel.classList.remove("hidden")
-        if (areaProductSearchPanel) areaProductSearchPanel.classList.add("hidden")
         loadPresets("gardenerAreaPresets", areaPresetsList, handleAreaPresetSelect)
       } else {
         areaPresetsPanel.classList.add("hidden")
       }
+    })
+  }
+
+  // Save preset
+  if (saveAreaPresetBtn) {
+    saveAreaPresetBtn.addEventListener("click", () => {
+      savePreset("gardenerAreaPresets")
     })
   }
 
@@ -483,6 +751,47 @@ function initAreaCalculator() {
     calculateAreaBtn.addEventListener("click", () => {
       calculateAreaApplication()
     })
+  }
+
+  // Remove the find product button as it's no longer needed
+  const findAreaProductBtn = document.getElementById("find-area-product-btn")
+  if (findAreaProductBtn) {
+    findAreaProductBtn.parentNode.removeChild(findAreaProductBtn)
+  }
+}
+
+// Function to update area product name dropdown based on selected product type
+function updateAreaProductNameDropdown(selectedType) {
+  const areaProductNameSelect = document.getElementById("area-product-name-select")
+  if (!areaProductNameSelect) return
+
+  // Clear existing options except the first one
+  while (areaProductNameSelect.options.length > 1) {
+    areaProductNameSelect.remove(1)
+  }
+
+  // Filter products by selected type
+  const filteredProducts = AREA_TREATMENT_PRODUCTS.filter((product) => product.type === selectedType)
+
+  // Add filtered products to dropdown
+  filteredProducts.forEach((product) => {
+    const option = document.createElement("option")
+    option.value = product.id
+    option.textContent = product.name
+    areaProductNameSelect.appendChild(option)
+  })
+
+  // Show/hide the dropdown based on whether there are products
+  const areaProductNameSelectContainer = document.getElementById("area-product-name-select-container")
+  if (areaProductNameSelectContainer) {
+    if (filteredProducts.length === 0 && selectedType !== "custom") {
+      areaProductNameSelectContainer.classList.add("hidden")
+      // Show the manual input if no products are available
+      const areaProductNameInputGroup = document.querySelector("#area-product-name-group .input-with-button")
+      if (areaProductNameInputGroup) areaProductNameInputGroup.classList.remove("hidden")
+    } else {
+      areaProductNameSelectContainer.classList.remove("hidden")
+    }
   }
 }
 
@@ -503,16 +812,56 @@ function initWaterCalculator() {
   const calculatedVolumeDiv = document.getElementById("calculated-volume")
   const volumeResultText = document.getElementById("volume-result")
   const volumeConversionText = document.getElementById("volume-conversion")
-  const findWaterProductBtn = document.getElementById("find-water-product-btn")
-  const waterProductSearchPanel = document.getElementById("water-product-search-panel")
-  const waterProductSearchInput = document.getElementById("water-product-search")
-  const waterProductSearchResults = document.getElementById("water-product-search-results")
-  const waterPresetsBtn = document.getElementById("water-presets-btn")
-  const waterPresetsPanel = document.getElementById("water-presets-panel")
-  const waterPresetsList = document.getElementById("water-presets-list")
   const waterProductTypeSelect = document.getElementById("water-product-type")
   const waterProductTypeHint = document.getElementById("water-product-type-hint")
   const calculateWaterBtn = document.getElementById("calculate-water-btn")
+  const waterPresetsBtn = document.getElementById("water-presets-btn")
+  const waterPresetsPanel = document.getElementById("water-presets-panel")
+  const waterPresetsList = document.getElementById("water-presets-list")
+  const saveWaterPresetBtn = document.getElementById("save-water-preset-btn")
+
+  // Create water product name dropdown
+  const waterProductNameGroup = document.getElementById("water-product-name-group")
+  if (waterProductNameGroup) {
+    // Create a container for the dropdown
+    const waterProductNameSelectContainer = document.createElement("div")
+    waterProductNameSelectContainer.id = "water-product-name-select-container"
+    waterProductNameSelectContainer.className = "form-group"
+
+    // Create label
+    const waterProductNameSelectLabel = document.createElement("label")
+    waterProductNameSelectLabel.htmlFor = "water-product-name-select"
+    waterProductNameSelectLabel.textContent = "Select Product:"
+
+    // Create select element
+    const waterProductNameSelect = document.createElement("select")
+    waterProductNameSelect.id = "water-product-name-select"
+    waterProductNameSelect.className = "form-control"
+
+    // Add default option
+    const defaultOption = document.createElement("option")
+    defaultOption.value = ""
+    defaultOption.textContent = "-- Select a product --"
+    waterProductNameSelect.appendChild(defaultOption)
+
+    // Add the elements to the container
+    waterProductNameSelectContainer.appendChild(waterProductNameSelectLabel)
+    waterProductNameSelectContainer.appendChild(waterProductNameSelect)
+
+    // Insert the container before the product name input
+    waterProductNameGroup.insertBefore(waterProductNameSelectContainer, waterProductNameGroup.firstChild)
+
+    // Add event listener to the product name select
+    waterProductNameSelect.addEventListener("change", function () {
+      const selectedProductId = this.value
+      if (selectedProductId) {
+        const product = WATER_TREATMENT_PRODUCTS.find((p) => p.id === selectedProductId)
+        if (product) {
+          handleWaterProductSelect(product)
+        }
+      }
+    })
+  }
 
   // Toggle container shape inputs
   if (containerShapeRadios && containerShapeRadios.length > 0 && rectangularInputs && circularInputs) {
@@ -548,36 +897,38 @@ function initWaterCalculator() {
     }
   })
 
-  // Update product type hint
+  // Update product type hint and filter product name dropdown
   if (waterProductTypeSelect && waterProductTypeHint) {
     waterProductTypeSelect.addEventListener("change", () => {
       const selectedType = waterProductTypeSelect.value
       waterProductTypeHint.textContent = PRODUCT_TYPE_HINTS[selectedType] || ""
-    })
-  }
 
-  // Toggle product search panel
-  if (findWaterProductBtn && waterProductSearchPanel) {
-    findWaterProductBtn.addEventListener("click", () => {
-      if (waterProductSearchPanel.classList.contains("hidden")) {
-        waterProductSearchPanel.classList.remove("hidden")
-        if (waterPresetsPanel) waterPresetsPanel.classList.add("hidden")
-        if (waterProductSearchInput) waterProductSearchInput.focus()
+      // Update product name dropdown based on selected type
+      updateWaterProductNameDropdown(selectedType)
+
+      // Show/hide custom product name input based on selection
+      const waterProductNameInput = document.getElementById("water-product-name")
+      const waterProductNameInputGroup = document.querySelector("#water-product-name-group .input-with-button")
+
+      if (selectedType === "custom") {
+        // For custom type, show the input field and hide the dropdown
+        if (waterProductNameInputGroup) waterProductNameInputGroup.classList.remove("hidden")
+        document.getElementById("water-product-name-select-container").classList.add("hidden")
       } else {
-        waterProductSearchPanel.classList.add("hidden")
+        // For predefined types, show the dropdown and hide the input field
+        if (waterProductNameInputGroup) waterProductNameInputGroup.classList.add("hidden")
+        document.getElementById("water-product-name-select-container").classList.remove("hidden")
       }
     })
-  }
 
-  // Handle product search
-  if (waterProductSearchInput && waterProductSearchResults) {
-    waterProductSearchInput.addEventListener("input", () => {
-      const searchTerm = waterProductSearchInput.value.toLowerCase()
-      const filteredProducts = WATER_TREATMENT_PRODUCTS.filter((product) =>
-        product.name.toLowerCase().includes(searchTerm),
-      )
-      renderProductSearchResults(filteredProducts, waterProductSearchResults, handleWaterProductSelect)
-    })
+    // Initial update of product name dropdown
+    updateWaterProductNameDropdown(waterProductTypeSelect.value)
+
+    // Initially hide the product name input for non-custom types
+    const waterProductNameInputGroup = document.querySelector("#water-product-name-group .input-with-button")
+    if (waterProductNameInputGroup && waterProductTypeSelect.value !== "custom") {
+      waterProductNameInputGroup.classList.add("hidden")
+    }
   }
 
   // Toggle presets panel
@@ -585,11 +936,17 @@ function initWaterCalculator() {
     waterPresetsBtn.addEventListener("click", () => {
       if (waterPresetsPanel.classList.contains("hidden")) {
         waterPresetsPanel.classList.remove("hidden")
-        if (waterProductSearchPanel) waterProductSearchPanel.classList.add("hidden")
         loadPresets("gardenerWaterPresets", waterPresetsList, handleWaterPresetSelect)
       } else {
         waterPresetsPanel.classList.add("hidden")
       }
+    })
+  }
+
+  // Save preset
+  if (saveWaterPresetBtn) {
+    saveWaterPresetBtn.addEventListener("click", () => {
+      savePreset("gardenerWaterPresets")
     })
   }
 
@@ -598,6 +955,47 @@ function initWaterCalculator() {
     calculateWaterBtn.addEventListener("click", () => {
       calculateWaterDosage()
     })
+  }
+
+  // Remove the find product button as it's no longer needed
+  const findWaterProductBtn = document.getElementById("find-water-product-btn")
+  if (findWaterProductBtn) {
+    findWaterProductBtn.parentNode.removeChild(findWaterProductBtn)
+  }
+}
+
+// Function to update water product name dropdown based on selected product type
+function updateWaterProductNameDropdown(selectedType) {
+  const waterProductNameSelect = document.getElementById("water-product-name-select")
+  if (!waterProductNameSelect) return
+
+  // Clear existing options except the first one
+  while (waterProductNameSelect.options.length > 1) {
+    waterProductNameSelect.remove(1)
+  }
+
+  // Filter products by selected type
+  const filteredProducts = WATER_TREATMENT_PRODUCTS.filter((product) => product.type === selectedType)
+
+  // Add filtered products to dropdown
+  filteredProducts.forEach((product) => {
+    const option = document.createElement("option")
+    option.value = product.id
+    option.textContent = product.name
+    waterProductNameSelect.appendChild(option)
+  })
+
+  // Show/hide the dropdown based on whether there are products
+  const waterProductNameSelectContainer = document.getElementById("water-product-name-select-container")
+  if (waterProductNameSelectContainer) {
+    if (filteredProducts.length === 0 && selectedType !== "custom") {
+      waterProductNameSelectContainer.classList.add("hidden")
+      // Show the manual input if no products are available
+      const waterProductNameInputGroup = document.querySelector("#water-product-name-group .input-with-button")
+      if (waterProductNameInputGroup) waterProductNameInputGroup.classList.remove("hidden")
+    } else {
+      waterProductNameSelectContainer.classList.remove("hidden")
+    }
   }
 }
 
@@ -678,40 +1076,6 @@ function updateRatioLabels() {
   ratioLabel2.textContent = `${unitText} per ${targetUnitText}`
 }
 
-// Render product search results
-function renderProductSearchResults(products, resultsElement, selectHandler) {
-  if (!resultsElement) return
-
-  if (products.length === 0) {
-    resultsElement.innerHTML = '<div class="p-4 text-center">No products found</div>'
-    return
-  }
-
-  let html = "<ul>"
-  products.forEach((product) => {
-    html += `
-      <li data-id="${product.id}">
-        <div class="font-medium">${product.name}</div>
-        <div class="hint">${product.instructions}</div>
-      </li>
-    `
-  })
-  html += "</ul>"
-
-  resultsElement.innerHTML = html
-
-  // Add click event listeners
-  resultsElement.querySelectorAll("li").forEach((li) => {
-    li.addEventListener("click", () => {
-      const productId = li.getAttribute("data-id")
-      const product = products.find((p) => p.id === productId)
-      if (product && selectHandler) {
-        selectHandler(product)
-      }
-    })
-  })
-}
-
 // Handle product selection
 function handleProductSelect(product) {
   if (!product) return
@@ -732,7 +1096,6 @@ function handleProductSelect(product) {
   const waterUnit2Select = document.getElementById("water-unit-2")
   const instructionsText = document.getElementById("instructions-text")
   const productInstructions = document.getElementById("product-instructions")
-  const productSearchPanel = document.getElementById("product-search-panel")
 
   // Set product name
   if (productNameInput) productNameInput.value = product.name
@@ -777,27 +1140,408 @@ function handleProductSelect(product) {
   if (instructionsText) instructionsText.textContent = product.instructions
   if (productInstructions) productInstructions.classList.remove("hidden")
 
-  // Hide search panel
-  if (productSearchPanel) productSearchPanel.classList.add("hidden")
+  // Update ratio labels
+  updateRatioLabels()
+}
+
+// Implementation of preset functionality
+function loadPresets(presetType, presetsList, handlePresetSelect) {
+  console.log(`Loading presets for ${presetType}...`)
+
+  if (!presetsList) return
+
+  // Clear existing presets
+  presetsList.innerHTML = ""
+
+  // Get presets from localStorage
+  const presets = JSON.parse(localStorage.getItem(presetType) || "[]")
+
+  if (presets.length === 0) {
+    presetsList.innerHTML = '<div class="p-4 text-center">No saved presets found</div>'
+    return
+  }
+
+  // Create list of presets
+  let html = "<ul>"
+  presets.forEach((preset, index) => {
+    html += `
+      <li data-index="${index}">
+        <div class="font-medium">${preset.name}</div>
+        <div class="hint">${preset.description || "No description"}</div>
+      </li>
+    `
+  })
+  html += "</ul>"
+
+  presetsList.innerHTML = html
+
+  // Add click event listeners
+  presetsList.querySelectorAll("li").forEach((li) => {
+    li.addEventListener("click", () => {
+      const index = Number.parseInt(li.getAttribute("data-index") || "0")
+      const preset = presets[index]
+      if (preset && handlePresetSelect) {
+        handlePresetSelect(preset)
+      }
+    })
+  })
+}
+
+function handlePresetSelect(preset) {
+  console.log("Preset selected:", preset)
+
+  if (!preset) return
+
+  // Set all form values based on the preset
+  const productTypeSelect = document.getElementById("product-type")
+  if (productTypeSelect) productTypeSelect.value = preset.productType
+
+  // Trigger change event to update product name dropdown
+  if (productTypeSelect) {
+    const event = new Event("change")
+    productTypeSelect.dispatchEvent(event)
+  }
+
+  const productNameInput = document.getElementById("product-name")
+  if (productNameInput) productNameInput.value = preset.productName
+
+  // Set measurement type
+  const measurementTypeRadios = document.querySelectorAll('input[name="measurement-type"]')
+  if (measurementTypeRadios && measurementTypeRadios.length > 0) {
+    const radio = Array.from(measurementTypeRadios).find((r) => r.value === preset.measurementType)
+    if (radio) radio.checked = true
+
+    // Trigger change event
+    if (radio) {
+      const event = new Event("change")
+      radio.dispatchEvent(event)
+    }
+  }
+
+  // Set cap size if applicable
+  if (preset.measurementType === "cap") {
+    const capSizeInput = document.getElementById("cap-size")
+    if (capSizeInput) capSizeInput.value = preset.capSize
+  }
+
+  // Set has scoop
+  const hasScoopRadios = document.querySelectorAll('input[name="has-scoop"]')
+  if (hasScoopRadios && hasScoopRadios.length > 0) {
+    const radio = Array.from(hasScoopRadios).find((r) => r.value === preset.hasScoop)
+    if (radio) radio.checked = true
+
+    // Trigger change event
+    if (radio) {
+      const event = new Event("change")
+      radio.dispatchEvent(event)
+    }
+  }
+
+  // Set scoop size if applicable
+  if (preset.hasScoop === "yes") {
+    const scoopSizeInput = document.getElementById("scoop-size")
+    if (scoopSizeInput) scoopSizeInput.value = preset.scoopSize
+
+    const scoopUnitSelect = document.getElementById("scoop-unit")
+    if (scoopUnitSelect) scoopUnitSelect.value = preset.scoopUnit
+  }
+
+  // Set calculation mode
+  const calculationModeRadios = document.querySelectorAll('input[name="calculation-mode"]')
+  if (calculationModeRadios && calculationModeRadios.length > 0) {
+    const radio = Array.from(calculationModeRadios).find((r) => r.value === preset.calculationMode)
+    if (radio) radio.checked = true
+
+    // Trigger change event
+    if (radio) {
+      const event = new Event("change")
+      radio.dispatchEvent(event)
+    }
+  }
+
+  // Set values based on calculation mode
+  if (preset.calculationMode === "product_to_water") {
+    const productAmountInput = document.getElementById("product-amount")
+    if (productAmountInput) productAmountInput.value = preset.productAmount
+
+    const productUnitSelect = document.getElementById("product-unit")
+    if (productUnitSelect) productUnitSelect.value = preset.productUnit
+
+    const waterAmountInput = document.getElementById("water-amount")
+    if (waterAmountInput) waterAmountInput.value = preset.waterAmount
+
+    const waterUnitSelect = document.getElementById("water-unit")
+    if (waterUnitSelect) waterUnitSelect.value = preset.waterUnit
+  } else if (preset.calculationMode === "water_to_product") {
+    const waterAmount2Input = document.getElementById("water-amount-2")
+    if (waterAmount2Input) waterAmount2Input.value = preset.waterAmount2
+
+    const waterUnit2Select = document.getElementById("water-unit-2")
+    if (waterUnit2Select) waterUnit2Select.value = preset.waterUnit2
+
+    const ratioInput = document.getElementById("ratio")
+    if (ratioInput) ratioInput.value = preset.ratio
+  } else if (preset.calculationMode === "ratio_based") {
+    const ratio2Input = document.getElementById("ratio-2")
+    if (ratio2Input) ratio2Input.value = preset.ratio2
+
+    const targetAmountInput = document.getElementById("target-amount")
+    if (targetAmountInput) targetAmountInput.value = preset.targetAmount
+
+    const targetUnitSelect = document.getElementById("target-unit")
+    if (targetUnitSelect) targetUnitSelect.value = preset.targetUnit
+  }
+
+  // Hide presets panel
+  const presetsPanel = document.getElementById("presets-panel")
+  if (presetsPanel) presetsPanel.classList.add("hidden")
 
   // Update ratio labels
   updateRatioLabels()
 }
 
-// Dummy implementations to resolve undeclared variable errors
-function loadPresets(presetType, presetsList, handlePresetSelect) {
-  console.log(`Loading presets for ${presetType}...`)
-  // Implementation would go here in a real application
+function handleAreaPresetSelect(preset) {
+  console.log("Area preset selected:", preset)
+
+  if (!preset) return
+
+  // Set all form values based on the preset
+  const areaProductTypeSelect = document.getElementById("area-product-type")
+  if (areaProductTypeSelect) areaProductTypeSelect.value = preset.productType
+
+  // Trigger change event to update product name dropdown
+  if (areaProductTypeSelect) {
+    const event = new Event("change")
+    areaProductTypeSelect.dispatchEvent(event)
+  }
+
+  const areaProductNameInput = document.getElementById("area-product-name")
+  if (areaProductNameInput) areaProductNameInput.value = preset.productName
+
+  // Set area shape
+  const areaShapeRadios = document.querySelectorAll('input[name="area-shape"]')
+  if (areaShapeRadios && areaShapeRadios.length > 0) {
+    const radio = Array.from(areaShapeRadios).find((r) => r.value === preset.areaShape)
+    if (radio) radio.checked = true
+
+    // Trigger change event
+    if (radio) {
+      const event = new Event("change")
+      radio.dispatchEvent(event)
+    }
+  }
+
+  // Set dimensions based on shape
+  if (preset.areaShape === "rectangle") {
+    const lengthInput = document.getElementById("length")
+    if (lengthInput) lengthInput.value = preset.length
+
+    const widthInput = document.getElementById("width")
+    if (widthInput) widthInput.value = preset.width
+
+    const areaUnitSelect = document.getElementById("area-unit")
+    if (areaUnitSelect) areaUnitSelect.value = preset.areaUnit
+  } else if (preset.areaShape === "circle") {
+    const diameterInput = document.getElementById("diameter")
+    if (diameterInput) diameterInput.value = preset.diameter
+
+    const circleUnitSelect = document.getElementById("circle-unit")
+    if (circleUnitSelect) circleUnitSelect.value = preset.circleUnit
+  }
+
+  // Set application rate
+  const applicationRateInput = document.getElementById("application-rate")
+  if (applicationRateInput) applicationRateInput.value = preset.applicationRate
+
+  const rateUnitSelect = document.getElementById("rate-unit")
+  if (rateUnitSelect) rateUnitSelect.value = preset.rateUnit
+
+  const rateAreaUnitSelect = document.getElementById("rate-area-unit")
+  if (rateAreaUnitSelect) rateAreaUnitSelect.value = preset.rateAreaUnit
+
+  // Hide presets panel
+  const areaPresetsPanel = document.getElementById("area-presets-panel")
+  if (areaPresetsPanel) areaPresetsPanel.classList.add("hidden")
+
+  // Calculate area
+  calculateArea()
 }
 
-function handlePresetSelect(preset) {
-  console.log("Preset selected:", preset)
-  // Implementation would go here in a real application
+function handleWaterPresetSelect(preset) {
+  console.log("Water preset selected:", preset)
+
+  if (!preset) return
+
+  // Set all form values based on the preset
+  const waterProductTypeSelect = document.getElementById("water-product-type")
+  if (waterProductTypeSelect) waterProductTypeSelect.value = preset.productType
+
+  // Trigger change event to update product name dropdown
+  if (waterProductTypeSelect) {
+    const event = new Event("change")
+    waterProductTypeSelect.dispatchEvent(event)
+  }
+
+  const waterProductNameInput = document.getElementById("water-product-name")
+  if (waterProductNameInput) waterProductNameInput.value = preset.productName
+
+  // Set container shape
+  const containerShapeRadios = document.querySelectorAll('input[name="container-shape"]')
+  if (containerShapeRadios && containerShapeRadios.length > 0) {
+    const radio = Array.from(containerShapeRadios).find((r) => r.value === preset.containerShape)
+    if (radio) radio.checked = true
+
+    // Trigger change event
+    if (radio) {
+      const event = new Event("change")
+      radio.dispatchEvent(event)
+    }
+  }
+
+  // Set dimension unit
+  const dimensionUnitSelect = document.getElementById("dimension-unit")
+  if (dimensionUnitSelect) dimensionUnitSelect.value = preset.dimensionUnit
+
+  // Set dimensions based on shape
+  if (preset.containerShape === "rectangular") {
+    const containerLengthInput = document.getElementById("container-length")
+    if (containerLengthInput) containerLengthInput.value = preset.containerLength
+
+    const containerWidthInput = document.getElementById("container-width")
+    if (containerWidthInput) containerWidthInput.value = preset.containerWidth
+
+    const containerHeightInput = document.getElementById("container-height")
+    if (containerHeightInput) containerHeightInput.value = preset.containerHeight
+  } else if (preset.containerShape === "circular") {
+    const containerDiameterInput = document.getElementById("container-diameter")
+    if (containerDiameterInput) containerDiameterInput.value = preset.containerDiameter
+
+    const containerDepthInput = document.getElementById("container-depth")
+    if (containerDepthInput) containerDepthInput.value = preset.containerDepth
+  }
+
+  // Set water volume
+  const waterVolumeInput = document.getElementById("water-volume")
+  if (waterVolumeInput) waterVolumeInput.value = preset.waterVolume
+
+  const waterVolumeUnitSelect = document.getElementById("water-volume-unit")
+  if (waterVolumeUnitSelect) waterVolumeUnitSelect.value = preset.waterVolumeUnit
+
+  // Set dosage
+  const dosageAmountInput = document.getElementById("dosage-amount")
+  if (dosageAmountInput) dosageAmountInput.value = preset.dosageAmount
+
+  const dosageUnitSelect = document.getElementById("dosage-unit")
+  if (dosageUnitSelect) dosageUnitSelect.value = preset.dosageUnit
+
+  // Hide presets panel
+  const waterPresetsPanel = document.getElementById("water-presets-panel")
+  if (waterPresetsPanel) waterPresetsPanel.classList.add("hidden")
+
+  // Calculate volume
+  calculateVolume()
 }
 
 function savePreset(presetType) {
   console.log(`Saving preset for ${presetType}...`)
-  // Implementation would go here in a real application
+
+  // Get preset name from user
+  const presetName = prompt("Enter a name for this preset:")
+  if (!presetName) return // User cancelled
+
+  // Create preset object based on current form values
+  const preset = {
+    name: presetName,
+    description: "",
+    timestamp: new Date().toISOString(),
+  }
+
+  if (presetType === "gardenerPresets") {
+    // Get product calculator values
+    preset.productType = document.getElementById("product-type")?.value || ""
+    preset.productName = document.getElementById("product-name")?.value || ""
+    preset.measurementType = document.querySelector('input[name="measurement-type"]:checked')?.value || ""
+    preset.capSize = document.getElementById("cap-size")?.value || ""
+    preset.hasScoop = document.querySelector('input[name="has-scoop"]:checked')?.value || ""
+    preset.scoopSize = document.getElementById("scoop-size")?.value || ""
+    preset.scoopUnit = document.getElementById("scoop-unit")?.value || ""
+    preset.calculationMode = document.querySelector('input[name="calculation-mode"]:checked')?.value || ""
+
+    // Get values based on calculation mode
+    if (preset.calculationMode === "product_to_water") {
+      preset.productAmount = document.getElementById("product-amount")?.value || ""
+      preset.productUnit = document.getElementById("product-unit")?.value || ""
+      preset.waterAmount = document.getElementById("water-amount")?.value || ""
+      preset.waterUnit = document.getElementById("water-unit")?.value || ""
+      preset.description = `${preset.productAmount} ${preset.productUnit} per ${preset.waterAmount} ${preset.waterUnit}`
+    } else if (preset.calculationMode === "water_to_product") {
+      preset.waterAmount2 = document.getElementById("water-amount-2")?.value || ""
+      preset.waterUnit2 = document.getElementById("water-unit-2")?.value || ""
+      preset.ratio = document.getElementById("ratio")?.value || ""
+      preset.description = `${preset.ratio} ${preset.measurementType} per ${preset.waterAmount2} ${preset.waterUnit2}`
+    } else if (preset.calculationMode === "ratio_based") {
+      preset.ratio2 = document.getElementById("ratio-2")?.value || ""
+      preset.targetAmount = document.getElementById("target-amount")?.value || ""
+      preset.targetUnit = document.getElementById("target-unit")?.value || ""
+      preset.description = `${preset.ratio2} ${preset.measurementType} per ${preset.targetAmount} ${preset.targetUnit}`
+    }
+  } else if (presetType === "gardenerAreaPresets") {
+    // Get area calculator values
+    preset.productType = document.getElementById("area-product-type")?.value || ""
+    preset.productName = document.getElementById("area-product-name")?.value || ""
+    preset.areaShape = document.querySelector('input[name="area-shape"]:checked')?.value || ""
+
+    // Get dimensions based on shape
+    if (preset.areaShape === "rectangle") {
+      preset.length = document.getElementById("length")?.value || ""
+      preset.width = document.getElementById("width")?.value || ""
+      preset.areaUnit = document.getElementById("area-unit")?.value || ""
+      preset.description = `${preset.length}×${preset.width} ${preset.areaUnit} rectangle`
+    } else if (preset.areaShape === "circle") {
+      preset.diameter = document.getElementById("diameter")?.value || ""
+      preset.circleUnit = document.getElementById("circle-unit")?.value || ""
+      preset.description = `${preset.diameter} ${preset.circleUnit} diameter circle`
+    }
+
+    preset.applicationRate = document.getElementById("application-rate")?.value || ""
+    preset.rateUnit = document.getElementById("rate-unit")?.value || ""
+    preset.rateAreaUnit = document.getElementById("rate-area-unit")?.value || ""
+  } else if (presetType === "gardenerWaterPresets") {
+    // Get water calculator values
+    preset.productType = document.getElementById("water-product-type")?.value || ""
+    preset.productName = document.getElementById("water-product-name")?.value || ""
+    preset.containerShape = document.querySelector('input[name="container-shape"]:checked')?.value || ""
+    preset.dimensionUnit = document.getElementById("dimension-unit")?.value || ""
+
+    // Get dimensions based on shape
+    if (preset.containerShape === "rectangular") {
+      preset.containerLength = document.getElementById("container-length")?.value || ""
+      preset.containerWidth = document.getElementById("container-width")?.value || ""
+      preset.containerHeight = document.getElementById("container-height")?.value || ""
+      preset.description = `${preset.containerLength}×${preset.containerWidth}×${preset.containerHeight} ${preset.dimensionUnit} container`
+    } else if (preset.containerShape === "circular") {
+      preset.containerDiameter = document.getElementById("container-diameter")?.value || ""
+      preset.containerDepth = document.getElementById("container-depth")?.value || ""
+      preset.description = `${preset.containerDiameter}×${preset.containerDepth} ${preset.dimensionUnit} circular container`
+    }
+
+    preset.waterVolume = document.getElementById("water-volume")?.value || ""
+    preset.waterVolumeUnit = document.getElementById("water-volume-unit")?.value || ""
+    preset.dosageAmount = document.getElementById("dosage-amount")?.value || ""
+    preset.dosageUnit = document.getElementById("dosage-unit")?.value || ""
+  }
+
+  // Get existing presets from localStorage
+  const presets = JSON.parse(localStorage.getItem(presetType) || "[]")
+
+  // Add new preset
+  presets.push(preset)
+
+  // Save back to localStorage
+  localStorage.setItem(presetType, JSON.stringify(presets))
+
+  // Show confirmation
+  alert(`Preset "${presetName}" saved successfully!`)
 }
 
 function calculateProductDosage() {
@@ -1189,15 +1933,49 @@ function calculateProductDosage() {
 function calculateArea() {
   console.log("Calculating area...")
   // Implementation would go here in a real application
+
+  // Get input values
+  let length = Number.parseFloat(document.getElementById("length")?.value || "0")
+  let width = Number.parseFloat(document.getElementById("width")?.value || "0")
+  const areaUnit = document.getElementById("area-unit")?.value || "sq_m"
+  let diameter = Number.parseFloat(document.getElementById("diameter")?.value || "0")
+  const circleUnit = document.getElementById("circle-unit")?.value || "m"
+  const areaShape = document.querySelector('input[name="area-shape"]:checked')?.value || "rectangle"
+
+  // Get result elements
+  const calculatedAreaDiv = document.getElementById("calculated-area")
+  const areaResultText = document.getElementById("area-result")
+
+  // Calculate area in square meters
+  let areaSqMeters = 0
+
+  if (areaShape === "rectangle") {
+    // Convert length and width to meters
+    length = length * AREA_CONVERSIONS[areaUnit]
+    width = width * AREA_CONVERSIONS[areaUnit]
+    areaSqMeters = length * width
+  } else if (areaShape === "circle") {
+    // Convert diameter to meters
+    diameter = diameter * LENGTH_CONVERSIONS[circleUnit]
+    const radius = diameter / 2
+    areaSqMeters = Math.PI * radius * radius
+  }
+
+  // Convert area to selected unit
+  const calculatedArea = areaSqMeters / AREA_CONVERSIONS[areaUnit]
+
+  // Format result
+  const areaResult = `${calculatedArea.toFixed(2)} ${areaUnit}`
+
+  // Update result elements
+  if (calculatedAreaDiv && areaResultText) {
+    calculatedAreaDiv.classList.remove("hidden")
+    areaResultText.textContent = areaResult
+  }
 }
 
 function handleAreaProductSelect(product) {
   console.log("Area product selected:", product)
-  // Implementation would go here in a real application
-}
-
-function handleAreaPresetSelect(preset) {
-  console.log("Area preset selected:", preset)
   // Implementation would go here in a real application
 }
 
@@ -1213,11 +1991,6 @@ function calculateVolume() {
 
 function handleWaterProductSelect(product) {
   console.log("Water product selected:", product)
-  // Implementation would go here in a real application
-}
-
-function handleWaterPresetSelect(preset) {
-  console.log("Preset selected:", preset)
   // Implementation would go here in a real application
 }
 
@@ -1424,7 +2197,7 @@ function formatDebugInfo(calculatorType) {
     }
 
     const volumeResult = document.getElementById("volume-result")?.textContent || "N/A"
-    if (volumeResult !== "N/A" && volumeResult !== "-") {
+    if (volumeResult !== "N/A" && areaResult !== "-") {
       debugInfo += "Calculated Volume: " + volumeResult + "\n"
     }
 
