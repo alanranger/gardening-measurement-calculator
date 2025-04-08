@@ -162,7 +162,7 @@ p {
 
 /* Make sure tab panels are properly hidden/shown */
 .tab-panel {
-  display: none;
+  display: none !important;
 }
 
 .tab-panel.active {
@@ -673,7 +673,7 @@ select:focus {
 }
 
 .guide-tab-panel {
-  display: none;
+  display: none !important;
 }
 
 .guide-tab-panel.active {
@@ -722,9 +722,7 @@ select:focus {
 }
 
 .accordion-content {
-  padding: var(--spacing);
-  border-top: 1px solid var(--border);
-  display: none;
+  display: none !important;
 }
 
 .accordion-item.active .accordion-content {
