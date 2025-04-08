@@ -289,6 +289,28 @@ const COMMON_PRODUCTS = [
     defaultWaterUnit: "plant",
     instructions: "Spray directly onto leaves and aerial roots. Use 2-3 times per week during active growth.",
   },
+  {
+    id: "miracle-gro-plant-food-concentrate",
+    name: "Miracle-Gro Plant Food Concentrate",
+    type: "liquid_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 7,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions: "Apply every 7-14 days. Safe for all plants when used as directed."
+  },
+  {
+    id: "seaweed-extract",
+    name: "Organic Seaweed Extract",
+    type: "liquid_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 5,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions: "Apply every 2-4 weeks. Improves plant health and stress resistance."
+  }
 ]
 
 // Area Treatment Products
@@ -531,6 +553,17 @@ const AREA_TREATMENT_PRODUCTS = [
     instructions:
       "Apply as a foliar spray. Repeat after 14 days if necessary. Effective against a wide range of pests.",
   },
+  {
+    id: "organic-lawn-feed",
+    name: "Organic Lawn Feed",
+    type: "lawn_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 50,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions: "Apply in spring and summer. Safe for children and pets immediately after application."
+  }
 ]
 
 // Water Treatment Products
@@ -707,6 +740,17 @@ const WATER_TREATMENT_PRODUCTS = [
     defaultWaterUnit: "l",
     instructions: "Add weekly during the growing season. Promotes healthy plant growth without encouraging algae.",
   },
+  {
+    id: "natural-pond-cleaner",
+    name: "Natural Pond Cleaner",
+    type: "pond_treatment",
+    measurementType: "volume",
+    defaultDosage: 20,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1000,
+    defaultWaterUnit: "l",
+    instructions: "Add monthly to maintain water clarity. Contains beneficial bacteria."
+  }
 ]
 
 // Conversion factors
@@ -902,6 +946,17 @@ document.addEventListener("DOMContentLoaded", () => {
   initAreaCalculator()
   initWaterCalculator()
   initAccordion()
+  
+  // Add version information - only add if it doesn't already exist
+  if (!document.querySelector(".version")) {
+    const VERSION = "v2.0"
+    const VERSION_ELEMENT = document.createElement("div")
+    VERSION_ELEMENT.className = "version"
+    VERSION_ELEMENT.textContent = VERSION
+    document.body.appendChild(VERSION_ELEMENT)
+  }
+  
+  // We'll skip adding the warning message since it's already in the HTML
 })
 
 // Initialize tabs
@@ -1361,11 +1416,6 @@ function handlePresetSelect(preset) {
     capSizeInput.value = preset.capSize || 10
   } else {
     capSizeGroup.classList.add("hidden")
-  }
-
-  // Set has scoop
-  document.querySelector(`input[name="has-scoop"][value="${preset.hasScoopMeasure ? "yes" : "no"}"]`).checked = true
-  if (preset.hasScoopMeasure) {
   }
 
   // Set has scoop
@@ -2356,21 +2406,5 @@ const ADDITIONAL_WATER_PRODUCTS = [
   }
 ]
 
-// Version information
-const VERSION = "v2.0"
-const VERSION_ELEMENT = document.createElement("div")
-VERSION_ELEMENT.className = "version"
-VERSION_ELEMENT.textContent = VERSION
-document.body.appendChild(VERSION_ELEMENT)
-
-// Warning message for beta version
-const WARNING_MESSAGE = "This is a beta version. Please verify all calculations before use."
-const WARNING_ELEMENT = document.createElement("div")
-WARNING_ELEMENT.className = "warning-message"
-WARNING_ELEMENT.textContent = WARNING_MESSAGE
-document.querySelector("header").appendChild(WARNING_ELEMENT)
-
-// Merge the additional products with the existing ones
-COMMON_PRODUCTS.push(...ADDITIONAL_COMMON_PRODUCTS)
-AREA_TREATMENT_PRODUCTS.push(...ADDITIONAL_AREA_PRODUCTS)
-WATER_TREATMENT_PRODUCTS.push(...ADDITIONAL_WATER_PRODUCTS)
+// Version information - only add if it doesn't already exist
+// Note: We're not adding this in the DOMContentLoaded event to avoid duplication
