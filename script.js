@@ -1272,6 +1272,8 @@ function updateRatioLabels() {
 // Render product search results
 function renderProductSearchResults(products, resultsElement, selectHandler) {
   if (products.length === 0) {
+    resultsElement.  resultsElement, selectHandler) {
+  if (products.length === 0) {
     resultsElement.innerHTML = '<div class="p-4 text-center">No products found</div>'
     return
   }
@@ -1626,509 +1628,64 @@ function saveWaterPreset() {
   alert(`Preset "${productName}" saved successfully`)
 }
 
-// Calculate product dosage
-function calculateProductDosage() {
-  // Get calculation mode
-  const calculationMode = document.querySelector('input[name="calculation-mode"]:checked').value
+// Calculate total amount needed
+const totalBaseAmount = areaInSqM * rateBasePerSqM
+debug.totalBaseAmount = totalBaseAmount
 
-  // Get measurement type
-  const measurementType = document.querySelector('input[name="measurement-type"]:checked').value
+// Format total amount in appropriate units
+let totalAmount = ""
+let alternativeAmount = ""
 
-  // Get has scoop
-  const hasScoopMeasure = document.querySelector('input[name="has-scoop"]:checked').value === "yes"
-
-  // Get cap size
-  const capSize = Number.parseFloat(capSizeInput.value) || 10
-
-  // Initialize debug info
-  const debug = {
-    calculationMode,
-    measurementType,
-    hasScoopMeasure,
-    capSize,
-  }
-
-  // Variables for calculation
-  let productQty = 0
-  let waterQty = 0
-  let ratio = 0
-  const wateringCanDosage = ""
-
-  // Get values based on calculation mode
-  if (calculationMode === "product_to_water") {
-    const productAmount = Number.parseFloat(document.getElementById("product-amount").value)
-    const productUnit = document.getElementById("product-unit").value
-    const waterAmount = Number.parseFloat(document.getElementById("water-amount").value) || 1
-    const waterUnit = document.getElementById("water-unit").value
-
-    if (isNaN(productAmount)) {
-      alert("Please enter a valid product amount")
-      return
-    }
-
-    debug.productAmount = productAmount
-    debug.productUnit = productUnit
-    debug.waterAmount = waterAmount
-    debug.waterUnit = waterUnit
-
-    productQty = productAmount
-    waterQty = waterAmount
-    ratio = productQty / waterQty
-
-    debug.productQty = productQty
-    debug.waterQty = waterQty
-    debug.ratio = ratio
-  } else if (calculationMode === "water_to_product") {
-    const waterAmount = Number.parseFloat(document.getElementById("water-amount-2").value)
-    const waterUnit = document.getElementById("water-unit-2").value
-    const ratioValue = Number.parseFloat(document.getElementById("ratio").value)
-
-    if (isNaN(waterAmount) || isNaN(ratioValue)) {
-      alert("Please enter valid water amount and ratio")
-      return
-    }
-
-    debug.waterAmount = waterAmount
-    debug.waterUnit = waterUnit
-    debug.ratioValue = ratioValue
-
-    waterQty = waterAmount
-    ratio = ratioValue
-    productQty = ratio * waterQty
-
-    debug.waterQty = waterQty
-    debug.ratio = ratio
-    debug.productQty = productQty
-  } else if (calculationMode === "ratio_based") {
-    const ratioValue = Number.parseFloat(document.getElementById("ratio-2").value)
-    const targetAmount = Number.parseFloat(document.getElementById("target-amount").value)
-    const targetUnit = document.getElementById("target-unit").value
-
-    if (isNaN(ratioValue) || isNaN(targetAmount)) {
-      alert("Please enter valid ratio and target amount")
-      return
-    }
-
-    debug.ratioValue = ratioValue
-    debug.targetAmount = targetAmount
-    debug.targetUnit = targetUnit
-
-    ratio = ratioValue
-    waterQty = targetAmount
-    productQty = ratio * waterQty
-
-    debug.ratio = ratio
-    debug.waterQty = waterQty
-    debug.productQty = productQty
-  }
-
-  // Get units
-  const productUnit =
-    calculationMode === "product_to_water"
-      ? document.getElementById("product-unit").value
-      : measurementType === "weight"
-        ? "g"
-        : measurementType === "volume"
-          ? "ml"
-          : "cap"
-
-  const waterUnit =
-    calculationMode === "product_to_water"
-      ? document.getElementById("water-unit").value
-      : calculationMode === "water_to_product"
-        ? document.getElementById("water-unit-2").value
-        : document.getElementById("target-unit").value
-
-  debug.productUnit = productUnit
-  debug.waterUnit = waterUnit
-
-  // Convert to base units
-  let productBaseQty = productQty
-  if (measurementType === "weight" && WEIGHT_CONVERSIONS[productUnit]) {
-    productBaseQty = productQty * WEIGHT_CONVERSIONS[productUnit]
-  } else if ((measurementType === "volume" || measurementType === "cap") && VOLUME_CONVERSIONS[productUnit]) {
-    productBaseQty = productQty * VOLUME_CONVERSIONS[productUnit]
-  }
-
-  let waterBaseQty = waterQty
-  if (VOLUME_CONVERSIONS[waterUnit]) {
-    waterBaseQty = waterQty * VOLUME_CONVERSIONS[waterUnit]
-  }
-
-  debug.productBaseQty = productBaseQty
-  debug.waterBaseQty = waterBaseQty
-
-  // Calculate metric dosage (ml or g per liter)
-  const metricRatio = productBaseQty / (waterBaseQty / 1000)
-  debug.metricRatio = metricRatio
-
-  // Calculate imperial dosage (oz or fl oz per gallon)
-  let imperialRatio
-  if (measurementType === "weight") {
-    // Convert g/l to oz/gal
-    imperialRatio = productBaseQty / 28.3495 / (waterBaseQty / 4546.09)
+if (WEIGHT_CONVERSIONS[rateUnit]) {
+  // Weight product
+  if (totalBaseAmount >= 1000) {
+    totalAmount = `${(totalBaseAmount / 1000).toFixed(2)} kg`
   } else {
-    // Convert ml/l to fl oz/gal
-    imperialRatio = productBaseQty / 29.5735 / (waterBaseQty / 4546.09)
-  }
-  debug.imperialRatio = imperialRatio
-
-  // Calculate scoop dosage if applicable
-  let scoopDosageText = ""
-  if (hasScoopMeasure) {
-    const scoopSize = Number.parseFloat(document.getElementById("scoop-size").value)
-    const scoopUnit = document.getElementById("scoop-unit").value
-
-    if (!isNaN(scoopSize)) {
-      let scoopBaseQty = scoopSize
-
-      if (WEIGHT_CONVERSIONS[scoopUnit]) {
-        scoopBaseQty = scoopSize * WEIGHT_CONVERSIONS[scoopUnit]
-      } else if (VOLUME_CONVERSIONS[scoopUnit]) {
-        scoopBaseQty = scoopSize * VOLUME_CONVERSIONS[scoopUnit]
-      }
-
-      const scoopsNeeded = productBaseQty / scoopBaseQty
-      scoopDosageText = `${scoopsNeeded.toFixed(2)} scoops per ${waterQty} ${waterUnit}`
-
-      debug.scoopSize = scoopSize
-      debug.scoopUnit = scoopUnit
-      debug.scoopBaseQty = scoopBaseQty
-      debug.scoopsNeeded = scoopsNeeded
-    }
+    totalAmount = `${totalBaseAmount.toFixed(2)} g`
   }
 
-  // Calculate cap dosage if applicable
-  let capDosageText = ""
-  if (measurementType === "volume" || measurementType === "cap") {
-    const mlAmount = productBaseQty
-    const capsNeeded = mlAmount / capSize
-
-    debug.mlAmount = mlAmount
-    debug.capsNeeded = capsNeeded
-
-    if (capsNeeded < 0.25) {
-      capDosageText = `${(capsNeeded * capSize).toFixed(1)} ml (a few drops)`
-    } else if (capsNeeded < 0.4) {
-      capDosageText = `${(capsNeeded * capSize).toFixed(1)} ml (about 1/4 cap)`
-    } else if (capsNeeded < 0.6) {
-      capDosageText = `${(capsNeeded * capSize).toFixed(1)} ml (about 1/2 cap)`
-    } else if (capsNeeded < 0.85) {
-      capDosageText = `${(capsNeeded * capSize).toFixed(1)} ml (about 3/4 cap)`
-    } else if (capsNeeded < 1.25) {
-      capDosageText = `${(capsNeeded * capSize).toFixed(1)} ml (about 1 full cap)`
-    } else {
-      const wholeCaps = Math.floor(capsNeeded)
-      const fraction = capsNeeded - wholeCaps
-      let fractionText = ""
-
-      if (fraction < 0.125) fractionText = ""
-      else if (fraction < 0.375) fractionText = " and 1/4"
-      else if (fraction < 0.625) fractionText = " and 1/2"
-      else if (fraction < 0.875) fractionText = " and 3/4"
-      else fractionText = " and 1"
-
-      capDosageText = `${wholeCaps}${fractionText} caps (${(capsNeeded * capSize).toFixed(1)} ml)`
-    }
-  }
-
-  // Calculate alternative dosage
-  const waterUnitLabel = waterUnit === "l" ? "gallon" : "liter"
-  const alternativeWaterAmount = waterUnit === "l" ? 4.54609 : 1
-  const alternativeRatio = productBaseQty / (alternativeWaterAmount * 1000)
-
-  debug.waterUnitLabel = waterUnitLabel
-  debug.alternativeWaterAmount = alternativeWaterAmount
-  debug.alternativeRatio = alternativeRatio
-
-  let alternativeDosageText
-  if (measurementType === "weight") {
-    alternativeDosageText = `${alternativeRatio.toFixed(2)}g per ${waterUnitLabel}`
+  // Alternative in imperial
+  alternativeAmount = `${(totalBaseAmount / WEIGHT_CONVERSIONS["lb"]).toFixed(2)} lb`
+} else {
+  // Volume product
+  if (totalBaseAmount >= 1000) {
+    totalAmount = `${(totalBaseAmount / 1000).toFixed(2)} l`
   } else {
-    alternativeDosageText = `${alternativeRatio.toFixed(2)}ml per ${waterUnitLabel}`
+    totalAmount = `${totalBaseAmount.toFixed(2)} ml`
   }
 
-  // Format results based on calculation mode
-  let metricDosageText, imperialDosageText
-
-  if (calculationMode === "product_to_water") {
-    metricDosageText = `${metricRatio.toFixed(2)} ${measurementType === "weight" ? "g" : "ml"} per liter`
-    imperialDosageText = `${imperialRatio.toFixed(2)} ${measurementType === "weight" ? "oz" : "fl oz"} per gallon`
-  } else if (calculationMode === "water_to_product") {
-    metricDosageText = `${productBaseQty.toFixed(2)} ${measurementType === "weight" ? "g" : "ml"} for ${waterQty} ${waterUnit}`
-    imperialDosageText = `${(productBaseQty / (measurementType === "weight" ? 28.3495 : 29.5735)).toFixed(2)} ${measurementType === "weight" ? "oz" : "fl oz"} for ${(waterBaseQty / 4546.09).toFixed(2)} gallons`
-  } else if (calculationMode === "ratio_based") {
-    metricDosageText = `${productBaseQty.toFixed(2)} ${measurementType === "weight" ? "g" : "ml"} product with ${waterQty} ${waterUnit} water`
-    imperialDosageText = `${(productBaseQty / (measurementType === "weight" ? 28.3495 : 29.5735)).toFixed(2)} ${measurementType === "weight" ? "oz" : "fl oz"} product with ${(waterBaseQty / 4546.09).toFixed(2)} gallons water`
-  }
-
-  // Update results
-  metricResult.textContent = metricDosageText
-  imperialResult.textContent = imperialDosageText
-
-  if (capDosageText) {
-    capResult.textContent = capDosageText
-    capResultCard.classList.remove("hidden")
-  } else {
-    capResultCard.classList.add("hidden")
-  }
-
-  if (scoopDosageText) {
-    scoopResult.textContent = scoopDosageText
-    scoopResultCard.classList.remove("hidden")
-  } else {
-    scoopResultCard.classList.add("hidden")
-  }
-
-  alternativeResult.textContent = alternativeDosageText
-
-  // Update watering can helper if applicable
-  const productNameValue = productNameInput.value
-  if (calculationMode === "water_to_product" && productNameValue) {
-    wateringCanTitle.textContent = `For your ${waterQty} ${waterUnit} watering can:`
-
-    // Get the manufacturer's measurement unit (cap, scoop, etc.)
-    let manufacturerText = ""
-
-    if (measurementType === "cap") {
-      // For cap measurements, show both ml and caps
-      const capsNeeded = productBaseQty / capSize
-
-      // Format the cap measurement in a user-friendly way
-      let capText = ""
-      if (capsNeeded < 0.25) {
-        capText = "a few drops"
-      } else if (capsNeeded < 0.4) {
-        capText = "1/4 cap"
-      } else if (capsNeeded < 0.6) {
-        capText = "1/2 cap"
-      } else if (capsNeeded < 0.85) {
-        capText = "3/4 cap"
-      } else if (capsNeeded < 1.25) {
-        capText = "1 full cap"
-      } else {
-        const wholeCaps = Math.floor(capsNeeded)
-        const fraction = capsNeeded - wholeCaps
-        let fractionText = ""
-
-        if (fraction < 0.125) fractionText = ""
-        else if (fraction < 0.375) fractionText = " and 1/4"
-        else if (fraction < 0.625) fractionText = " and 1/2"
-        else if (fraction < 0.875) fractionText = " and 3/4"
-        else fractionText = " and 1"
-
-        capText = `${wholeCaps}${fractionText} caps`
-      }
-
-      manufacturerText = ` (${capText})`
-    } else if (hasScoopMeasure) {
-      // For scoop measurements, show both ml/g and scoops
-      const scoopSize = Number.parseFloat(document.getElementById("scoop-size").value)
-      const scoopUnit = document.getElementById("scoop-unit").value
-
-      if (!isNaN(scoopSize)) {
-        let scoopBaseQty = scoopSize
-
-        if (WEIGHT_CONVERSIONS[scoopUnit]) {
-          scoopBaseQty = scoopSize * WEIGHT_CONVERSIONS[scoopUnit]
-        } else if (VOLUME_CONVERSIONS[scoopUnit]) {
-          scoopBaseQty = scoopSize * VOLUME_CONVERSIONS[scoopUnit]
-        }
-
-        const scoopsNeeded = productBaseQty / scoopBaseQty
-
-        // Format the scoop measurement
-        let scoopText = ""
-        if (scoopsNeeded < 0.25) {
-          scoopText = "a small pinch"
-        } else if (scoopsNeeded < 1) {
-          const fraction = Math.round(scoopsNeeded * 4) / 4
-          if (fraction === 0.25) scoopText = "1/4 scoop"
-          else if (fraction === 0.5) scoopText = "1/2 scoop"
-          else if (fraction === 0.75) scoopText = "3/4 scoop"
-          else scoopText = `${fraction} scoops`
-        } else {
-          const wholeScoops = Math.floor(scoopsNeeded)
-          const fraction = scoopsNeeded - wholeScoops
-          let fractionText = ""
-
-          if (fraction < 0.125) fractionText = ""
-          else if (fraction < 0.375) fractionText = " and 1/4"
-          else if (fraction < 0.625) fractionText = " and 1/2"
-          else if (fraction < 0.875) fractionText = " and 3/4"
-          else fractionText = " and 1"
-
-          scoopText = `${wholeScoops}${fractionText} scoops`
-        }
-
-        manufacturerText = ` (${scoopText})`
-      }
-    }
-
-    // Update the watering can result with both precise measurement and manufacturer's unit
-    wateringCanResult.textContent = `Add ${productBaseQty.toFixed(1)} ${measurementType === "weight" ? "g" : "ml"}${manufacturerText} of ${productNameValue}`
-
-    wateringCanInfo.textContent = `Based on the ratio of ${ratio.toFixed(2)} ${measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"} per ${waterUnit === "l" ? "liter" : "gallon"}`
-
-    wateringCanSection.classList.remove("hidden")
-  } else {
-    wateringCanSection.classList.add("hidden")
-  }
-
-  // Update debug info
-  debugInfo.textContent = JSON.stringify(debug, null, 2)
+  // Alternative in imperial
+  alternativeAmount = `${(totalBaseAmount / VOLUME_CONVERSIONS["gal_uk"]).toFixed(2)} gal (UK)`
 }
 
-// Calculate area
-function calculateArea() {
-  const areaShape = document.querySelector('input[name="area-shape"]:checked').value
-  const areaUnit = areaUnitSelect.value
+// Calculate metric rate (g or ml per sq meter)
+const metricRate = `${rateBasePerSqM.toFixed(2)} ${rateUnit === "g" || rateUnit === "kg" ? "g" : "ml"} per sq meter`
 
-  // Initialize debug info
-  const debug = {
-    areaShape,
-    areaUnit,
-  }
-
-  let area = 0
-
-  if (areaShape === "rectangle") {
-    const length = Number.parseFloat(lengthInput.value)
-    const width = Number.parseFloat(widthInput.value)
-
-    if (isNaN(length) || isNaN(width)) {
-      calculatedAreaDiv.classList.add("hidden")
-      return
-    }
-
-    debug.length = length
-    debug.width = width
-
-    area = length * width
-  } else if (areaShape === "circle") {
-    const diameter = Number.parseFloat(diameterInput.value)
-
-    if (isNaN(diameter)) {
-      calculatedAreaDiv.classList.add("hidden")
-      return
-    }
-
-    debug.diameter = diameter
-
-    const radius = diameter / 2
-    area = Math.PI * radius * radius
-  }
-
-  debug.area = area
-
-  // Convert to square meters
-  const areaInSqM = area * AREA_CONVERSIONS[areaUnit]
-  debug.areaInSqM = areaInSqM
-
-  // Update UI
-  areaResultText.textContent = `${areaInSqM.toFixed(2)} square meters`
-  calculatedAreaDiv.classList.remove("hidden")
-
-  // Update debug info
-  areaDebugInfo.textContent = JSON.stringify(debug, null, 2)
+// Calculate imperial rate (oz or fl oz per sq yard)
+let imperialRate = ""
+if (WEIGHT_CONVERSIONS[rateUnit]) {
+  // Convert g/sq m to oz/sq yd
+  const ozPerSqYd = (rateBasePerSqM / 28.3495) * 0.836127
+  imperialRate = `${ozPerSqYd.toFixed(2)} oz per sq yard`
+} else {
+  // Convert ml/sq m to fl oz/sq yd
+  const flOzPerSqYd = (rateBasePerSqM / 29.5735) * 0.836127
+  imperialRate = `${flOzPerSqYd.toFixed(2)} fl oz per sq yard`
 }
 
-// Calculate area application
-function calculateAreaApplication() {
-  // Get area
-  const areaInSqM = Number.parseFloat(areaResultText.textContent)
+// Update results
+totalAmountResult.textContent = totalAmount
+alternativeAmountResult.textContent = alternativeAmount
+metricRateResult.textContent = metricRate
+imperialRateResult.textContent = imperialRate
 
-  // Get application rate
-  const applicationRate = Number.parseFloat(applicationRateInput.value)
-  const rateUnit = rateUnitSelect.value
-  const rateAreaUnit = rateAreaUnitSelect.value
+// Update debug info
+debug.totalAmount = totalAmount
+debug.alternativeAmount = alternativeAmount
+debug.metricRate = metricRate
+debug.imperialRate = imperialRate
 
-  if (isNaN(applicationRate)) {
-    alert("Please enter a valid application rate")
-    return
-  }
-
-  // Initialize debug info
-  const debug = {
-    areaInSqM,
-    applicationRate,
-    rateUnit,
-    rateAreaUnit,
-  }
-
-  // Convert rate to base unit per sq meter
-  let rateBasePerSqM = applicationRate
-
-  // First convert the product amount to base units (g or ml)
-  if (WEIGHT_CONVERSIONS[rateUnit]) {
-    rateBasePerSqM = applicationRate * WEIGHT_CONVERSIONS[rateUnit]
-  } else if (VOLUME_CONVERSIONS[rateUnit]) {
-    rateBasePerSqM = applicationRate * VOLUME_CONVERSIONS[rateUnit]
-  }
-
-  // Then adjust for the area unit in the rate
-  rateBasePerSqM = rateBasePerSqM / AREA_CONVERSIONS[rateAreaUnit]
-
-  debug.rateBasePerSqM = rateBasePerSqM
-
-  // Calculate total amount needed
-  const totalBaseAmount = areaInSqM * rateBasePerSqM
-  debug.totalBaseAmount = totalBaseAmount
-
-  // Format total amount in appropriate units
-  let totalAmount = ""
-  let alternativeAmount = ""
-
-  if (WEIGHT_CONVERSIONS[rateUnit]) {
-    // Weight product
-    if (totalBaseAmount >= 1000) {
-      totalAmount = `${(totalBaseAmount / 1000).toFixed(2)} kg`
-    } else {
-      totalAmount = `${totalBaseAmount.toFixed(2)} g`
-    }
-
-    // Alternative in imperial
-    alternativeAmount = `${(totalBaseAmount / WEIGHT_CONVERSIONS["lb"]).toFixed(2)} lb`
-  } else {
-    // Volume product
-    if (totalBaseAmount >= 1000) {
-      totalAmount = `${(totalBaseAmount / 1000).toFixed(2)} l`
-    } else {
-      totalAmount = `${totalBaseAmount.toFixed(2)} ml`
-    }
-
-    // Alternative in imperial
-    alternativeAmount = `${(totalBaseAmount / VOLUME_CONVERSIONS["gal_uk"]).toFixed(2)} gal (UK)`
-  }
-
-  // Calculate metric rate (g or ml per sq meter)
-  const metricRate = `${rateBasePerSqM.toFixed(2)} ${rateUnit === "g" || rateUnit === "kg" ? "g" : "ml"} per sq meter`
-
-  // Calculate imperial rate (oz or fl oz per sq yard)
-  let imperialRate = ""
-  if (WEIGHT_CONVERSIONS[rateUnit]) {
-    // Convert g/sq m to oz/sq yd
-    const ozPerSqYd = (rateBasePerSqM / 28.3495) * 0.836127
-    imperialRate = `${ozPerSqYd.toFixed(2)} oz per sq yard`
-  } else {
-    // Convert ml/sq m to fl oz/sq yd
-    const flOzPerSqYd = (rateBasePerSqM / 29.5735) * 0.836127
-    imperialRate = `${flOzPerSqYd.toFixed(2)} fl oz per sq yard`
-  }
-
-  // Update results
-  totalAmountResult.textContent = totalAmount
-  alternativeAmountResult.textContent = alternativeAmount
-  metricRateResult.textContent = metricRate
-  imperialRateResult.textContent = imperialRate
-
-  // Update debug info
-  debug.totalAmount = totalAmount
-  debug.alternativeAmount = alternativeAmount
-  debug.metricRate = metricRate
-  debug.imperialRate = imperialRate
-
-  areaDebugInfo.textContent = JSON.stringify(debug, null, 2)
+areaDebugInfo.textContent = JSON.stringify(debug, null, 2)
 }
 
 // Calculate volume
