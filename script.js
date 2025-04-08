@@ -794,17 +794,16 @@ function initProductCalculator() {
   // Initial setup
   updateRatioLabels()
 
-  // Set  updateRatioLabels()
+  // Set updateRatioLabels()
 }
 
 // Initial setup
 updateRatioLabels()
 
 // Set up initial calculation mode based on product type
+const productTypeSelect = document.getElementById("product-type")
 if (productTypeSelect) {
   setupCalculationModeForProductType()
-}
-\
 }
 
 // Update ratio labels based on measurement type and water unit
