@@ -93,6 +93,77 @@ h1 {
   display: block;
 }
 
+/* Step-based sections */
+.step-section {
+  margin-bottom: 25px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background-color: #2e7d32;
+  color: white;
+  border-radius: 50%;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.step-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #2e7d32;
+}
+
+/* Step 1: Product Selection */
+.product-selection {
+  background-color: #e8f5e9;
+  border-left: 5px solid #2e7d32;
+}
+
+/* Step 2: Calculation Requirements */
+.calculation-requirements {
+  background-color: #e3f2fd;
+  border-left: 5px solid #1976d2;
+}
+
+/* Step 3: Results */
+.results-section {
+  background-color: #f3e5f5;
+  border-left: 5px solid #7b1fa2;
+}
+
+/* Custom product section */
+.custom-product-section {
+  background-color: #f5f5f5;
+  padding: 15px;
+  border-radius: 6px;
+  margin-top: 15px;
+  border: 1px dashed #aaa;
+}
+
+.custom-product-toggle {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.custom-product-toggle input {
+  margin-right: 10px;
+}
+
 /* Form elements */
 .form-group {
   margin-bottom: 20px;
@@ -437,27 +508,6 @@ footer {
   background-color: #e8f5e9;
 }
 
-/* Find Product button styling to match screenshot */
-#find-product-btn,
-#find-area-product-btn,
-#find-water-product-btn {
-  background-color: #2e7d32;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 15px;
-  border-radius: 4px;
-}
-
-#find-product-btn:before,
-#find-area-product-btn:before,
-#find-water-product-btn:before {
-  content: "●";
-  margin-right: 8px;
-  font-size: 0.8em;
-}
-
 /* My Presets button styling to match screenshot */
 #my-presets-btn,
 #area-presets-btn,
@@ -542,5 +592,27 @@ h1 {
 
   .form-actions {
     flex-direction: column;
+  }
+
+  /* Enhance mobile experience */
+  .step-section {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+
+  .step-number {
+    width: 25px;
+    height: 25px;
+    font-size: 0.9rem;
+  }
+
+  .step-title {
+    font-size: 1.1rem;
+  }
+
+  /* Make buttons easier to tap on mobile */
+  button {
+    padding: 12px 15px;
+    min-height: 44px; /* Minimum touch target size */
   }
 }
