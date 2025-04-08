@@ -977,53 +977,43 @@ function calculateProductDosage() {
     scoopResult = `${(standardProductAmount / (scoopSize * scoopConversionFactor)).toFixed(1)} scoops per ${standardWaterAmount.toFixed(1)} litres`
   }
 
-  // Watering can calculation (assuming standard 10L watering can)
-  const wateringCanSize = 10 // litres
+  // Watering can calculation - use the same unit the user selected
+  let wateringCanSize, wateringCanUnit, wateringCanLabel
+  if (waterUnit === "l" || waterUnit === "ml") {
+    wateringCanSize = 10 // 10 litre watering can
+    wateringCanUnit = "litres"
+    wateringCanLabel = "10L watering can"
+  } else if (waterUnit === "gal_uk") {
+    wateringCanSize = 2 // 2 gallon watering can (common UK size)
+    wateringCanUnit = "gallons"
+    wateringCanLabel = "2 gallon watering can"
+  }
+
   const wateringCanAmount = (standardProductAmount / standardWaterAmount) * wateringCanSize
 
   let wateringCanResultText
   if (measurementType === "weight") {
     if (wateringCanAmount < 10) {
-      wateringCanResultText = `${wateringCanAmount.toFixed(1)}g per 10L watering can`
+      wateringCanResultText = `${wateringCanAmount.toFixed(1)}g per ${wateringCanLabel}`
     } else {
-      wateringCanResultText = `${(wateringCanAmount / 1000).toFixed(2)}kg per 10L watering can`
+      wateringCanResultText = `${(wateringCanAmount / 1000).toFixed(2)}kg per ${wateringCanLabel}`
     }
   } else if (measurementType === "volume") {
     if (wateringCanAmount < 10) {
-      wateringCanResultText = `${wateringCanAmount.toFixed(1)}ml per 10L watering can`
+      wateringCanResultText = `${wateringCanAmount.toFixed(1)}ml per ${wateringCanLabel}`
     } else {
-      wateringCanResultText = `${(wateringCanAmount / 1000).toFixed(2)}L per 10L watering can`
+      wateringCanResultText = `${(wateringCanAmount / 1000).toFixed(2)}L per ${wateringCanLabel}`
     }
   } else if (measurementType === "cap") {
-    wateringCanResultText = `${(wateringCanAmount / capSize).toFixed(1)} caps per 10L watering can`
+    wateringCanResultText = `${(wateringCanAmount / capSize).toFixed(1)} caps per ${wateringCanLabel}`
   }
-
-  // Update result elements
-  if (metricResultElement) metricResultElement.textContent = metricResult
-  if (imperialResultElement) imperialResultElement.textContent = imperialResult
-
-  if (measurementType === "cap" && capResultElement && capResultCard) {
-    capResultElement.textContent = capResult
-    capResultCard.classList.remove("hidden")
-  } else if (capResultCard) {
-    capResultCard.classList.add("hidden")
-  }
-
-  if (hasScoop && scoopResultElement && scoopResultCard) {
-    scoopResultElement.textContent = scoopResult
-    scoopResultCard.classList.remove("hidden")
-  } else if (scoopResultCard) {
-    scoopResultCard.classList.add("hidden")
-  }
-
-  if (alternativeResultElement) alternativeResultElement.textContent = alternativeResult
 
   // Show watering can section
   if (wateringCanSection && wateringCanResult) {
     wateringCanSection.classList.remove("hidden")
     wateringCanResult.textContent = wateringCanResultText
     if (wateringCanInfo) {
-      wateringCanInfo.textContent = "Based on a standard 10L watering can"
+      wateringCanInfo.textContent = `Based on a standard ${wateringCanLabel}`
     }
   }
 
