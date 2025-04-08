@@ -165,6 +165,117 @@ p {
   padding: var(--spacing-lg);
 }
 
+/* Quick Access Buttons */
+.quick-access-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background-color: #f5f9f7;
+  border-radius: 8px;
+  border: 1px dashed #cce5d9;
+}
+
+.primary-btn,
+.secondary-btn {
+  padding: 0.75rem 1.25rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex: 1;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.primary-btn {
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+}
+
+.primary-btn:hover {
+  background-color: #1b5e20;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.secondary-btn {
+  background-color: white;
+  color: #2e7d32;
+  border: 2px solid #2e7d32;
+}
+
+.secondary-btn:hover {
+  background-color: #f1f8e9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Search Panel Styling */
+.search-panel {
+  margin-bottom: 1.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.search-header {
+  padding: 1rem;
+  background-color: #f5f9f7;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.search-header h3 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  color: #2e7d32;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #cce5d9;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.search-results {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.search-results ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.search-results li {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.search-results li:hover {
+  background-color: #f1f8e9;
+}
+
+.search-results li:last-child {
+  border-bottom: none;
+}
+
+.search-results .hint {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
 /* Form Elements */
 .form-group {
   margin-bottom: var(--spacing);
@@ -621,4 +732,11 @@ footer {
   .section-header button {
     flex: 1;
   }
+}
+
+/* Update form section styling */
+.form-section {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e0e0e0;
 }
