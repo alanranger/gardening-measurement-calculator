@@ -940,24 +940,89 @@ const accordionTriggers = document.querySelectorAll(".accordion-trigger")
 
 // Initialize the application
 document.addEventListener("DOMContentLoaded", () => {
-  initTabs()
-  initGuideTabs()
-  initProductCalculator()
-  initAreaCalculator()
-  initWaterCalculator()
-  initAccordion()
+  console.log("DOM fully loaded and parsed");
+  
+  // Debug tab elements
+  const tabButtons = document.querySelectorAll(".tab-button");
+  console.log("Tab buttons found:", tabButtons.length);
+  tabButtons.forEach(btn => {
+    console.log("Tab button:", btn.getAttribute("data-tab"));
+  });
+  
+  const tabPanels = document.querySelectorAll(".tab-panel");
+  console.log("Tab panels found:", tabPanels.length);
+  tabPanels.forEach(panel => {
+    console.log("Tab panel ID:", panel.id);
+  });
+  
+  // Initialize tabs with direct event listeners
+  document.querySelectorAll(".tab-button").forEach((button) => {
+    button.addEventListener("click", function() {
+      const tabId = this.getAttribute("data-tab");
+      console.log("Tab clicked:", tabId);
+      
+      // Update active tab button
+      document.querySelectorAll(".tab-button").forEach((btn) => {
+        btn.classList.remove("active");
+      });
+      this.classList.add("active");
+      
+      // Update active tab panel
+      document.querySelectorAll(".tab-panel").forEach((panel) => {
+        panel.classList.remove("active");
+      });
+      
+      const targetPanel = document.getElementById(`${tabId}-panel`);
+      if (targetPanel) {
+        targetPanel.classList.add("active");
+        console.log("Activated panel:", targetPanel.id);
+      } else {
+        console.error(`Panel with ID ${tabId}-panel not found`);
+      }
+    });
+  });
+  
+  // Initialize guide tabs with direct event listeners
+  document.querySelectorAll(".guide-tab").forEach((tab) => {
+    tab.addEventListener("click", function() {
+      const tabId = this.getAttribute("data-guide-tab");
+      console.log("Guide tab clicked:", tabId);
+      
+      // Update active guide tab
+      document.querySelectorAll(".guide-tab").forEach((t) => {
+        t.classList.remove("active");
+      });
+      this.classList.add("active");
+      
+      // Update active guide tab panel
+      document.querySelectorAll(".guide-tab-panel").forEach((panel) => {
+        panel.classList.remove("active");
+      });
+      
+      const targetPanel = document.getElementById(`${tabId}-panel`);
+      if (targetPanel) {
+        targetPanel.classList.add("active");
+        console.log("Activated guide panel:", targetPanel.id);
+      } else {
+        console.error(`Guide panel with ID ${tabId}-panel not found`);
+      }
+    });
+  });
+  
+  initProductCalculator();
+  initAreaCalculator();
+  initWaterCalculator();
+  initAccordion();
   
   // Add version information - only add if it doesn't already exist
   if (!document.querySelector(".version")) {
-    const VERSION = "v2.0"
-    const VERSION_ELEMENT = document.createElement("div")
-    VERSION_ELEMENT.className = "version"
-    VERSION_ELEMENT.textContent = VERSION
-    document.body.appendChild(VERSION_ELEMENT)
+    const VERSION = "v2.0";
+    const VERSION_ELEMENT = document.createElement("div");
+    VERSION_ELEMENT.className = "version";
+    VERSION_ELEMENT.textContent = VERSION;
+    document.body.appendChild(VERSION_ELEMENT);
   }
-  
-  // We'll skip adding the warning message since it's already in the HTML
-})
+});
 
 // Initialize tabs
 function initTabs() {
