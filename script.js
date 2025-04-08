@@ -854,6 +854,9 @@ document.addEventListener("DOMContentLoaded", () => {
       waterDebugContent.classList.toggle("hidden")
     })
   }
+
+  // Initialize debug info and copy functionality
+  initDebugCopyFunctionality()
 })
 
 // Add this function to format debug info for copying
@@ -1067,8 +1070,8 @@ function copyToClipboard(text) {
   return true
 }
 
-// Add event listeners for the copy debug buttons
-document.addEventListener("DOMContentLoaded", () => {
+// Initialize debug copy functionality
+function initDebugCopyFunctionality() {
   // Product calculator copy debug button
   const copyDebugBtn = document.getElementById("copy-debug-btn")
   if (copyDebugBtn) {
@@ -1134,4 +1137,4 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     })
   }
-})
+}
