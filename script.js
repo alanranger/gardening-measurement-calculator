@@ -851,7 +851,7 @@ function calculateProductDosage() {
     } else if (productUnit === "lb") {
       standardProductAmount = productAmount * 453.59 // lb to g
     } else if (productUnit === "tsp") {
-      standardProductAmount = productAmount * 5 // tsp to ml (approximate)\`\`\`javascript
+      standardProductAmount = productAmount * 5 // tsp to ml (approximate)
     } else if (productUnit === "tbsp") {
       standardProductAmount = productAmount * 15 // tbsp to ml (approximate)
     } else if (productUnit === "cap") {
@@ -1378,4 +1378,3 @@ function initDebugCopyFunctionality() {
     })
   }
 }
-\`\`\`
