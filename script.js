@@ -979,12 +979,10 @@ function initProductCalculator() {
 
   // Toggle product search panel
   findProductBtn.addEventListener("click", () => {
-    if (productSearchPanel.classList.contains("hidden")) {
-      productSearchPanel.classList.remove("hidden")
+    productSearchPanel.classList.toggle("hidden")
+    if (!productSearchPanel.classList.contains("hidden")) {
       presetsPanel.classList.add("hidden")
       productSearchInput.focus()
-    } else {
-      productSearchPanel.classList.add("hidden")
     }
   })
 
@@ -998,12 +996,10 @@ function initProductCalculator() {
 
   // Toggle presets panel
   myPresetsBtn.addEventListener("click", () => {
-    if (presetsPanel.classList.contains("hidden")) {
-      presetsPanel.classList.remove("hidden")
+    presetsPanel.classList.toggle("hidden")
+    if (!presetsPanel.classList.contains("hidden")) {
       productSearchPanel.classList.add("hidden")
       loadPresets("gardenerPresets", presetsList, handlePresetSelect)
-    } else {
-      presetsPanel.classList.add("hidden")
     }
   })
 
@@ -1068,12 +1064,10 @@ function initAreaCalculator() {
 
   // Toggle product search panel
   findAreaProductBtn.addEventListener("click", () => {
-    if (areaProductSearchPanel.classList.contains("hidden")) {
-      areaProductSearchPanel.classList.remove("hidden")
+    areaProductSearchPanel.classList.toggle("hidden")
+    if (!areaProductSearchPanel.classList.contains("hidden")) {
       areaPresetsPanel.classList.add("hidden")
       areaProductSearchInput.focus()
-    } else {
-      areaProductSearchPanel.classList.add("hidden")
     }
   })
 
@@ -1089,12 +1083,10 @@ function initAreaCalculator() {
 
   // Toggle presets panel
   areaPresetsBtn.addEventListener("click", () => {
-    if (areaPresetsPanel.classList.contains("hidden")) {
-      areaPresetsPanel.classList.remove("hidden")
+    areaPresetsPanel.classList.toggle("hidden")
+    if (!areaPresetsPanel.classList.contains("hidden")) {
       areaProductSearchPanel.classList.add("hidden")
       loadPresets("gardenerAreaPresets", areaPresetsList, handleAreaPresetSelect)
-    } else {
-      areaPresetsPanel.classList.add("hidden")
     }
   })
 
@@ -1158,12 +1150,10 @@ function initWaterCalculator() {
 
   // Toggle product search panel
   findWaterProductBtn.addEventListener("click", () => {
-    if (waterProductSearchPanel.classList.contains("hidden")) {
-      waterProductSearchPanel.classList.remove("hidden")
+    waterProductSearchPanel.classList.toggle("hidden")
+    if (!waterProductSearchPanel.classList.contains("hidden")) {
       waterPresetsPanel.classList.add("hidden")
       waterProductSearchInput.focus()
-    } else {
-      waterProductSearchPanel.classList.add("hidden")
     }
   })
 
@@ -1179,12 +1169,10 @@ function initWaterCalculator() {
 
   // Toggle presets panel
   waterPresetsBtn.addEventListener("click", () => {
-    if (waterPresetsPanel.classList.contains("hidden")) {
-      waterPresetsPanel.classList.remove("hidden")
+    waterPresetsPanel.classList.toggle("hidden")
+    if (!waterPresetsPanel.classList.contains("hidden")) {
       waterProductSearchPanel.classList.add("hidden")
       loadPresets("gardenerWaterPresets", waterPresetsList, handleWaterPresetSelect)
-    } else {
-      waterPresetsPanel.classList.add("hidden")
     }
   })
 
