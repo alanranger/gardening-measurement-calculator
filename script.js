@@ -226,74 +226,8 @@ const PRODUCT_TYPE_HINTS = {
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM fully loaded and parsed")
 
-  // Debug tab elements
-  const tabButtons = document.querySelectorAll(".tab-button")
-  console.log("Tab buttons found:", tabButtons.length)
-  tabButtons.forEach((btn) => {
-    console.log("Tab button:", btn.getAttribute("data-tab"))
-  })
-
-  const tabPanels = document.querySelectorAll(".tab-panel")
-  console.log("Tab panels found:", tabPanels.length)
-  tabPanels.forEach((panel) => {
-    console.log("Tab panel ID:", panel.id)
-  })
-
-  // Initialize tabs with direct event listeners
-  document.querySelectorAll(".tab-button").forEach((button) => {
-    button.addEventListener("click", function () {
-      const tabId = this.getAttribute("data-tab")
-      console.log("Tab clicked:", tabId)
-
-      // Update active tab button
-      document.querySelectorAll(".tab-button").forEach((btn) => {
-        btn.classList.remove("active")
-      })
-      this.classList.add("active")
-
-      // Update active tab panel
-      document.querySelectorAll(".tab-panel").forEach((panel) => {
-        panel.classList.remove("active")
-      })
-
-      const targetPanel = document.getElementById(`${tabId}-panel`)
-      if (targetPanel) {
-        targetPanel.classList.add("active")
-        console.log("Activated panel:", targetPanel.id)
-      } else {
-        console.error(`Panel with ID ${tabId}-panel not found`)
-      }
-    })
-  })
-
-  // Initialize guide tabs with direct event listeners
-  document.querySelectorAll(".guide-tab").forEach((tab) => {
-    if (tab) {
-      tab.addEventListener("click", function () {
-        const tabId = this.getAttribute("data-guide-tab")
-        console.log("Guide tab clicked:", tabId)
-
-        // Update active guide tab
-        document.querySelectorAll(".guide-tab").forEach((t) => {
-          t.classList.remove("active")
-        })
-        this.classList.add("active")
-
-        // Update active guide tab panel
-        document.querySelectorAll(".guide-tab-panel").forEach((panel) => {
-          panel.classList.remove("active")
-        })
-
-        const targetPanel = document.getElementById(`${tabId}-panel`)
-        if (targetPanel) {
-          targetPanel.classList.add("active")
-          console.log("Activated guide panel:", targetPanel.id)
-        } else {
-          console.error(`Guide panel with ID ${tabId}-panel not found`)
-        }
-      })
-    }
-  })
+  // Initialize the calculator type selector
+  initCalculatorTypeSelector()
 
   // Initialize calculators with error handling
   try {
@@ -324,21 +258,96 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("Error initializing accordion:", error)
   }
 
-  // Add version information - only add if it doesn't already exist
-  if (!document.querySelector(".version")) {
-    const VERSION = "v2.0"
-    const VERSION_ELEMENT = document.createElement("div")
-    VERSION_ELEMENT.className = "version"
-    VERSION_ELEMENT.textContent = VERSION
-    document.body.appendChild(VERSION_ELEMENT)
-  }
-
   // Update version number in header
   const versionHeader = document.querySelector(".version-header")
   if (versionHeader) {
-    versionHeader.textContent = "V1.09"
+    versionHeader.textContent = "V2.0"
   }
+
+  // Initialize debug info and copy functionality
+  initDebugCopyFunctionality()
 })
+
+// Initialize calculator type selector
+function initCalculatorTypeSelector() {
+  const calculatorTypeSelect = document.getElementById("calculator-type")
+
+  if (calculatorTypeSelect) {
+    calculatorTypeSelect.addEventListener("change", function () {
+      const selectedType = this.value
+      console.log("Calculator type changed to:", selectedType)
+
+      // Hide all calculator inputs and results
+      document.getElementById("product-calculator-inputs").classList.add("hidden")
+      document.getElementById("area-calculator-inputs").classList.add("hidden")
+      document.getElementById("water-calculator-inputs").classList.add("hidden")
+      document.getElementById("product-calculator-results").classList.add("hidden")
+      document.getElementById("area-calculator-results").classList.add("hidden")
+      document.getElementById("water-calculator-results").classList.add("hidden")
+      document.getElementById("conversion-section").classList.add("hidden")
+
+      // Show the selected calculator inputs and results
+      if (selectedType === "product") {
+        document.getElementById("product-calculator-inputs").classList.remove("hidden")
+        document.getElementById("product-calculator-results").classList.remove("hidden")
+      } else if (selectedType === "area") {
+        document.getElementById("area-calculator-inputs").classList.remove("hidden")
+        document.getElementById("area-calculator-results").classList.remove("hidden")
+      } else if (selectedType === "water") {
+        document.getElementById("water-calculator-inputs").classList.remove("hidden")
+        document.getElementById("water-calculator-results").classList.remove("hidden")
+      } else if (selectedType === "conversion") {
+        document.getElementById("conversion-section").classList.remove("hidden")
+      }
+
+      // Update product type options based on calculator type
+      updateProductTypeOptions(selectedType)
+    })
+
+    // Set initial state
+    calculatorTypeSelect.dispatchEvent(new Event("change"))
+  }
+}
+
+// Update product type options based on calculator type
+function updateProductTypeOptions(calculatorType) {
+  const productTypeSelect = document.getElementById("product-type")
+
+  if (!productTypeSelect) return
+
+  // Clear existing options
+  while (productTypeSelect.options.length > 0) {
+    productTypeSelect.remove(0)
+  }
+
+  // Add appropriate options based on calculator type
+  if (calculatorType === "product") {
+    addOption(productTypeSelect, "liquid_fertilizer", "Liquid Fertilizer")
+    addOption(productTypeSelect, "granular_fertilizer", "Granular Fertilizer")
+    addOption(productTypeSelect, "weed_killer", "Weed Killer")
+    addOption(productTypeSelect, "custom", "Custom Product")
+  } else if (calculatorType === "area") {
+    addOption(productTypeSelect, "lawn_fertilizer", "Lawn Fertilizer")
+    addOption(productTypeSelect, "granular_fertilizer", "Granular Fertilizer")
+    addOption(productTypeSelect, "custom", "Custom Product")
+  } else if (calculatorType === "water") {
+    addOption(productTypeSelect, "pond_treatment", "Pond Treatment")
+    addOption(productTypeSelect, "algaecide", "Algaecide")
+    addOption(productTypeSelect, "water_clarifier", "Water Clarifier")
+    addOption(productTypeSelect, "custom", "Custom Product")
+  }
+
+  // Trigger change event to update product name dropdown
+  productTypeSelect.dispatchEvent(new Event("change"))
+}
+
+// Helper function to add option to select element
+function addOption(selectElement, value, text) {
+  const option = document.createElement("option")
+  option.value = value
+  option.textContent = text
+  selectElement.appendChild(option)
+}
 
 // Initialize product calculator
 function initProductCalculator() {
@@ -495,7 +504,14 @@ function initProductCalculator() {
   // Calculate button
   if (calculateBtn) {
     calculateBtn.addEventListener("click", () => {
-      calculateProductDosage()
+      const calculatorType = document.getElementById("calculator-type").value
+      if (calculatorType === "product") {
+        calculateProductDosage()
+      } else if (calculatorType === "area") {
+        calculateAreaApplication()
+      } else if (calculatorType === "water") {
+        calculateWaterDosage()
+      }
     })
   }
 
@@ -549,8 +565,19 @@ function updateProductNameDropdown(selectedType) {
     productNameSelect.remove(1)
   }
 
+  // Get the current calculator type
+  const calculatorType = document.getElementById("calculator-type").value
+
+  // Choose the appropriate product list based on calculator type
+  let productList = COMMON_PRODUCTS
+  if (calculatorType === "area") {
+    productList = AREA_TREATMENT_PRODUCTS
+  } else if (calculatorType === "water") {
+    productList = WATER_TREATMENT_PRODUCTS
+  }
+
   // Filter products by selected type
-  const filteredProducts = COMMON_PRODUCTS.filter((product) => product.type === selectedType)
+  const filteredProducts = productList.filter((product) => product.type === selectedType)
 
   // Add filtered products to dropdown
   filteredProducts.forEach((product) => {
@@ -602,7 +629,21 @@ function initAreaCalculator() {
     })
   }
 
-  // Rest of area calculator initialization...
+  // Calculate area when inputs change
+  const areaInputs = [
+    document.getElementById("length"),
+    document.getElementById("width"),
+    document.getElementById("area-unit"),
+    document.getElementById("diameter"),
+    document.getElementById("circle-unit"),
+  ]
+
+  areaInputs.forEach((input) => {
+    if (input) {
+      input.addEventListener("change", calculateArea)
+      input.addEventListener("input", calculateArea)
+    }
+  })
 }
 
 // Initialize water calculator
@@ -631,7 +672,22 @@ function initWaterCalculator() {
     })
   }
 
-  // Rest of water calculator initialization...
+  // Calculate volume when inputs change
+  const volumeInputs = [
+    document.getElementById("container-length"),
+    document.getElementById("container-width"),
+    document.getElementById("container-height"),
+    document.getElementById("container-diameter"),
+    document.getElementById("container-depth"),
+    document.getElementById("dimension-unit"),
+  ]
+
+  volumeInputs.forEach((input) => {
+    if (input) {
+      input.addEventListener("change", calculateVolume)
+      input.addEventListener("input", calculateVolume)
+    }
+  })
 }
 
 // Initialize accordion
@@ -1399,14 +1455,263 @@ function calculateProductDosage() {
   }
 }
 
+// Calculate area
+function calculateArea() {
+  console.log("Calculating area...")
+
+  // Get input values
+  let length = Number.parseFloat(document.getElementById("length")?.value || "0")
+  let width = Number.parseFloat(document.getElementById("width")?.value || "0")
+  const areaUnit = document.getElementById("area-unit")?.value || "sq_m"
+  let diameter = Number.parseFloat(document.getElementById("diameter")?.value || "0")
+  const circleUnit = document.getElementById("circle-unit")?.value || "m"
+  const areaShape = document.querySelector('input[name="area-shape"]:checked')?.value || "rectangle"
+
+  // Get result elements
+  const calculatedAreaDiv = document.getElementById("calculated-area")
+  const areaResultText = document.getElementById("area-result")
+
+  // Calculate area in square meters
+  let areaSqMeters = 0
+
+  if (areaShape === "rectangle") {
+    // Convert length and width to meters
+    length = length * LENGTH_CONVERSIONS[areaUnit]
+    width = width * LENGTH_CONVERSIONS[areaUnit]
+    areaSqMeters = length * width
+  } else if (areaShape === "circle") {
+    // Convert diameter to meters
+    diameter = diameter * LENGTH_CONVERSIONS[circleUnit]
+    const radius = diameter / 2
+    areaSqMeters = Math.PI * radius * radius
+  }
+
+  // Convert area to selected unit
+  const calculatedArea = areaSqMeters / AREA_CONVERSIONS[areaUnit]
+
+  // Format result
+  const areaResult = `${calculatedArea.toFixed(2)} ${areaUnit}`
+
+  // Update result elements
+  if (calculatedAreaDiv && areaResultText) {
+    calculatedAreaDiv.classList.remove("hidden")
+    areaResultText.textContent = areaResult
+  }
+}
+
+// Calculate area application
+function calculateAreaApplication() {
+  console.log("Calculating area application...")
+
+  // First ensure area is calculated
+  calculateArea()
+
+  // Get area value
+  const areaResultText = document.getElementById("area-result")?.textContent || "-"
+  if (areaResultText === "-") return
+
+  // Parse area value
+  const areaParts = areaResultText.split(" ")
+  const areaValue = Number.parseFloat(areaParts[0])
+  const areaUnit = areaParts[1]
+
+  // Get application rate
+  const applicationRate = Number.parseFloat(document.getElementById("application-rate")?.value || "0")
+  const rateUnit = document.getElementById("rate-unit")?.value || "g"
+  const rateAreaUnit = document.getElementById("rate-area-unit")?.value || "sq_m"
+
+  // Calculate total amount needed
+  let totalAmount = 0
+
+  // Convert area to rate area unit
+  const areaInRateUnit = areaValue * (AREA_CONVERSIONS[areaUnit] / AREA_CONVERSIONS[rateAreaUnit])
+
+  // Calculate total amount
+  totalAmount = applicationRate * areaInRateUnit
+
+  // Format results
+  let totalAmountResult, alternativeAmountResult, metricRateResult, imperialRateResult
+
+  // Total amount
+  if (rateUnit === "g" && totalAmount >= 1000) {
+    totalAmountResult = `${(totalAmount / 1000).toFixed(2)} kg`
+  } else if (rateUnit === "ml" && totalAmount >= 1000) {
+    totalAmountResult = `${(totalAmount / 1000).toFixed(2)} L`
+  } else {
+    totalAmountResult = `${totalAmount.toFixed(2)} ${rateUnit}`
+  }
+
+  // Alternative measurement
+  if (rateUnit === "g" || rateUnit === "kg") {
+    // Convert to oz/lb
+    const ozAmount = totalAmount / WEIGHT_CONVERSIONS.oz
+    if (ozAmount < 16) {
+      alternativeAmountResult = `${ozAmount.toFixed(1)} oz`
+    } else {
+      alternativeAmountResult = `${(ozAmount / 16).toFixed(2)} lb`
+    }
+  } else if (rateUnit === "ml" || rateUnit === "l") {
+    // Convert to fl oz
+    const flOzAmount = totalAmount / 28.41
+    alternativeAmountResult = `${flOzAmount.toFixed(1)} fl oz`
+  } else {
+    alternativeAmountResult = totalAmountResult
+  }
+
+  // Metric rate (per sq m)
+  const ratePerSqM = applicationRate * (AREA_CONVERSIONS[rateAreaUnit] / AREA_CONVERSIONS.sq_m)
+  metricRateResult = `${ratePerSqM.toFixed(1)} ${rateUnit} per sq m`
+
+  // Imperial rate (per sq ft)
+  const ratePerSqFt = applicationRate * (AREA_CONVERSIONS[rateAreaUnit] / AREA_CONVERSIONS.sq_ft)
+  imperialRateResult = `${ratePerSqFt.toFixed(1)} ${rateUnit} per sq ft`
+
+  // Update result elements
+  document.getElementById("total-amount-result").textContent = totalAmountResult
+  document.getElementById("alternative-amount-result").textContent = alternativeAmountResult
+  document.getElementById("metric-rate-result").textContent = metricRateResult
+  document.getElementById("imperial-rate-result").textContent = imperialRateResult
+}
+
+// Calculate volume
+function calculateVolume() {
+  console.log("Calculating volume...")
+
+  // Get input values
+  const containerShape = document.querySelector('input[name="container-shape"]:checked')?.value || "rectangular"
+  const dimensionUnit = document.getElementById("dimension-unit")?.value || "cm"
+
+  let containerLength = Number.parseFloat(document.getElementById("container-length")?.value || "0")
+  let containerWidth = Number.parseFloat(document.getElementById("container-width")?.value || "0")
+  let containerHeight = Number.parseFloat(document.getElementById("container-height")?.value || "0")
+  let containerDiameter = Number.parseFloat(document.getElementById("container-diameter")?.value || "0")
+  let containerDepth = Number.parseFloat(document.getElementById("container-depth")?.value || "0")
+
+  // Get result elements
+  const calculatedVolumeDiv = document.getElementById("calculated-volume")
+  const volumeResultText = document.getElementById("volume-result")
+  const volumeConversionText = document.getElementById("volume-conversion")
+
+  // Calculate volume in cubic meters
+  let volumeCubicMeters = 0
+
+  // Convert dimensions to meters
+  const conversionFactor = LENGTH_CONVERSIONS[dimensionUnit]
+
+  if (containerShape === "rectangular") {
+    containerLength = containerLength * conversionFactor
+    containerWidth = containerWidth * conversionFactor
+    containerHeight = containerHeight * conversionFactor
+
+    volumeCubicMeters = containerLength * containerWidth * containerHeight
+  } else if (containerShape === "circular") {
+    containerDiameter = containerDiameter * conversionFactor
+    containerDepth = containerDepth * conversionFactor
+
+    const radius = containerDiameter / 2
+    volumeCubicMeters = Math.PI * radius * radius * containerDepth
+  }
+
+  // Convert to litres (1 cubic meter = 1000 litres)
+  const volumeLitres = volumeCubicMeters * 1000
+
+  // Format results
+  let volumeResult, volumeConversion
+
+  if (volumeLitres < 1) {
+    volumeResult = `${(volumeLitres * 1000).toFixed(0)} ml`
+  } else if (volumeLitres < 1000) {
+    volumeResult = `${volumeLitres.toFixed(1)} litres`
+  } else {
+    volumeResult = `${(volumeLitres / 1000).toFixed(2)} cubic meters`
+  }
+
+  // Conversion to gallons
+  const volumeGallons = volumeLitres / VOLUME_CONVERSIONS.gal_uk
+  volumeConversion = `(${volumeGallons.toFixed(1)} UK gallons)`
+
+  // Update result elements
+  if (calculatedVolumeDiv && volumeResultText && volumeConversionText) {
+    calculatedVolumeDiv.classList.remove("hidden")
+    volumeResultText.textContent = volumeResult
+    volumeConversionText.textContent = volumeConversion
+  }
+
+  // Update water volume input
+  const waterVolumeInput = document.getElementById("water-volume")
+  if (waterVolumeInput) {
+    waterVolumeInput.value = volumeLitres.toFixed(0)
+  }
+}
+
+// Calculate water dosage
+function calculateWaterDosage() {
+  console.log("Calculating water dosage...")
+
+  // Get input values
+  const waterVolume = Number.parseFloat(document.getElementById("water-volume")?.value || "0")
+  const waterVolumeUnit = document.getElementById("water-volume-unit")?.value || "l"
+  const dosageAmount = Number.parseFloat(document.getElementById("dosage-amount")?.value || "0")
+  const dosageUnit = document.getElementById("dosage-unit")?.value || "ml"
+
+  // Convert water volume to litres
+  let waterVolumeLitres = 0
+
+  if (waterVolumeUnit === "l") {
+    waterVolumeLitres = waterVolume
+  } else if (waterVolumeUnit === "ml") {
+    waterVolumeLitres = waterVolume / 1000
+  } else if (waterVolumeUnit === "gal_uk") {
+    waterVolumeLitres = waterVolume * 4.546
+  }
+
+  // Calculate dosage (based on per 1000 litres)
+  const totalDosage = (dosageAmount * waterVolumeLitres) / 1000
+
+  // Format results
+  let totalAmountResult, metricDosageResult, imperialDosageResult, alternativeDosageResult
+
+  // Total amount
+  if (dosageUnit === "g" && totalDosage >= 1000) {
+    totalAmountResult = `${(totalDosage / 1000).toFixed(2)} kg`
+  } else if (dosageUnit === "ml" && totalDosage >= 1000) {
+    totalAmountResult = `${(totalDosage / 1000).toFixed(2)} L`
+  } else {
+    totalAmountResult = `${totalDosage.toFixed(2)} ${dosageUnit}`
+  }
+
+  // Metric dosage (per litre)
+  const dosagePerLitre = dosageAmount / 1000
+  metricDosageResult = `${dosagePerLitre.toFixed(2)} ${dosageUnit} per litre`
+
+  // Imperial dosage (per gallon)
+  const dosagePerGallon = (dosageAmount / 1000) * 4.546
+  imperialDosageResult = `${dosagePerGallon.toFixed(2)} ${dosageUnit} per gallon`
+
+  // Alternative dosage
+  if (dosageUnit === "ml") {
+    if (dosagePerLitre < 5) {
+      alternativeDosageResult = `${(dosagePerLitre * 20).toFixed(1)} drops per litre`
+    } else {
+      alternativeDosageResult = `${(dosagePerLitre / 5).toFixed(1)} teaspoons per litre`
+    }
+  } else if (dosageUnit === "g") {
+    alternativeDosageResult = `${(dosagePerLitre / 5).toFixed(1)} teaspoons per litre`
+  } else {
+    alternativeDosageResult = metricDosageResult
+  }
+
+  // Update result elements
+  document.getElementById("water-total-amount-result").textContent = totalAmountResult
+  document.getElementById("water-metric-dosage-result").textContent = metricDosageResult
+  document.getElementById("water-imperial-dosage-result").textContent = imperialDosageResult
+  document.getElementById("water-alternative-dosage-result").textContent = alternativeDosageResult
+}
+
 // Add debug event listeners to debug triggers
 document.addEventListener("DOMContentLoaded", () => {
   const debugTrigger = document.getElementById("debug-trigger")
   const debugContent = document.getElementById("debug-content")
-  const areaDebugTrigger = document.getElementById("area-debug-trigger")
-  const areaDebugContent = document.getElementById("area-debug-content")
-  const waterDebugTrigger = document.getElementById("water-debug-trigger")
-  const waterDebugContent = document.getElementById("water-debug-content")
 
   if (debugTrigger && debugContent) {
     debugTrigger.addEventListener("click", () => {
@@ -1414,23 +1719,11 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 
-  if (areaDebugTrigger && areaDebugContent) {
-    areaDebugTrigger.addEventListener("click", () => {
-      areaDebugContent.classList.toggle("hidden")
-    })
-  }
-
-  if (waterDebugTrigger && waterDebugContent) {
-    waterDebugTrigger.addEventListener("click", () => {
-      waterDebugContent.classList.toggle("hidden")
-    })
-  }
-
   // Initialize debug info and copy functionality
   initDebugCopyFunctionality()
 })
 
-// Add this function to format debug info for copying
+// Format debug info for copying
 function formatDebugInfo(calculatorType) {
   let debugInfo = ""
 
@@ -1439,7 +1732,11 @@ function formatDebugInfo(calculatorType) {
   debugInfo += "Generated: " + new Date().toLocaleString() + "\n"
   debugInfo += "----------------------------------------\n\n"
 
-  if (calculatorType === "product") {
+  // Get calculator type
+  const selectedCalculatorType = document.getElementById("calculator-type").value
+  debugInfo += "Calculator Type: " + selectedCalculatorType + "\n\n"
+
+  if (selectedCalculatorType === "product") {
     // Product Calculator Debug Info
     debugInfo += "PRODUCT CALCULATOR SELECTIONS:\n\n"
 
@@ -1523,7 +1820,7 @@ function formatDebugInfo(calculatorType) {
     }
 
     debugInfo += "Alternative Measurement: " + alternativeResult + "\n"
-  } else if (calculatorType === "area") {
+  } else if (selectedCalculatorType === "area") {
     // Area Calculator Debug Info
     debugInfo += "AREA CALCULATOR SELECTIONS:\n\n"
 
@@ -1534,8 +1831,8 @@ function formatDebugInfo(calculatorType) {
     const areaUnit = document.getElementById("area-unit")?.value || "N/A"
     const diameter = document.getElementById("diameter")?.value || "N/A"
     const circleUnit = document.getElementById("circle-unit")?.value || "N/A"
-    const areaProductType = document.getElementById("area-product-type")?.value || "N/A"
-    const areaProductName = document.getElementById("area-product-name")?.value || "N/A"
+    const areaProductType = document.getElementById("product-type")?.value || "N/A"
+    const areaProductName = document.getElementById("product-name")?.value || "N/A"
     const applicationRate = document.getElementById("application-rate")?.value || "N/A"
     const rateUnit = document.getElementById("rate-unit")?.value || "N/A"
     const rateAreaUnit = document.getElementById("rate-area-unit")?.value || "N/A"
@@ -1545,22 +1842,19 @@ function formatDebugInfo(calculatorType) {
 
     if (areaShape === "rectangle") {
       debugInfo += "Length: " + length + " " + areaUnit + "\n"
-      \
-      debugInfo += "Width: \" + width {
-      debugInfo += "Length: " + length + " " + areaUnit + "\\n"
-      debugInfo += "Width: " + width + " " + areaUnit + "\\n"
+      debugInfo += "Width: " + width + " " + areaUnit + "\n"
     } else if (areaShape === "circle") {
-      debugInfo += "Diameter: " + diameter + " " + circleUnit + "\\n"
+      debugInfo += "Diameter: " + diameter + " " + circleUnit + "\n"
     }
 
     const areaResult = document.getElementById("area-result")?.textContent || "N/A"
     if (areaResult !== "N/A" && areaResult !== "-") {
-      debugInfo += "Calculated Area: " + areaResult + "\\n"
+      debugInfo += "Calculated Area: " + areaResult + "\n"
     }
 
-    debugInfo += "Product Type: " + areaProductType + "\\n"
-    debugInfo += "Product Name: " + areaProductName + "\\n"
-    debugInfo += "Application Rate: " + applicationRate + " " + rateUnit + " per " + rateAreaUnit + "\\n\\n"
+    debugInfo += "Product Type: " + areaProductType + "\n"
+    debugInfo += "Product Name: " + areaProductName + "\n"
+    debugInfo += "Application Rate: " + applicationRate + " " + rateUnit + " per " + rateAreaUnit + "\n\n"
 
     // Add results if available
     const totalAmountResult = document.getElementById("total-amount-result")?.textContent || "N/A"
@@ -1568,14 +1862,14 @@ function formatDebugInfo(calculatorType) {
     const metricRateResult = document.getElementById("metric-rate-result")?.textContent || "N/A"
     const imperialRateResult = document.getElementById("imperial-rate-result")?.textContent || "N/A"
 
-    debugInfo += "RESULTS:\\n"
-    debugInfo += "Total Amount Needed: " + totalAmountResult + "\\n"
-    debugInfo += "Alternative Measurement: " + alternativeAmountResult + "\\n"
-    debugInfo += "Metric Rate: " + metricRateResult + "\\n"
-    debugInfo += "Imperial Rate: " + imperialRateResult + "\\n"
-  } else if (calculatorType === "water") {
+    debugInfo += "RESULTS:\n"
+    debugInfo += "Total Amount Needed: " + totalAmountResult + "\n"
+    debugInfo += "Alternative Measurement: " + alternativeAmountResult + "\n"
+    debugInfo += "Metric Rate: " + metricRateResult + "\n"
+    debugInfo += "Imperial Rate: " + imperialRateResult + "\n"
+  } else if (selectedCalculatorType === "water") {
     // Water Calculator Debug Info
-    debugInfo += "WATER CALCULATOR SELECTIONS:\\n\\n"
+    debugInfo += "WATER CALCULATOR SELECTIONS:\n\n"
 
     // Get all the water calculator inputs
     const containerShape = document.querySelector('input[name="container-shape"]:checked')?.value || "N/A"
@@ -1587,33 +1881,33 @@ function formatDebugInfo(calculatorType) {
     const containerDepth = document.getElementById("container-depth")?.value || "N/A"
     const waterVolume = document.getElementById("water-volume")?.value || "N/A"
     const waterVolumeUnit = document.getElementById("water-volume-unit")?.value || "N/A"
-    const waterProductType = document.getElementById("water-product-type")?.value || "N/A"
-    const waterProductName = document.getElementById("water-product-name")?.value || "N/A"
+    const waterProductType = document.getElementById("product-type")?.value || "N/A"
+    const waterProductName = document.getElementById("product-name")?.value || "N/A"
     const dosageAmount = document.getElementById("dosage-amount")?.value || "N/A"
     const dosageUnit = document.getElementById("dosage-unit")?.value || "N/A"
 
     // Format the debug info
-    debugInfo += "Container Shape: " + containerShape + "\\n"
-    debugInfo += "Dimension Unit: " + dimensionUnit + "\\n"
+    debugInfo += "Container Shape: " + containerShape + "\n"
+    debugInfo += "Dimension Unit: " + dimensionUnit + "\n"
 
     if (containerShape === "rectangular") {
-      debugInfo += "Length: " + containerLength + " " + dimensionUnit + "\\n"
-      debugInfo += "Width: " + containerWidth + " " + dimensionUnit + "\\n"
-      debugInfo += "Height: " + containerHeight + " " + dimensionUnit + "\\n"
+      debugInfo += "Length: " + containerLength + " " + dimensionUnit + "\n"
+      debugInfo += "Width: " + containerWidth + " " + dimensionUnit + "\n"
+      debugInfo += "Height: " + containerHeight + " " + dimensionUnit + "\n"
     } else if (containerShape === "circular") {
-      debugInfo += "Diameter: " + containerDiameter + " " + dimensionUnit + "\\n"
-      debugInfo += "Depth: " + containerDepth + " " + dimensionUnit + "\\n"
+      debugInfo += "Diameter: " + containerDiameter + " " + dimensionUnit + "\n"
+      debugInfo += "Depth: " + containerDepth + " " + dimensionUnit + "\n"
     }
 
     const volumeResult = document.getElementById("volume-result")?.textContent || "N/A"
     if (volumeResult !== "N/A" && volumeResult !== "-") {
-      debugInfo += "Calculated Volume: " + volumeResult + "\\n"
+      debugInfo += "Calculated Volume: " + volumeResult + "\n"
     }
 
-    debugInfo += "Water Volume: " + waterVolume + " " + waterVolumeUnit + "\\n"
-    debugInfo += "Product Type: " + waterProductType + "\\n"
-    debugInfo += "Product Name: " + waterProductName + "\\n"
-    debugInfo += "Dosage Amount: " + dosageAmount + " " + dosageUnit + " per 1000 litres\\n\\n"
+    debugInfo += "Water Volume: " + waterVolume + " " + waterVolumeUnit + "\n"
+    debugInfo += "Product Type: " + waterProductType + "\n"
+    debugInfo += "Product Name: " + waterProductName + "\n"
+    debugInfo += "Dosage Amount: " + dosageAmount + " " + dosageUnit + " per 1000 litres\n\n"
 
     // Add results if available
     const waterTotalAmountResult = document.getElementById("water-total-amount-result")?.textContent || "N/A"
@@ -1622,11 +1916,11 @@ function formatDebugInfo(calculatorType) {
     const waterAlternativeDosageResult =
       document.getElementById("water-alternative-dosage-result")?.textContent || "N/A"
 
-    debugInfo += "RESULTS:\\n"
-    debugInfo += "Total Amount Needed: " + waterTotalAmountResult + "\\n"
-    debugInfo += "Metric Dosage: " + waterMetricDosageResult + "\\n"
-    debugInfo += "Imperial Dosage: " + waterImperialDosageResult + "\\n"
-    debugInfo += "Alternative Dosage: " + waterAlternativeDosageResult + "\\n"
+    debugInfo += "RESULTS:\n"
+    debugInfo += "Total Amount Needed: " + waterTotalAmountResult + "\n"
+    debugInfo += "Metric Dosage: " + waterMetricDosageResult + "\n"
+    debugInfo += "Imperial Dosage: " + waterImperialDosageResult + "\n"
+    debugInfo += "Alternative Dosage: " + waterAlternativeDosageResult + "\n"
   }
 
   return debugInfo
@@ -1656,7 +1950,8 @@ function initDebugCopyFunctionality() {
   const copyDebugBtn = document.getElementById("copy-debug-btn")
   if (copyDebugBtn) {
     copyDebugBtn.addEventListener("click", () => {
-      const debugInfo = formatDebugInfo("product")
+      const calculatorType = document.getElementById("calculator-type").value
+      const debugInfo = formatDebugInfo(calculatorType)
 
       // Update the debug info display
       const debugInfoElement = document.getElementById("debug-info")
@@ -1669,50 +1964,6 @@ function initDebugCopyFunctionality() {
         copyDebugBtn.textContent = "Copied!"
         setTimeout(() => {
           copyDebugBtn.textContent = "Copy Debug Info"
-        }, 2000)
-      }
-    })
-  }
-
-  // Area calculator copy debug button
-  const copyAreaDebugBtn = document.getElementById("copy-area-debug-btn")
-  if (copyAreaDebugBtn) {
-    copyAreaDebugBtn.addEventListener("click", () => {
-      const debugInfo = formatDebugInfo("area")
-
-      // Update the debug info display
-      const areaDebugInfoElement = document.getElementById("area-debug-info")
-      if (areaDebugInfoElement) {
-        areaDebugInfoElement.textContent = debugInfo
-      }
-
-      // Copy to clipboard
-      if (copyToClipboard(debugInfo)) {
-        copyAreaDebugBtn.textContent = "Copied!"
-        setTimeout(() => {
-          copyAreaDebugBtn.textContent = "Copy Debug Info"
-        }, 2000)
-      }
-    })
-  }
-
-  // Water calculator copy debug button
-  const copyWaterDebugBtn = document.getElementById("copy-water-debug-btn")
-  if (copyWaterDebugBtn) {
-    copyWaterDebugBtn.addEventListener("click", () => {
-      const debugInfo = formatDebugInfo("water")
-
-      // Update the debug info display
-      const waterDebugInfoElement = document.getElementById("water-debug-info")
-      if (waterDebugInfoElement) {
-        waterDebugInfoElement.textContent = debugInfo
-      }
-
-      // Copy to clipboard
-      if (copyToClipboard(debugInfo)) {
-        copyWaterDebugBtn.textContent = "Copied!"
-        setTimeout(() => {
-          copyWaterDebugBtn.textContent = "Copy Debug Info"
         }, 2000)
       }
     })
