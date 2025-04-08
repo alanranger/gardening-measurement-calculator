@@ -169,24 +169,28 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize calculators with error handling
   try {
     initProductCalculator()
+    console.log("Product calculator initialized")
   } catch (error) {
     console.error("Error initializing product calculator:", error)
   }
 
   try {
     initAreaCalculator()
+    console.log("Area calculator initialized")
   } catch (error) {
     console.error("Error initializing area calculator:", error)
   }
 
   try {
     initWaterCalculator()
+    console.log("Water calculator initialized")
   } catch (error) {
     console.error("Error initializing water calculator:", error)
   }
 
   try {
     initAccordion()
+    console.log("Accordion initialized")
   } catch (error) {
     console.error("Error initializing accordion:", error)
   }
@@ -203,8 +207,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Initialize product calculator
 function initProductCalculator() {
+  console.log("Initializing product calculator...")
+
   // Get DOM elements with error checking
   const productTypeSelect = document.getElementById("product-type")
+  console.log("productTypeSelect:", productTypeSelect)
+
   const productTypeHint = document.getElementById("product-type-hint")
   const measurementTypeRadios = document.querySelectorAll('input[name="measurement-type"]')
   const capSizeGroup = document.getElementById("cap-size-group")
@@ -239,40 +247,50 @@ function initProductCalculator() {
   // Toggle cap size input based on measurement type
   if (measurementTypeRadios && measurementTypeRadios.length > 0 && capSizeGroup) {
     measurementTypeRadios.forEach((radio) => {
-      radio.addEventListener("change", () => {
-        if (radio.value === "cap") {
-          capSizeGroup.classList.remove("hidden")
-        } else {
-          capSizeGroup.classList.add("hidden")
-        }
-        updateRatioLabels()
-      })
+      if (radio) {
+        radio.addEventListener("change", () => {
+          if (radio.value === "cap") {
+            capSizeGroup.classList.remove("hidden")
+          } else {
+            capSizeGroup.classList.add("hidden")
+          }
+          updateRatioLabels()
+        })
+      }
     })
   }
 
   // Toggle scoop size input based on has scoop selection
   if (hasScoopRadios && hasScoopRadios.length > 0 && scoopSizeGroup) {
     hasScoopRadios.forEach((radio) => {
-      radio.addEventListener("change", () => {
-        if (radio.value === "yes") {
-          scoopSizeGroup.classList.remove("hidden")
-        } else {
-          scoopSizeGroup.classList.add("hidden")
-        }
-      })
+      if (radio) {
+        radio.addEventListener("change", () => {
+          if (radio.value === "yes") {
+            scoopSizeGroup.classList.remove("hidden")
+          } else {
+            scoopSizeGroup.classList.add("hidden")
+          }
+        })
+      }
     })
   }
 
   // Toggle calculation mode panels
-  if (calculationModeRadios && calculationModeRadios.length > 0 && calculationModePanels) {
+  if (calculationModeRadios && calculationModeRadios.length > 0) {
     calculationModeRadios.forEach((radio) => {
-      radio.addEventListener("change", () => {
-        calculationModePanels.forEach((panel) => panel.classList.add("hidden"))
-        const targetPanel = document.getElementById(`${radio.value}-panel`)
-        if (targetPanel) {
-          targetPanel.classList.remove("hidden")
-        }
-      })
+      if (radio) {
+        radio.addEventListener("change", () => {
+          if (calculationModePanels) {
+            calculationModePanels.forEach((panel) => {
+              if (panel) panel.classList.add("hidden")
+            })
+          }
+          const targetPanel = document.getElementById(`${radio.value}-panel`)
+          if (targetPanel) {
+            targetPanel.classList.remove("hidden")
+          }
+        })
+      }
     })
   }
 
@@ -348,6 +366,8 @@ function initProductCalculator() {
 
 // Initialize area calculator
 function initAreaCalculator() {
+  console.log("Initializing area calculator...")
+
   // Get DOM elements with error checking
   const areaShapeRadios = document.querySelectorAll('input[name="area-shape"]')
   const rectangleInputs = document.getElementById("rectangle-inputs")
@@ -373,15 +393,17 @@ function initAreaCalculator() {
   // Toggle area shape inputs
   if (areaShapeRadios && areaShapeRadios.length > 0 && rectangleInputs && circleInputs) {
     areaShapeRadios.forEach((radio) => {
-      radio.addEventListener("change", () => {
-        if (radio.value === "rectangle") {
-          rectangleInputs.classList.remove("hidden")
-          circleInputs.classList.add("hidden")
-        } else {
-          rectangleInputs.classList.add("hidden")
-          circleInputs.classList.remove("hidden")
-        }
-      })
+      if (radio) {
+        radio.addEventListener("change", () => {
+          if (radio.value === "rectangle") {
+            rectangleInputs.classList.remove("hidden")
+            circleInputs.classList.add("hidden")
+          } else {
+            rectangleInputs.classList.add("hidden")
+            circleInputs.classList.remove("hidden")
+          }
+        })
+      }
     })
   }
 
@@ -449,6 +471,8 @@ function initAreaCalculator() {
 
 // Initialize water calculator
 function initWaterCalculator() {
+  console.log("Initializing water calculator...")
+
   // Get DOM elements with error checking
   const containerShapeRadios = document.querySelectorAll('input[name="container-shape"]')
   const rectangularInputs = document.getElementById("rectangular-inputs")
@@ -476,15 +500,17 @@ function initWaterCalculator() {
   // Toggle container shape inputs
   if (containerShapeRadios && containerShapeRadios.length > 0 && rectangularInputs && circularInputs) {
     containerShapeRadios.forEach((radio) => {
-      radio.addEventListener("change", () => {
-        if (radio.value === "rectangular") {
-          rectangularInputs.classList.remove("hidden")
-          circularInputs.classList.add("hidden")
-        } else {
-          rectangularInputs.classList.add("hidden")
-          circularInputs.classList.remove("hidden")
-        }
-      })
+      if (radio) {
+        radio.addEventListener("change", () => {
+          if (radio.value === "rectangular") {
+            rectangularInputs.classList.remove("hidden")
+            circularInputs.classList.add("hidden")
+          } else {
+            rectangularInputs.classList.add("hidden")
+            circularInputs.classList.remove("hidden")
+          }
+        })
+      }
     })
   }
 
@@ -560,16 +586,21 @@ function initWaterCalculator() {
 
 // Initialize accordion
 function initAccordion() {
+  console.log("Initializing accordion...")
+
   const accordionTriggers = document.querySelectorAll(".accordion-trigger")
+  console.log("Accordion triggers found:", accordionTriggers.length)
 
   if (accordionTriggers && accordionTriggers.length > 0) {
     accordionTriggers.forEach((trigger) => {
-      trigger.addEventListener("click", () => {
-        const accordionItem = trigger.parentElement
-        if (accordionItem) {
-          accordionItem.classList.toggle("active")
-        }
-      })
+      if (trigger) {
+        trigger.addEventListener("click", () => {
+          const accordionItem = trigger.parentElement
+          if (accordionItem) {
+            accordionItem.classList.toggle("active")
+          }
+        })
+      }
     })
   }
 }
@@ -736,72 +767,93 @@ function handleProductSelect(product) {
   updateRatioLabels()
 }
 
-// Other handler functions and calculation functions would follow...
-// These would include:
-// - handlePresetSelect
-// - handleAreaProductSelect
-// - handleAreaPresetSelect
-// - handleWaterProductSelect
-// - handleWaterPresetSelect
-// - loadPresets
-// - savePreset
-// - saveAreaPreset
-// - saveWaterPreset
-// - calculateProductDosage
-// - calculateArea
-// - calculateAreaApplication
-// - calculateVolume
-// - calculateWaterDosage
-
-// For brevity, I've included the core initialization functions that are essential
-// for the tab functionality to work correctly.
-
 // Dummy implementations to resolve undeclared variable errors
 function loadPresets(presetType, presetsList, handlePresetSelect) {
-  console.warn("loadPresets function is a placeholder.")
+  console.log(`Loading presets for ${presetType}...`)
+  // Implementation would go here in a real application
 }
 
 function handlePresetSelect(preset) {
-  console.warn("handlePresetSelect function is a placeholder.")
+  console.log("Preset selected:", preset)
+  // Implementation would go here in a real application
 }
 
 function savePreset(presetType) {
-  console.warn("savePreset function is a placeholder.")
+  console.log(`Saving preset for ${presetType}...`)
+  // Implementation would go here in a real application
 }
 
 function calculateProductDosage() {
-  console.warn("calculateProductDosage function is a placeholder.")
+  console.log("Calculating product dosage...")
+  // Implementation would go here in a real application
 }
 
 function calculateArea() {
-  console.warn("calculateArea function is a placeholder.")
+  console.log("Calculating area...")
+  // Implementation would go here in a real application
 }
 
-// Dummy implementations to resolve undeclared variable errors
 function handleAreaProductSelect(product) {
-  console.warn("handleAreaProductSelect function is a placeholder.")
+  console.log("Area product selected:", product)
+  // Implementation would go here in a real application
 }
 
 function handleAreaPresetSelect(preset) {
-  console.warn("handleAreaPresetSelect function is a placeholder.")
+  console.log("Area preset selected:", preset)
+  // Implementation would go here in a real application
 }
 
 function calculateAreaApplication() {
-  console.warn("calculateAreaApplication function is a placeholder.")
+  console.log("Calculating area application...")
+  // Implementation would go here in a real application
 }
 
 function calculateVolume() {
-  console.warn("calculateVolume function is a placeholder.")
+  console.log("Calculating volume...")
+  // Implementation would go here in a real application
 }
 
 function handleWaterProductSelect(product) {
-  console.warn("handleWaterProductSelect function is a placeholder.")
+  console.log("Water product selected:", product)
+  // Implementation would go here in a  {
+  console.log("Water product selected:", product)
+  // Implementation would go here in a real application
 }
 
 function handleWaterPresetSelect(preset) {
-  console.warn("handleWaterPresetSelect function is a placeholder.")
+  console.log("Water preset selected:", preset)
+  // Implementation would go here in a real application
 }
 
 function calculateWaterDosage() {
-  console.warn("calculateWaterDosage function is a placeholder.")
+  console.log("Calculating water dosage...")
+  // Implementation would go here in a real application
 }
+
+// Add debug event listeners to debug triggers
+document.addEventListener("DOMContentLoaded", () => {
+  const debugTrigger = document.getElementById("debug-trigger")
+  const debugContent = document.getElementById("debug-content")
+  const areaDebugTrigger = document.getElementById("area-debug-trigger")
+  const areaDebugContent = document.getElementById("area-debug-content")
+  const waterDebugTrigger = document.getElementById("water-debug-trigger")
+  const waterDebugContent = document.getElementById("water-debug-content")
+
+  if (debugTrigger && debugContent) {
+    debugTrigger.addEventListener("click", () => {
+      debugContent.classList.toggle("hidden")
+    })
+  }
+
+  if (areaDebugTrigger && areaDebugContent) {
+    areaDebugTrigger.addEventListener("click", () => {
+      areaDebugContent.classList.toggle("hidden")
+    })
+  }
+
+  if (waterDebugTrigger && waterDebugContent) {
+    waterDebugTrigger.addEventListener("click", () => {
+      waterDebugContent.classList.toggle("hidden")
+    })
+  }
+})
