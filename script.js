@@ -275,15 +275,45 @@ document.addEventListener("DOMContentLoaded", () => {
 function fixCalculationModeSection() {
   console.log("Fixing calculation mode section...")
 
-  // Look for the calculation mode card instead of product-calculator-inputs
-  const calculationModeCard =
-    document.querySelector(".card .calculation-mode") ||
-    document.querySelector(".card:has(h3.card-title:contains('Calculation Mode'))") ||
-    document.querySelector(".card:nth-of-type(2)") // Fallback to second card
+  // Look for the calculation mode card using multiple selectors
+  let calculationModeCard = document.querySelector(".card:has(h3.card-title:contains('Calculation Mode'))")
 
   if (!calculationModeCard) {
-    console.error("Calculation mode card not found")
-    return
+    calculationModeCard = document.querySelector(".card h3.card-title")?.closest(".card")
+  }
+
+  if (!calculationModeCard) {
+    // Try to find the second card in the product tab
+    const productTab = document.getElementById("product-tab")
+    if (productTab) {
+      const cards = productTab.querySelectorAll(".card")
+      if (cards.length >= 2) {
+        calculationModeCard = cards[1] // Second card
+      }
+    }
+  }
+
+  if (!calculationModeCard) {
+    console.error("Calculation mode card not found - will create it")
+
+    // Find a place to insert the calculation mode card
+    const productTab = document.getElementById("product-tab")
+    if (!productTab) {
+      console.error("Product tab not found, cannot create calculation mode card")
+      return
+    }
+
+    // Create a new calculation mode card
+    calculationModeCard = document.createElement("div")
+    calculationModeCard.className = "card"
+
+    // Find where to insert it - after the first card or at the end of product-tab
+    const firstCard = productTab.querySelector(".card")
+    if (firstCard) {
+      firstCard.insertAdjacentElement("afterend", calculationModeCard)
+    } else {
+      productTab.appendChild(calculationModeCard)
+    }
   }
 
   // Check if the calculation mode radio buttons exist
@@ -294,6 +324,7 @@ function fixCalculationModeSection() {
 
     // Create the calculation mode section HTML
     const calculationModeSectionHTML = `
+      <h3 class="card-title">Calculation Mode</h3>
       <div class="form-group">
         <div class="radio-group">
           <label>
@@ -389,27 +420,15 @@ function fixCalculationModeSection() {
           </div>
         </div>
       </div>
+
+      <div class="form-actions">
+        <button id="calculate-btn" class="primary-button">Calculate</button>
+        <button id="save-preset-btn" class="secondary-button">Save as Preset</button>
+      </div>
     `
 
     // Replace the content of the calculation mode card
-    calculationModeCard.innerHTML = `<h3 class="card-title">Calculation Mode</h3>${calculationModeSectionHTML}`
-
-    // Add event listeners to the calculation mode radio buttons
-    const newCalculationModeRadios = calculationModeCard.querySelectorAll('input[name="calculation-mode"]')
-    newCalculationModeRadios.forEach((radio) => {
-      radio.addEventListener("change", function () {
-        // Hide all panels
-        calculationModeCard.querySelectorAll(".calculation-mode-panel").forEach((panel) => {
-          panel.classList.add("hidden")
-        })
-
-        // Show the selected panel
-        const selectedPanel = document.getElementById(`${this.value}-panel`)
-        if (selectedPanel) {
-          selectedPanel.classList.remove("hidden")
-        }
-      })
-    })
+    calculationModeCard.innerHTML = calculationModeSectionHTML
   } else {
     console.log("Calculation mode radio buttons found, ensuring they're properly initialized")
 
