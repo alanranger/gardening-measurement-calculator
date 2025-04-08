@@ -51,7 +51,7 @@ h1 {
 /* Tabs */
 .tabs {
   display: flex;
-  background-color: #e8f5e9;
+  background-color: #f1f1f1;
   border-bottom: 1px solid #ddd;
   overflow-x: auto;
 }
@@ -66,10 +66,11 @@ h1 {
   color: #555;
   transition: all 0.3s;
   white-space: nowrap;
+  border-right: 1px solid #ddd;
 }
 
 .tab-button:hover {
-  background-color: #d0e8d0;
+  background-color: #e8e8e8;
 }
 
 .tab-button.active {
@@ -409,29 +410,53 @@ footer {
   margin-top: 20px;
 }
 
-/* Enhanced button styling to match screenshot */
-.find-product-btn,
+/* Styling to match the screenshot */
+.tabs {
+  background-color: #f8f8f8;
+}
+
+.tab-button {
+  background-color: #f8f8f8;
+  border-right: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+  color: #333;
+  font-weight: normal;
+  padding: 15px 20px;
+}
+
+.tab-button.active {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border-bottom: none;
+  font-weight: bold;
+}
+
+.tab-button:hover {
+  background-color: #e8f5e9;
+}
+
+/* Find Product button styling to match screenshot */
 #find-product-btn,
 #find-area-product-btn,
 #find-water-product-btn {
-  background-color: #4caf50;
+  background-color: #2e7d32;
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 20px;
+  padding: 10px 15px;
+  border-radius: 4px;
 }
 
-.find-product-btn:before,
 #find-product-btn:before,
 #find-area-product-btn:before,
 #find-water-product-btn:before {
-  content: "⚫";
+  content: "●";
   margin-right: 8px;
   font-size: 0.8em;
 }
 
-.my-presets-btn,
+/* My Presets button styling to match screenshot */
 #my-presets-btn,
 #area-presets-btn,
 #water-presets-btn {
@@ -441,16 +466,59 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 20px;
+  padding: 10px 15px;
+  border-radius: 4px;
 }
 
-.my-presets-btn:before,
 #my-presets-btn:before,
 #area-presets-btn:before,
 #water-presets-btn:before {
   content: "★";
   margin-right: 8px;
   color: #ffc107;
+}
+
+/* Header styling to match screenshot */
+header {
+  background-color: white;
+  color: #2e7d32;
+  text-align: center;
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+h1 {
+  color: #2e7d32;
+  font-size: 2rem;
+}
+
+.subtitle {
+  color: #555;
+}
+
+.beta-warning {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+
+/* Primary button styling */
+.primary-button {
+  background-color: #2e7d32;
+}
+
+.primary-button:hover {
+  background-color: #1b5e20;
+}
+
+/* Result cards */
+.result-card h3 {
+  color: #2e7d32;
+}
+
+/* Version indicator */
+.version {
+  background-color: #2e7d32;
 }
 
 /* Responsive adjustments */
