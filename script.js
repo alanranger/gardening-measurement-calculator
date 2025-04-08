@@ -830,7 +830,7 @@ function debugTabPanels() {
 
 // Initialize tabs
 function initTabs() {
-  console.log("Initializing tabs with robust implementation")
+  console.log("Initializing tabs with improved implementation")
 
   // Get all tab buttons and panels
   const tabButtons = document.querySelectorAll(".tab-button")
@@ -840,21 +840,18 @@ function initTabs() {
 
   // First, ensure all panels are hidden except the active one
   tabPanels.forEach((panel) => {
-    if (panel.classList.contains("active")) {
-      panel.style.display = "block"
-    } else {
-      panel.style.display = "none"
-    }
+    panel.style.display = "none"
   })
+
+  // Make the first panel visible by default
+  if (tabPanels.length > 0) {
+    tabPanels[0].style.display = "block"
+    tabPanels[0].classList.add("active")
+  }
 
   // Add click event listeners to tab buttons
   tabButtons.forEach((button) => {
-    // Remove any existing event listeners by cloning and replacing
-    const newButton = button.cloneNode(true)
-    button.parentNode.replaceChild(newButton, button)
-
-    newButton.addEventListener("click", function (e) {
-      e.preventDefault()
+    button.addEventListener("click", function () {
       const tabId = this.getAttribute("data-tab")
       console.log(`Tab clicked: ${tabId}`)
 
@@ -878,25 +875,9 @@ function initTabs() {
         console.log(`Activated panel: ${targetPanel.id}`)
       } else {
         console.error(`Panel not found: ${tabId}-panel`)
-        // Log all available panels for debugging
-        console.log("Available panels:")
-        tabPanels.forEach((p) => {
-          console.log(p.id)
-        })
       }
     })
   })
-
-  // Ensure the first tab is active if none are
-  if (!document.querySelector(".tab-button.active") && tabButtons.length > 0) {
-    tabButtons[0].classList.add("active")
-    const firstTabId = tabButtons[0].getAttribute("data-tab")
-    const firstPanel = document.getElementById(firstTabId + "-panel")
-    if (firstPanel) {
-      firstPanel.classList.add("active")
-      firstPanel.style.display = "block"
-    }
-  }
 }
 
 // Initialize guide tabs

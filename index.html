@@ -345,539 +345,217 @@
             </div>
 
             <!-- Area Treatments Calculator -->
-            <div id="area-panel" class="tab-panel">
-                <div class="card">
-                  <div class="card-header">
-                    <h2>Area Calculator</h2>
-                    <p>Calculate the correct amount of product to use for your garden area</p>
-                  </div>
-                  <div class="card-content">
-                    <!-- Quick Access Buttons -->
-                    <div class="quick-access-buttons">
-                      <button id="find-area-product-btn" class="primary-btn">
-                        <span class="icon">🔍</span> Find Area Product
-                      </button>
-                      <button id="area-presets-btn" class="secondary-btn">
-                        <span class="icon">⭐</span> My Saved Area Products
-                      </button>
-                    </div>
+            <div id="area-panel" class="tab-panel" style="display: none;">
+        <div class="card">
+          <div class="card-header">
+            <h2>Area Calculator</h2>
+            <p>Calculate the correct amount of product to use for your garden area</p>
+          </div>
+          <div class="card-content">
+            <!-- Quick Access Buttons -->
+            <div class="quick-access-buttons">
+              <button id="find-area-product-btn" class="primary-btn">
+                <span class="icon">🔍</span> Find Area Product
+              </button>
+              <button id="area-presets-btn" class="secondary-btn">
+                <span class="icon">⭐</span> My Saved Area Products
+              </button>
+            </div>
 
-                    <!-- Product Selection Dropdown -->
-                    <div class="product-selection-dropdown">
-                      <label for="area-product-dropdown">Select an area treatment product:</label>
-                      <select id="area-product-dropdown" class="product-dropdown">
-                        <option value="">-- Select a product --</option>
-                        <optgroup label="Lawn Fertilizers">
-                          <!-- Will be populated by JavaScript -->
-                        </optgroup>
-                        <optgroup label="Lawn Seeds">
-                          <!-- Will be populated by JavaScript -->
-                        </optgroup>
-                        <optgroup label="Weed Killers">
-                          <!-- Will be populated by JavaScript -->
-                        </optgroup>
-                        <optgroup label="Other Area Products">
-                          <!-- Will be populated by JavaScript -->
-                        </optgroup>
+            <!-- Product Selection Dropdown -->
+            <div class="product-selection-dropdown">
+              <label for="area-product-dropdown">Select an area treatment product:</label>
+              <select id="area-product-dropdown" class="product-dropdown">
+                <option value="">-- Select a product --</option>
+                <!-- Will be populated by JavaScript -->
+              </select>
+            </div>
+
+            <!-- Rest of area panel content -->
+            <div class="form-section">
+              <h3>Step 1: Calculate Your Area</h3>
+              <div class="section highlight">
+                <h3>Calculate Area</h3>
+                <div class="form-group">
+                  <label>Area Shape</label>
+                  <div class="radio-group">
+                    <label class="radio">
+                      <input type="radio" name="area-shape" value="rectangle" checked>
+                      <span>Rectangle/Square</span>
+                    </label>
+                    <label class="radio">
+                      <input type="radio" name="area-shape" value="circle">
+                      <span>Circle</span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Rectangle inputs -->
+                <div id="rectangle-inputs">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="length">Length</label>
+                      <input type="number" id="length" placeholder="e.g., 10">
+                    </div>
+                    <div class="form-group">
+                      <label for="width">Width</label>
+                      <input type="number" id="width" placeholder="e.g., 5">
+                    </div>
+                    <div class="form-group">
+                      <label for="area-unit">Unit</label>
+                      <select id="area-unit">
+                        <option value="sq_m">Square Meters (m²)</option>
+                        <option value="sq_ft">Square Feet (ft²)</option>
+                        <option value="sq_yd">Square Yards (yd²)</option>
                       </select>
                     </div>
-
-                    <!-- Product Search Panel -->
-                    <div id="area-product-search-panel" class="search-panel hidden">
-                      <div class="search-header">
-                        <h3>Find an Area Treatment Product</h3>
-                        <input type="text" id="area-product-search" placeholder="Search for a product..." class="search-input">
-                      </div>
-                      <div id="area-product-search-results" class="search-results"></div>
-                    </div>
-
-                    <!-- Presets Panel -->
-                    <div id="area-presets-panel" class="search-panel hidden">
-                      <div class="search-header">
-                        <h3>My Saved Area Products</h3>
-                      </div>
-                      <div id="area-presets-list" class="search-results"></div>
-                    </div>
-
-                    <div class="form-section">
-                      <h3>Step 1: Calculate Your Area</h3>
-                        <div class="section highlight">
-                            <h3>Calculate Area</h3>
-                            <div class="form-group">
-                                <label>Area Shape</label>
-                                <div class="radio-group">
-                                    <label class="radio">
-                                        <input type="radio" name="area-shape" value="rectangle" checked>
-                                        <span>Rectangle/Square</span>
-                                    </label>
-                                    <label class="radio">
-                                        <input type="radio" name="area-shape" value="circle">
-                                        <span>Circle</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <!-- Rectangle inputs -->
-                            <div id="rectangle-inputs">
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="length">Length</label>
-                                        <input type="number" id="length" placeholder="e.g., 10">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="width">Width</label>
-                                        <input type="number" id="width" placeholder="e.g., 5">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="area-unit">Unit</label>
-                                        <select id="area-unit">
-                                            <option value="sq_m">Square Meters (m²)</option>
-                                            <option value="sq_ft">Square Feet (ft²)</option>
-                                            <option value="sq_yd">Square Yards (yd²)</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Circle inputs -->
-                            <div id="circle-inputs" class="hidden">
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="diameter">Diameter</label>
-                                        <input type="number" id="diameter" placeholder="e.g., 8">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="circle-unit">Unit</label>
-                                        <select id="circle-unit">
-                                            <option value="sq_m">Meters (m)</option>
-                                            <option value="sq_ft">Feet (ft)</option>
-                                            <option value="sq_yd">Yards (yd)</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="calculated-area" class="result-card hidden">
-                                <h4>Calculated Area</h4>
-                                <p id="area-result">-</p>
-                            </div>
-                        </div>
-
-                        <div class="section highlight">
-                            <h3>Product Application</h3>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="area-product-type">Product Type</label>
-                                    <select id="area-product-type">
-                                        <option value="lawn_fertilizer">Lawn Fertilizer</option>
-                                        <option value="lawn_seed">Lawn Seed</option>
-                                        <option value="weed_killer">Weed Killer</option>
-                                        <option value="mulch">Mulch/Compost</option>
-                                        <option value="lime">Garden Lime</option>
-                                        <option value="custom">Custom Product</option>
-                                    </select>
-                                    <p class="hint" id="area-product-type-hint">Typical usage: 35g per sq meter or 1oz per sq yard</p>
-                                </div>
-                                <div class="form-group">
-                                    <label for="area-product-name">Product Name (Optional)</label>
-                                    <input type="text" id="area-product-name" placeholder="e.g., Scotts Turf Builder">
-                                </div>
-                            </div>
-
-                            <div id="area-product-instructions" class="instructions hidden">
-                                <h4>Product Instructions</h4>
-                                <p id="area-instructions-text"></p>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="application-rate">Application Rate</label>
-                                    <input type="number" id="application-rate" placeholder="e.g., 35">
-                                </div>
-                                <div class="form-group">
-                                    <label for="rate-unit">Unit</label>
-                                    <select id="rate-unit">
-                                        <option value="g">Grams (g)</option>
-                                        <option value="kg">Kilograms (kg)</option>
-                                        <option value="oz">Ounces (oz)</option>
-                                        <option value="lb">Pounds (lb)</option>
-                                        <option value="ml">Milliliters (ml)</option>
-                                        <option value="l">Litres (l)</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="rate-area-unit">Per Area Unit</label>
-                                    <select id="rate-area-unit">
-                                        <option value="sq_m">Square Meter (m²)</option>
-                                        <option value="sq_ft">Square Foot (ft²)</option>
-                                        <option value="sq_yd">Square Yard (yd²)</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-actions">
-                                <button class="button-outline" id="save-area-preset-btn">
-                                    <span class="icon">💾</span> Save as Preset
-                                </button>
-                                <button class="button-primary" id="calculate-area-btn">Calculate</button>
-                            </div>
-                        </div>
-
-                        <!-- Results -->
-                        <div class="section highlight" id="area-results-section">
-                            <h3>Results</h3>
-                            <div class="results-grid">
-                                <div class="result-card">
-                                    <h4>Total Amount Needed</h4>
-                                    <p id="total-amount-result">-</p>
-                                </div>
-                                <div class="result-card">
-                                    <h4>Alternative Measurement</h4>
-                                    <p id="alternative-amount-result">-</p>
-                                </div>
-                                <div class="result-card">
-                                    <h4>Metric Rate</h4>
-                                    <p id="metric-rate-result">-</p>
-                                </div>
-                                <div class="result-card">
-                                    <h4>Imperial Rate</h4>
-                                    <p id="imperial-rate-result">-</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Debug Information -->
-                        <div class="section">
-                            <div class="collapsible">
-                                <button class="collapsible-trigger" id="area-debug-trigger">
-                                    <h3 class="muted">Debug Information</h3>
-                                    <span class="icon">▼</span>
-                                </button>
-                                <div class="collapsible-content hidden" id="area-debug-content">
-                                    <div class="debug-panel">
-                                        <button class="button-icon" id="copy-area-debug-btn">
-                                            <span class="icon">📋</span>
-                                        </button>
-                                        <div class="debug-info" id="area-debug-info">
-                                            <!-- Debug info will be populated by JavaScript -->
-                                        </div>
-                                        <p class="hint">
-                                            If you encounter any issues, please copy this information and share it with the developer.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                  </div>
                 </div>
+
+                <!-- Circle inputs -->
+                <div id="circle-inputs" class="hidden">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="diameter">Diameter</label>
+                      <input type="number" id="diameter" placeholder="e.g., 8">
+                    </div>
+                    <div class="form-group">
+                      <label for="circle-unit">Unit</label>
+                      <select id="circle-unit">
+                        <option value="sq_m">Meters (m)</option>
+                        <option value="sq_ft">Feet (ft)</option>
+                        <option value="sq_yd">Yards (yd)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="calculated-area" class="result-card hidden">
+                  <h4>Calculated Area</h4>
+                  <p id="area-result">-</p>
+                </div>
+              </div>
             </div>
+          </div>
+        </div>
+    </div>
 
             <!-- Water Treatments Calculator -->
-            <div id="water-panel" class="tab-panel">
-                <div class="card">
-                  <div class="card-header">
-                    <h2>Water Calculator</h2>
-                    <p>Calculate the correct amount of product to use for your pond or water feature</p>
-                  </div>
-                  <div class="card-content">
-                    <!-- Quick Access Buttons -->
-                    <div class="quick-access-buttons">
-                      <button id="find-water-product-btn" class="primary-btn">
-                        <span class="icon">🔍</span> Find Water Product
-                      </button>
-                      <button id="water-presets-btn" class="secondary-btn">
-                        <span class="icon">⭐</span> My Saved Water Products
-                      </button>
-                    </div>
-
-                    <!-- Product Selection Dropdown -->
-                    <div class="product-selection-dropdown">
-                      <label for="water-product-dropdown">Select a water treatment product:</label>
-                      <select id="water-product-dropdown" class="product-dropdown">
-                        <option value="">-- Select a product --</option>
-                        <optgroup label="Pond Treatments">
-                          <!-- Will be populated by JavaScript -->
-                        </optgroup>
-                        <optgroup label="Algaecides">
-                          <!-- Will be populated by JavaScript -->
-                        </optgroup>
-                        <optgroup label="Water Clarifiers">
-                          <!-- Will be populated by JavaScript -->
-                        </optgroup>
-                        <optgroup label="Other Water Products">
-                          <!-- Will be populated by JavaScript -->
-                        </optgroup>
-                      </select>
-                    </div>
-
-                    <!-- Product Search Panel -->
-                    <div id="water-product-search-panel" class="search-panel hidden">
-                      <div class="search-header">
-                        <h3>Find a Water Treatment Product</h3>
-                        <input type="text" id="water-product-search" placeholder="Search for a product..." class="search-input">
-                      </div>
-                      <div id="water-product-search-results" class="search-results"></div>
-                    </div>
-
-                    <!-- Presets Panel -->
-                    <div id="water-presets-panel" class="search-panel hidden">
-                      <div class="search-header">
-                        <h3>My Saved Water Products</h3>
-                      </div>
-                      <div id="water-presets-list" class="search-results"></div>
-                    </div>
-
-                    <div class="form-section">
-                      <h3>Step 1: Calculate Your Water Volume</h3>
-                        <div class="section highlight">
-                            <h3>Calculate Water Volume</h3>
-                            <div class="form-group">
-                                <label>Container Shape</label>
-                                <div class="radio-group">
-                                    <label class="radio">
-                                        <input type="radio" name="container-shape" value="rectangular" checked>
-                                        <span>Rectangular/Square</span>
-                                    </label>
-                                    <label class="radio">
-                                        <input type="radio" name="container-shape" value="circular">
-                                        <span>Circular</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="dimension-unit">Dimension Unit</label>
-                                <select id="dimension-unit">
-                                    <option value="m">Meters (m)</option>
-                                    <option value="cm">Centimeters (cm)</option>
-                                    <option value="ft">Feet (ft)</option>
-                                    <option value="in">Inches (in)</option>
-                                </select>
-                            </div>
-
-                            <!-- Rectangular container inputs -->
-                            <div id="rectangular-inputs">
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="container-length">Length</label>
-                                        <input type="number" id="container-length" placeholder="e.g., 2">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="container-width">Width</label>
-                                        <input type="number" id="container-width" placeholder="e.g., 1">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="container-height">Depth/Height</label>
-                                        <input type="number" id="container-height" placeholder="e.g., 0.5">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Circular container inputs -->
-                            <div id="circular-inputs" class="hidden">
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="container-diameter">Diameter</label>
-                                        <input type="number" id="container-diameter" placeholder="e.g., 1.5">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="container-depth">Depth</label>
-                                        <input type="number" id="container-depth" placeholder="e.g., 0.5">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="calculated-volume" class="result-card hidden">
-                                <h4>Calculated Volume</h4>
-                                <p id="volume-result">-</p>
-                                <p id="volume-conversion" class="hint">-</p>
-                            </div>
-
-                            <div class="form-group">
-                                <p class="hint">Or enter water volume manually:</p>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="water-volume">Water Amount</label>
-                                    <input type="number" id="water-volume" placeholder="e.g., 1000">
-                                </div>
-                                <div class="form-group">
-                                    <label for="water-volume-unit">Unit</label>
-                                    <select id="water-volume-unit">
-                                        <option value="l">Litres (l)</option>
-                                        <option value="gal_uk">UK Gallons</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="section highlight">
-                            <h3>Product Dosage</h3>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="water-product-type">Product Type</label>
-                                    <select id="water-product-type">
-                                        <option value="pond_treatment">Pond Treatment</option>
-                                        <option value="algaecide">Algaecide</option>
-                                        <option value="water_clarifier">Water Clarifier</option>
-                                        <option value="fish_medication">Fish Medication</option>
-                                        <option value="plant_nutrient">Aquatic Plant Nutrient</option>
-                                        <option value="custom">Custom Product</option>
-                                    </select>
-                                    <p class="hint" id="water-product-type-hint">Typical usage: 5ml per 1000 litres of water</p>
-                                </div>
-                                <div class="form-group">
-                                    <label for="water-product-name">Product Name (Optional)</label>
-                                    <input type="text" id="water-product-name" placeholder="e.g., TetraPond Algae Control">
-                                </div>
-                            </div>
-
-                            <div id="water-product-instructions" class="instructions hidden">
-                                <h4>Product Instructions</h4>
-                                <p id="water-instructions-text"></p>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="dosage-amount">Dosage Amount</label>
-                                    <input type="number" id="dosage-amount" placeholder="e.g., 5">
-                                </div>
-                                <div class="form-group">
-                                    <label for="dosage-unit">Unit</label>
-                                    <select id="dosage-unit">
-                                        <option value="ml">Milliliters (ml)</option>
-                                        <option value="g">Grams (g)</option>
-                                        <option value="tsp">Teaspoons (tsp)</option>
-                                        <option value="tbsp">Tablespoons (tbsp)</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-actions">
-                                <button class="button-outline" id="save-water-preset-btn">
-                                    <span class="icon">💾</span> Save as Preset
-                                </button>
-                                <button class="button-primary" id="calculate-water-btn">Calculate</button>
-                            </div>
-                        </div>
-
-                        <!-- Results -->
-                        <div class="section highlight" id="water-results-section">
-                            <h3>Results</h3>
-                            <div class="results-grid">
-                                <div class="result-card">
-                                    <h4>Total Amount Needed</h4>
-                                    <p id="water-total-amount-result">-</p>
-                                </div>
-                                <div class="result-card">
-                                    <h4>Metric Dosage</h4>
-                                    <p id="water-metric-dosage-result">-</p>
-                                </div>
-                                <div class="result-card">
-                                    <h4>Imperial Dosage</h4>
-                                    <p id="water-imperial-dosage-result">-</p>
-                                </div>
-                                <div class="result-card">
-                                    <h4>Alternative Dosage</h4>
-                                    <p id="water-alternative-dosage-result">-</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Debug Information -->
-                        <div class="section">
-                            <div class="collapsible">
-                                <button class="collapsible-trigger" id="water-debug-trigger">
-                                    <h3 class="muted">Debug Information</h3>
-                                    <span class="icon">▼</span>
-                                </button>
-                                <div class="collapsible-content hidden" id="water-debug-content">
-                                    <div class="debug-panel">
-                                        <button class="button-icon" id="copy-water-debug-btn">
-                                            <span class="icon">📋</span>
-                                        </button>
-                                        <div class="debug-info" id="water-debug-info">
-                                            <!-- Debug info will be populated by JavaScript -->
-                                        </div>
-                                        <p class="hint">
-                                            If you encounter any issues, please copy this information and share it with the developer.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div id="water-panel" class="tab-panel" style="display: none;">
+        <div class="card">
+          <div class="card-header">
+            <h2>Water Calculator</h2>
+            <p>Calculate the correct amount of product to use for your pond or water feature</p>
+          </div>
+          <div class="card-content">
+            <!-- Quick Access Buttons -->
+            <div class="quick-access-buttons">
+              <button id="find-water-product-btn" class="primary-btn">
+                <span class="icon">🔍</span> Find Water Product
+              </button>
+              <button id="water-presets-btn" class="secondary-btn">
+                <span class="icon">⭐</span> My Saved Water Products
+              </button>
             </div>
 
+            <!-- Product Selection Dropdown -->
+            <div class="product-selection-dropdown">
+              <label for="water-product-dropdown">Select a water treatment product:</label>
+              <select id="water-product-dropdown" class="product-dropdown">
+                <option value="">-- Select a product --</option>
+                <!-- Will be populated by JavaScript -->
+              </select>
+            </div>
+
+            <!-- Rest of water panel content -->
+            <div class="form-section">
+              <h3>Step 1: Calculate Your Water Volume</h3>
+              <div class="section highlight">
+                <h3>Calculate Water Volume</h3>
+                <div class="form-group">
+                  <label>Container Shape</label>
+                  <div class="radio-group">
+                    <label class="radio">
+                      <input type="radio" name="container-shape" value="rectangular" checked>
+                      <span>Rectangular/Square</span>
+                    </label>
+                    <label class="radio">
+                      <input type="radio" name="container-shape" value="circular">
+                      <span>Circular</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
             <!-- Conversion Guide -->
-            <div id="guide-panel" class="tab-panel">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Gardener's Conversion Guide</h2>
-                        <p>Reference guide for common gardening measurements and conversions</p>
-                    </div>
-                    <div class="card-content">
-                        <div class="guide-tabs">
-                            <div class="guide-tab-list">
-                                <button class="guide-tab active" data-guide-tab="weight">Weight</button>
-                                <button class="guide-tab" data-guide-tab="volume">Volume</button>
-                                <button class="guide-tab" data-guide-tab="area">Area</button>
-                                <button class="guide-tab" data-guide-tab="common">Common Ratios</button>
-                            </div>
+            <div id="guide-panel" class="tab-panel" style="display: none;">
+        <div class="card">
+          <div class="card-header">
+            <h2>Gardener's Conversion Guide</h2>
+            <p>Reference guide for common gardening measurements and conversions</p>
+          </div>
+          <div class="card-content">
+            <div class="guide-tabs">
+              <div class="guide-tab-list">
+                <button class="guide-tab active" data-guide-tab="weight">Weight</button>
+                <button class="guide-tab" data-guide-tab="volume">Volume</button>
+                <button class="guide-tab" data-guide-tab="area">Area</button>
+                <button class="guide-tab" data-guide-tab="common">Common Ratios</button>
+              </div>
 
-                            <div class="guide-tab-content">
-                                <!-- Weight Conversions -->
-                                <div class="guide-tab-panel active" id="weight-panel">
-                                    <h3>Weight Conversions</h3>
-                                    <table class="conversion-table">
-                                        <thead>
-                                            <tr>
-                                                <th>From</th>
-                                                <th>To</th>
-                                                <th>Multiply By</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Grams (g)</td>
-                                                <td>Ounces (oz)</td>
-                                                <td>0.035</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Ounces (oz)</td>
-                                                <td>Grams (g)</td>
-                                                <td>28.35</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Kilograms (kg)</td>
-                                                <td>Pounds (lb)</td>
-                                                <td>2.205</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Pounds (lb)</td>
-                                                <td>Kilograms (kg)</td>
-                                                <td>0.454</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Grams (g)</td>
-                                                <td>Kilograms (kg)</td>
-                                                <td>0.001</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Ounces (oz)</td>
-                                                <td>Pounds (lb)</td>
-                                                <td>0.0625</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+              <div class="guide-tab-content">
+                <!-- Weight Conversions -->
+                <div class="guide-tab-panel active" id="weight-panel">
+                  <h3>Weight Conversions</h3>
+                  <table class="conversion-table">
+                    <thead>
+                      <tr>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Multiply By</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Grams (g)</td>
+                        <td>Ounces (oz)</td>
+                        <td>0.035</td>
+                      </tr>
+                      <tr>
+                        <td>Ounces (oz)</td>
+                        <td>Grams (g)</td>
+                        <td>28.35</td>
+                      </tr>
+                      <tr>
+                        <td>Kilograms (kg)</td>
+                        <td>Pounds (lb)</td>
+                        <td>2.205</td>
+                      </tr>
+                      <tr>
+                        <td>Pounds (lb)</td>
+                        <td>Kilograms (kg)</td>
+                        <td>0.454</td>
+                      </tr>
+                      <tr>
+                        <td>Grams (g)</td>
+                        <td>Kilograms (kg)</td>
+                        <td>0.001</td>
+                      </tr>
+                      <tr>
+                        <td>Ounces (oz)</td>
+                        <td>Pounds (lb)</td>
+                        <td>0.0625</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
 
-                                <!-- Volume Conversions -->
-                                <div class="guide-tab-panel" id="volume-panel">
+                <!-- Volume Conversions -->
+                <div class="guide-tab-panel" id="volume-panel">
                                     <h3>Volume Conversions</h3>
                                     <table class="conversion-table">
                                         <thead>
@@ -1025,12 +703,12 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              </div>
             </div>
+          </div>
         </div>
+    </div>
+</div>
     </div>
 </div>
 
