@@ -1,5 +1,5 @@
 // Product Database
-const COMMON_PRODUCTS = [
+let COMMON_PRODUCTS = [
   {
     id: "miracle-gro-all-purpose",
     name: "Miracle-Gro All Purpose Liquid Plant Food",
@@ -292,7 +292,7 @@ const COMMON_PRODUCTS = [
 ]
 
 // Area Treatment Products
-const AREA_TREATMENT_PRODUCTS = [
+let AREA_TREATMENT_PRODUCTS = [
   {
     id: "evergreen-lawn-feed",
     name: "Evergreen Complete 4-in-1 Lawn Feed",
@@ -534,7 +534,7 @@ const AREA_TREATMENT_PRODUCTS = [
 ]
 
 // Water Treatment Products
-const WATER_TREATMENT_PRODUCTS = [
+let WATER_TREATMENT_PRODUCTS = [
   {
     id: "tetra-pond-algae",
     name: "TetraPond AlgoRem",
@@ -722,10 +722,15 @@ const ADDITIONAL_WATER_PRODUCTS = [
   // Additional water products can be added here
 ]
 
-// Merge the additional products with the existing ones
-COMMON_PRODUCTS = [...COMMON_PRODUCTS, ...ADDITIONAL_COMMON_PRODUCTS]
-AREA_TREATMENT_PRODUCTS = [...AREA_TREATMENT_PRODUCTS, ...ADDITIONAL_AREA_PRODUCTS]
-WATER_TREATMENT_PRODUCTS = [...WATER_TREATMENT_PRODUCTS, ...ADDITIONAL_WATER_PRODUCTS]
+// Merge the additional products with the existing ones - using let instead of const
+const MERGED_COMMON_PRODUCTS = [...COMMON_PRODUCTS, ...ADDITIONAL_COMMON_PRODUCTS]
+const MERGED_AREA_TREATMENT_PRODUCTS = [...AREA_TREATMENT_PRODUCTS, ...ADDITIONAL_AREA_PRODUCTS]
+const MERGED_WATER_TREATMENT_PRODUCTS = [...WATER_TREATMENT_PRODUCTS, ...ADDITIONAL_WATER_PRODUCTS]
+
+// Reassign the original arrays to use the merged values
+COMMON_PRODUCTS = MERGED_COMMON_PRODUCTS
+AREA_TREATMENT_PRODUCTS = MERGED_AREA_TREATMENT_PRODUCTS
+WATER_TREATMENT_PRODUCTS = MERGED_WATER_TREATMENT_PRODUCTS
 
 // Conversion factors
 const WEIGHT_CONVERSIONS = {
