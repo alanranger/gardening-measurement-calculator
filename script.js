@@ -819,6 +819,7 @@ function calculateProductDosage() {
   const wateringCanSection = document.getElementById("watering-can-section")
   const wateringCanResult = document.getElementById("watering-can-result")
   const wateringCanInfo = document.getElementById("watering-can-info")
+  const wateringCanTitle = document.getElementById("watering-can-title")
 
   // Get debug info element
   const debugInfoElement = document.getElementById("debug-info")
@@ -894,7 +895,12 @@ function calculateProductDosage() {
     }
 
     // Calculate product amount based on ratio
-    standardProductAmount = ratio * standardWaterAmount
+    if (measurementType === "cap") {
+      // For cap measurement, we need to convert the ratio to ml first
+      standardProductAmount = ratio * capSize * standardWaterAmount
+    } else {
+      standardProductAmount = ratio * standardWaterAmount
+    }
   } else if (calculationMode === "ratio_based") {
     // Convert target amount to standard units (litres)
     if (targetUnit === "l") {
@@ -906,7 +912,12 @@ function calculateProductDosage() {
     }
 
     // Calculate product amount based on ratio
-    standardProductAmount = ratio * standardWaterAmount
+    if (measurementType === "cap") {
+      // If using cap measurement, convert ratio to ml first
+      standardProductAmount = (ratio * capSize * standardWaterAmount) / (targetUnit === "gal_uk" ? 4.546 : 1)
+    } else {
+      standardProductAmount = (ratio * standardWaterAmount) / (targetUnit === "gal_uk" ? 4.546 : 1)
+    }
   }
 
   // Format results
@@ -978,42 +989,91 @@ function calculateProductDosage() {
   }
 
   // Watering can calculation - use the same unit the user selected
-  let wateringCanSize, wateringCanUnit, wateringCanLabel
-  if (waterUnit === "l" || waterUnit === "ml") {
-    wateringCanSize = 10 // 10 litre watering can
-    wateringCanUnit = "litres"
-    wateringCanLabel = "10L watering can"
-  } else if (waterUnit === "gal_uk") {
-    wateringCanSize = 2 // 2 gallon watering can (common UK size)
-    wateringCanUnit = "gallons"
-    wateringCanLabel = "2 gallon watering can"
-  }
-
-  const wateringCanAmount = (standardProductAmount / standardWaterAmount) * wateringCanSize
-
   let wateringCanResultText
-  if (measurementType === "weight") {
-    if (wateringCanAmount < 10) {
-      wateringCanResultText = `${wateringCanAmount.toFixed(1)}g per ${wateringCanLabel}`
-    } else {
-      wateringCanResultText = `${(wateringCanAmount / 1000).toFixed(2)}kg per ${wateringCanLabel}`
+
+  if (waterUnit === "gal_uk") {
+    // For UK gallons, show the result for the exact amount the user entered
+    if (measurementType === "cap") {
+      // Calculate caps directly: ratio * water amount
+      const capsNeeded = ratio * waterAmount
+      wateringCanResultText = `${capsNeeded.toFixed(1)} caps per ${waterAmount} gallon watering can`
+    } else if (measurementType === "weight") {
+      const productAmountForCan = ratio * waterAmount
+      if (productAmountForCan < 1000) {
+        wateringCanResultText = `${productAmountForCan.toFixed(1)}g per ${waterAmount} gallon watering can`
+      } else {
+        wateringCanResultText = `${(productAmountForCan / 1000).toFixed(2)}kg per ${waterAmount} gallon watering can`
+      }
+    } else if (measurementType === "volume") {
+      const productAmountForCan = ratio * waterAmount
+      if (productAmountForCan < 1000) {
+        wateringCanResultText = `${productAmountForCan.toFixed(1)}ml per ${waterAmount} gallon watering can`
+      } else {
+        wateringCanResultText = `${(productAmountForCan / 1000).toFixed(2)}L per ${waterAmount} gallon watering can`
+      }
     }
-  } else if (measurementType === "volume") {
-    if (wateringCanAmount < 10) {
-      wateringCanResultText = `${wateringCanAmount.toFixed(1)}ml per ${wateringCanLabel}`
-    } else {
-      wateringCanResultText = `${(wateringCanAmount / 1000).toFixed(2)}L per ${wateringCanLabel}`
+  } else {
+    // For litres or ml, calculate based on the ratio
+    if (measurementType === "cap") {
+      // Calculate caps directly: ratio * water amount
+      const capsNeeded = ratio * waterAmount
+      wateringCanResultText = `${capsNeeded.toFixed(1)} caps per ${waterAmount}${waterUnit === "l" ? "L" : "ml"} watering can`
+    } else if (measurementType === "weight") {
+      const productAmountForCan = ratio * waterAmount
+      if (productAmountForCan < 1000) {
+        wateringCanResultText = `${productAmountForCan.toFixed(1)}g per ${waterAmount}${waterUnit === "l" ? "L" : "ml"} watering can`
+      } else {
+        wateringCanResultText = `${(productAmountForCan / 1000).toFixed(2)}kg per ${waterAmount}${waterUnit === "l" ? "L" : "ml"} watering can`
+      }
+    } else if (measurementType === "volume") {
+      const productAmountForCan = ratio * waterAmount
+      if (productAmountForCan < 1000) {
+        wateringCanResultText = `${productAmountForCan.toFixed(1)}ml per ${waterAmount}${waterUnit === "l" ? "L" : "ml"} watering can`
+      } else {
+        wateringCanResultText = `${(productAmountForCan / 1000).toFixed(2)}L per ${waterAmount}${waterUnit === "l" ? "L" : "ml"} watering can`
+      }
     }
-  } else if (measurementType === "cap") {
-    wateringCanResultText = `${(wateringCanAmount / capSize).toFixed(1)} caps per ${wateringCanLabel}`
   }
+
+  // Update result elements
+  if (metricResultElement) metricResultElement.textContent = metricResult || "-"
+  if (imperialResultElement) imperialResultElement.textContent = imperialResult || "-"
+
+  if (measurementType === "cap" && capResultElement && capResultCard) {
+    capResultElement.textContent = capResult || "-"
+    capResultCard.classList.remove("hidden")
+  } else if (capResultCard) {
+    capResultCard.classList.add("hidden")
+  }
+
+  if (hasScoop && scoopResultElement && scoopResultCard) {
+    scoopResultElement.textContent = scoopResult || "-"
+    scoopResultCard.classList.remove("hidden")
+  } else if (scoopResultCard) {
+    scoopResultCard.classList.add("hidden")
+  }
+
+  if (alternativeResultElement) alternativeResultElement.textContent = alternativeResult || "-"
 
   // Show watering can section
   if (wateringCanSection && wateringCanResult) {
     wateringCanSection.classList.remove("hidden")
-    wateringCanResult.textContent = wateringCanResultText
+    wateringCanResult.textContent = wateringCanResultText || "-"
+
     if (wateringCanInfo) {
-      wateringCanInfo.textContent = `Based on a standard ${wateringCanLabel}`
+      if (waterUnit === "gal_uk") {
+        wateringCanInfo.textContent = `Based on your ${waterAmount} gallon measurement`
+      } else {
+        wateringCanInfo.textContent = "Based on a standard 10L watering can"
+      }
+    }
+
+    if (wateringCanTitle) {
+      if (waterUnit === "gal_uk") {
+        wateringCanTitle.textContent = "For your watering can:"
+      } else {
+        wateringCanTitle.textContent = "For a standard watering can:"
+      }
     }
   }
 
@@ -1054,7 +1114,7 @@ function handleWaterProductSelect(product) {
 }
 
 function handleWaterPresetSelect(preset) {
-  console.log("Water preset selected:", preset)
+  console.log("Preset selected:", preset)
   // Implementation would go here in a real application
 }
 
