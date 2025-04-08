@@ -674,11 +674,10 @@ select:focus {
 
 .guide-tab-panel {
   display: none;
-  padding: var(--spacing);
 }
 
 .guide-tab-panel.active {
-  display: block;
+  display: block !important;
 }
 
 /* Tables */
@@ -729,7 +728,7 @@ select:focus {
 }
 
 .accordion-item.active .accordion-content {
-  display: block;
+  display: block !important;
 }
 
 .accordion-content ul {

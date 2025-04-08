@@ -345,369 +345,369 @@
             </div>
 
             <!-- Area Treatments Calculator -->
-            <div id="area-panel" class="tab-panel" style="display: none;">
-        <div class="card">
-          <div class="card-header">
-            <h2>Area Calculator</h2>
-            <p>Calculate the correct amount of product to use for your garden area</p>
-          </div>
-          <div class="card-content">
-            <!-- Quick Access Buttons -->
-            <div class="quick-access-buttons">
-              <button id="find-area-product-btn" class="primary-btn">
-                <span class="icon">🔍</span> Find Area Product
-              </button>
-              <button id="area-presets-btn" class="secondary-btn">
-                <span class="icon">⭐</span> My Saved Area Products
-              </button>
+            <div id="area-panel" class="tab-panel">
+    <div class="card">
+      <div class="card-header">
+        <h2>Area Calculator</h2>
+        <p>Calculate the correct amount of product to use for your garden area</p>
+      </div>
+      <div class="card-content">
+        <!-- Quick Access Buttons -->
+        <div class="quick-access-buttons">
+          <button id="find-area-product-btn" class="primary-btn">
+            <span class="icon">🔍</span> Find Area Product
+          </button>
+          <button id="area-presets-btn" class="secondary-btn">
+            <span class="icon">⭐</span> My Saved Area Products
+          </button>
+        </div>
+
+        <!-- Product Selection Dropdown -->
+        <div class="product-selection-dropdown">
+          <label for="area-product-dropdown">Select an area treatment product:</label>
+          <select id="area-product-dropdown" class="product-dropdown">
+            <option value="">-- Select a product --</option>
+            <!-- Will be populated by JavaScript -->
+          </select>
+        </div>
+
+        <!-- Rest of area panel content -->
+        <div class="form-section">
+          <h3>Step 1: Calculate Your Area</h3>
+          <div class="section highlight">
+            <h3>Calculate Area</h3>
+            <div class="form-group">
+              <label>Area Shape</label>
+              <div class="radio-group">
+                <label class="radio">
+                  <input type="radio" name="area-shape" value="rectangle" checked>
+                  <span>Rectangle/Square</span>
+                </label>
+                <label class="radio">
+                  <input type="radio" name="area-shape" value="circle">
+                  <span>Circle</span>
+                </label>
+              </div>
             </div>
 
-            <!-- Product Selection Dropdown -->
-            <div class="product-selection-dropdown">
-              <label for="area-product-dropdown">Select an area treatment product:</label>
-              <select id="area-product-dropdown" class="product-dropdown">
-                <option value="">-- Select a product --</option>
-                <!-- Will be populated by JavaScript -->
-              </select>
-            </div>
-
-            <!-- Rest of area panel content -->
-            <div class="form-section">
-              <h3>Step 1: Calculate Your Area</h3>
-              <div class="section highlight">
-                <h3>Calculate Area</h3>
+            <!-- Rectangle inputs -->
+            <div id="rectangle-inputs">
+              <div class="form-row">
                 <div class="form-group">
-                  <label>Area Shape</label>
-                  <div class="radio-group">
-                    <label class="radio">
-                      <input type="radio" name="area-shape" value="rectangle" checked>
-                      <span>Rectangle/Square</span>
-                    </label>
-                    <label class="radio">
-                      <input type="radio" name="area-shape" value="circle">
-                      <span>Circle</span>
-                    </label>
-                  </div>
+                  <label for="length">Length</label>
+                  <input type="number" id="length" placeholder="e.g., 10">
                 </div>
-
-                <!-- Rectangle inputs -->
-                <div id="rectangle-inputs">
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label for="length">Length</label>
-                      <input type="number" id="length" placeholder="e.g., 10">
-                    </div>
-                    <div class="form-group">
-                      <label for="width">Width</label>
-                      <input type="number" id="width" placeholder="e.g., 5">
-                    </div>
-                    <div class="form-group">
-                      <label for="area-unit">Unit</label>
-                      <select id="area-unit">
-                        <option value="sq_m">Square Meters (m²)</option>
-                        <option value="sq_ft">Square Feet (ft²)</option>
-                        <option value="sq_yd">Square Yards (yd²)</option>
-                      </select>
-                    </div>
-                  </div>
+                <div class="form-group">
+                  <label for="width">Width</label>
+                  <input type="number" id="width" placeholder="e.g., 5">
                 </div>
-
-                <!-- Circle inputs -->
-                <div id="circle-inputs" class="hidden">
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label for="diameter">Diameter</label>
-                      <input type="number" id="diameter" placeholder="e.g., 8">
-                    </div>
-                    <div class="form-group">
-                      <label for="circle-unit">Unit</label>
-                      <select id="circle-unit">
-                        <option value="sq_m">Meters (m)</option>
-                        <option value="sq_ft">Feet (ft)</option>
-                        <option value="sq_yd">Yards (yd)</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <div id="calculated-area" class="result-card hidden">
-                  <h4>Calculated Area</h4>
-                  <p id="area-result">-</p>
+                <div class="form-group">
+                  <label for="area-unit">Unit</label>
+                  <select id="area-unit">
+                    <option value="sq_m">Square Meters (m²)</option>
+                    <option value="sq_ft">Square Feet (ft²)</option>
+                    <option value="sq_yd">Square Yards (yd²)</option>
+                  </select>
                 </div>
               </div>
             </div>
+
+            <!-- Circle inputs -->
+            <div id="circle-inputs" class="hidden">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="diameter">Diameter</label>
+                  <input type="number" id="diameter" placeholder="e.g., 8">
+                </div>
+                <div class="form-group">
+                  <label for="circle-unit">Unit</label>
+                  <select id="circle-unit">
+                    <option value="sq_m">Meters (m)</option>
+                    <option value="sq_ft">Feet (ft)</option>
+                    <option value="sq_yd">Yards (yd)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div id="calculated-area" class="result-card hidden">
+              <h4>Calculated Area</h4>
+              <p id="area-result">-</p>
+            </div>
           </div>
         </div>
+      </div>
     </div>
+</div>
 
             <!-- Water Treatments Calculator -->
-            <div id="water-panel" class="tab-panel" style="display: none;">
-        <div class="card">
-          <div class="card-header">
-            <h2>Water Calculator</h2>
-            <p>Calculate the correct amount of product to use for your pond or water feature</p>
+            <div id="water-panel" class="tab-panel">
+    <div class="card">
+      <div class="card-header">
+        <h2>Water Calculator</h2>
+        <p>Calculate the correct amount of product to use for your pond or water feature</p>
+      </div>
+      <div class="card-content">
+        <!-- Quick Access Buttons -->
+        <div class="quick-access-buttons">
+          <button id="find-water-product-btn" class="primary-btn">
+            <span class="icon">🔍</span> Find Water Product
+          </button>
+          <button id="water-presets-btn" class="secondary-btn">
+            <span class="icon">⭐</span> My Saved Water Products
+          </button>
+        </div>
+
+        <!-- Product Selection Dropdown -->
+        <div class="product-selection-dropdown">
+          <label for="water-product-dropdown">Select a water treatment product:</label>
+          <select id="water-product-dropdown" class="product-dropdown">
+            <option value="">-- Select a product --</option>
+            <!-- Will be populated by JavaScript -->
+          </select>
+        </div>
+
+        <!-- Rest of water panel content -->
+        <div class="form-section">
+          <h3>Step 1: Calculate Your Water Volume</h3>
+          <div class="section highlight">
+            <h3>Calculate Water Volume</h3>
+            <div class="form-group">
+              <label>Container Shape</label>
+              <div class="radio-group">
+                <label class="radio">
+                  <input type="radio" name="container-shape" value="rectangular" checked>
+                  <span>Rectangular/Square</span>
+                </label>
+                <label class="radio">
+                  <input type="radio" name="container-shape" value="circular">
+                  <span>Circular</span>
+                </label>
+              </div>
+            </div>
           </div>
-          <div class="card-content">
-            <!-- Quick Access Buttons -->
-            <div class="quick-access-buttons">
-              <button id="find-water-product-btn" class="primary-btn">
-                <span class="icon">🔍</span> Find Water Product
-              </button>
-              <button id="water-presets-btn" class="secondary-btn">
-                <span class="icon">⭐</span> My Saved Water Products
-              </button>
+        </div>
+      </div>
+    </div>
+</div>
+
+            <!-- Conversion Guide -->
+            <div id="guide-panel" class="tab-panel">
+    <div class="card">
+      <div class="card-header">
+        <h2>Gardener's Conversion Guide</h2>
+        <p>Reference guide for common gardening measurements and conversions</p>
+      </div>
+      <div class="card-content">
+        <div class="guide-tabs">
+          <div class="guide-tab-list">
+            <button class="guide-tab active" data-guide-tab="weight">Weight</button>
+            <button class="guide-tab" data-guide-tab="volume">Volume</button>
+            <button class="guide-tab" data-guide-tab="area">Area</button>
+            <button class="guide-tab" data-guide-tab="common">Common Ratios</button>
+          </div>
+
+          <div class="guide-tab-content">
+            <!-- Weight Conversions -->
+            <div class="guide-tab-panel active" id="weight-panel">
+              <h3>Weight Conversions</h3>
+              <table class="conversion-table">
+                <thead>
+                  <tr>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Multiply By</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Grams (g)</td>
+                    <td>Ounces (oz)</td>
+                    <td>0.035</td>
+                  </tr>
+                  <tr>
+                    <td>Ounces (oz)</td>
+                    <td>Grams (g)</td>
+                    <td>28.35</td>
+                  </tr>
+                  <tr>
+                    <td>Kilograms (kg)</td>
+                    <td>Pounds (lb)</td>
+                    <td>2.205</td>
+                  </tr>
+                  <tr>
+                    <td>Pounds (lb)</td>
+                    <td>Kilograms (kg)</td>
+                    <td>0.454</td>
+                  </tr>
+                  <tr>
+                    <td>Grams (g)</td>
+                    <td>Kilograms (kg)</td>
+                    <td>0.001</td>
+                  </tr>
+                  <tr>
+                    <td>Ounces (oz)</td>
+                    <td>Pounds (lb)</td>
+                    <td>0.0625</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
-            <!-- Product Selection Dropdown -->
-            <div class="product-selection-dropdown">
-              <label for="water-product-dropdown">Select a water treatment product:</label>
-              <select id="water-product-dropdown" class="product-dropdown">
-                <option value="">-- Select a product --</option>
-                <!-- Will be populated by JavaScript -->
-              </select>
+            <!-- Volume Conversions -->
+            <div class="guide-tab-panel" id="volume-panel">
+              <h3>Volume Conversions</h3>
+              <table class="conversion-table">
+                <thead>
+                  <tr>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Multiply By</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Milliliters (ml)</td>
+                    <td>Fluid Ounces (fl oz)</td>
+                    <td>0.034</td>
+                  </tr>
+                  <tr>
+                    <td>Fluid Ounces (fl oz)</td>
+                    <td>Milliliters (ml)</td>
+                    <td>29.57</td>
+                  </tr>
+                  <tr>
+                    <td>Litres (l)</td>
+                    <td>UK Gallons (gal)</td>
+                    <td>0.220</td>
+                  </tr>
+                  <tr>
+                    <td>UK Gallons (gal)</td>
+                    <td>Litres (l)</td>
+                    <td>4.546</td>
+                  </tr>
+                  <tr>
+                    <td>Teaspoons (tsp)</td>
+                    <td>Milliliters (ml)</td>
+                    <td>4.929</td>
+                  </tr>
+                  <tr>
+                    <td>Tablespoons (tbsp)</td>
+                    <td>Milliliters (ml)</td>
+                    <td>14.787</td>
+                  </tr>
+                  <tr>
+                    <td>Cups</td>
+                    <td>Milliliters (ml)</td>
+                    <td>236.588</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
-            <!-- Rest of water panel content -->
-            <div class="form-section">
-              <h3>Step 1: Calculate Your Water Volume</h3>
-              <div class="section highlight">
-                <h3>Calculate Water Volume</h3>
-                <div class="form-group">
-                  <label>Container Shape</label>
-                  <div class="radio-group">
-                    <label class="radio">
-                      <input type="radio" name="container-shape" value="rectangular" checked>
-                      <span>Rectangular/Square</span>
-                    </label>
-                    <label class="radio">
-                      <input type="radio" name="container-shape" value="circular">
-                      <span>Circular</span>
-                    </label>
+            <!-- Area Conversions -->
+            <div class="guide-tab-panel" id="area-panel">
+              <h3>Area Conversions</h3>
+              <table class="conversion-table">
+                <thead>
+                  <tr>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Multiply By</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Square Meters (m²)</td>
+                    <td>Square Feet (ft²)</td>
+                    <td>10.764</td>
+                  </tr>
+                  <tr>
+                    <td>Square Feet (ft²)</td>
+                    <td>Square Meters (m²)</td>
+                    <td>0.093</td>
+                  </tr>
+                  <tr>
+                    <td>Square Meters (m²)</td>
+                    <td>Square Yards (yd²)</td>
+                    <td>1.196</td>
+                  </tr>
+                  <tr>
+                    <td>Square Yards (yd²)</td>
+                    <td>Square Meters (m²)</td>
+                    <td>0.836</td>
+                  </tr>
+                  <tr>
+                    <td>Acres</td>
+                    <td>Square Meters (m²)</td>
+                    <td>4046.856</td>
+                  </tr>
+                  <tr>
+                    <td>Hectares</td>
+                    <td>Acres</td>
+                    <td>2.471</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Common Ratios -->
+            <div class="guide-tab-panel" id="common-panel">
+              <h3>Common Gardening Measurements</h3>
+              <div class="accordion">
+                <div class="accordion-item">
+                  <button class="accordion-trigger">Lawn Fertilizer Application Rates</button>
+                  <div class="accordion-content">
+                    <ul>
+                      <li>General lawn fertilizer: 25-35g per square meter (0.8-1.1 oz per square yard)</li>
+                      <li>Starter fertilizer: 50g per square meter (1.6 oz per square yard)</li>
+                      <li>Slow-release fertilizer: 15-25g per square meter (0.5-0.8 oz per square yard)</li>
+                      <li>Liquid lawn feed: 10ml per litre of water (1.3 fl oz per gallon)</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <button class="accordion-trigger">Pond Treatment Dosages</button>
+                  <div class="accordion-content">
+                    <ul>
+                      <li>Algaecide: 5-10ml per 1000 litres (0.7-1.3 fl oz per 250 gallons)</li>
+                      <li>Water clarifier: 5ml per 1000 litres (0.7 fl oz per 250 gallons)</li>
+                      <li>Beneficial bacteria: 10ml per 1000 litres (1.3 fl oz per 250 gallons)</li>
+                      <li>Dechlorinator: 5ml per 1000 litres (0.7 fl oz per 250 gallons)</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <button class="accordion-trigger">Plant Fertilizer Measurements</button>
+                  <div class="accordion-content">
+                    <ul>
+                      <li>Liquid plant food: 5ml per litre of water (0.7 fl oz per gallon)</li>
+                      <li>Tomato fertilizer: 7ml per litre of water (0.9 fl oz per gallon)</li>
+                      <li>Granular fertilizer: 30-60g per square meter (1-2 oz per square yard)</li>
+                      <li>Slow-release fertilizer: 1-2g per litre of potting soil (0.035-0.07 oz per quart)</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <button class="accordion-trigger">Common Scoop Equivalents</button>
+                  <div class="accordion-content">
+                    <ul>
+                      <li>Standard teaspoon: approximately 5ml or 5g</li>
+                      <li>Standard tablespoon: approximately 15ml or 15g</li>
+                      <li>Small fertilizer scoop: approximately 5-10g</li>
+                      <li>Medium fertilizer scoop: approximately 20-30g</li>
+                      <li>Large fertilizer scoop: approximately 40-50g</li>
+                      <li>Coffee scoop: approximately 10g or 15ml</li>
+                    </ul>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
     </div>
-
-            <!-- Conversion Guide -->
-            <div id="guide-panel" class="tab-panel" style="display: none;">
-        <div class="card">
-          <div class="card-header">
-            <h2>Gardener's Conversion Guide</h2>
-            <p>Reference guide for common gardening measurements and conversions</p>
-          </div>
-          <div class="card-content">
-            <div class="guide-tabs">
-              <div class="guide-tab-list">
-                <button class="guide-tab active" data-guide-tab="weight">Weight</button>
-                <button class="guide-tab" data-guide-tab="volume">Volume</button>
-                <button class="guide-tab" data-guide-tab="area">Area</button>
-                <button class="guide-tab" data-guide-tab="common">Common Ratios</button>
-              </div>
-
-              <div class="guide-tab-content">
-                <!-- Weight Conversions -->
-                <div class="guide-tab-panel active" id="weight-panel">
-                  <h3>Weight Conversions</h3>
-                  <table class="conversion-table">
-                    <thead>
-                      <tr>
-                        <th>From</th>
-                        <th>To</th>
-                        <th>Multiply By</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Grams (g)</td>
-                        <td>Ounces (oz)</td>
-                        <td>0.035</td>
-                      </tr>
-                      <tr>
-                        <td>Ounces (oz)</td>
-                        <td>Grams (g)</td>
-                        <td>28.35</td>
-                      </tr>
-                      <tr>
-                        <td>Kilograms (kg)</td>
-                        <td>Pounds (lb)</td>
-                        <td>2.205</td>
-                      </tr>
-                      <tr>
-                        <td>Pounds (lb)</td>
-                        <td>Kilograms (kg)</td>
-                        <td>0.454</td>
-                      </tr>
-                      <tr>
-                        <td>Grams (g)</td>
-                        <td>Kilograms (kg)</td>
-                        <td>0.001</td>
-                      </tr>
-                      <tr>
-                        <td>Ounces (oz)</td>
-                        <td>Pounds (lb)</td>
-                        <td>0.0625</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-                <!-- Volume Conversions -->
-                <div class="guide-tab-panel" id="volume-panel">
-                                    <h3>Volume Conversions</h3>
-                                    <table class="conversion-table">
-                                        <thead>
-                                            <tr>
-                                                <th>From</th>
-                                                <th>To</th>
-                                                <th>Multiply By</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Milliliters (ml)</td>
-                                                <td>Fluid Ounces (fl oz)</td>
-                                                <td>0.034</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Fluid Ounces (fl oz)</td>
-                                                <td>Milliliters (ml)</td>
-                                                <td>29.57</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Litres (l)</td>
-                                                <td>UK Gallons (gal)</td>
-                                                <td>0.220</td>
-                                            </tr>
-                                            <tr>
-                                                <td>UK Gallons (gal)</td>
-                                                <td>Litres (l)</td>
-                                                <td>4.546</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Teaspoons (tsp)</td>
-                                                <td>Milliliters (ml)</td>
-                                                <td>4.929</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Tablespoons (tbsp)</td>
-                                                <td>Milliliters (ml)</td>
-                                                <td>14.787</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cups</td>
-                                                <td>Milliliters (ml)</td>
-                                                <td>236.588</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <!-- Area Conversions -->
-                                <div class="guide-tab-panel" id="area-panel">
-                                    <h3>Area Conversions</h3>
-                                    <table class="conversion-table">
-                                        <thead>
-                                            <tr>
-                                                <th>From</th>
-                                                <th>To</th>
-                                                <th>Multiply By</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Square Meters (m²)</td>
-                                                <td>Square Feet (ft²)</td>
-                                                <td>10.764</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Square Feet (ft²)</td>
-                                                <td>Square Meters (m²)</td>
-                                                <td>0.093</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Square Meters (m²)</td>
-                                                <td>Square Yards (yd²)</td>
-                                                <td>1.196</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Square Yards (yd²)</td>
-                                                <td>Square Meters (m²)</td>
-                                                <td>0.836</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Acres</td>
-                                                <td>Square Meters (m²)</td>
-                                                <td>4046.856</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Hectares</td>
-                                                <td>Acres</td>
-                                                <td>2.471</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <!-- Common Ratios -->
-                                <div class="guide-tab-panel" id="common-panel">
-                                    <h3>Common Gardening Measurements</h3>
-                                    <div class="accordion">
-                                        <div class="accordion-item">
-                                            <button class="accordion-trigger">Lawn Fertilizer Application Rates</button>
-                                            <div class="accordion-content">
-                                                <ul>
-                                                    <li>General lawn fertilizer: 25-35g per square meter (0.8-1.1 oz per square yard)</li>
-                                                    <li>Starter fertilizer: 50g per square meter (1.6 oz per square yard)</li>
-                                                    <li>Slow-release fertilizer: 15-25g per square meter (0.5-0.8 oz per square yard)</li>
-                                                    <li>Liquid lawn feed: 10ml per litre of water (1.3 fl oz per gallon)</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="accordion-item">
-                                            <button class="accordion-trigger">Pond Treatment Dosages</button>
-                                            <div class="accordion-content">
-                                                <ul>
-                                                    <li>Algaecide: 5-10ml per 1000 litres (0.7-1.3 fl oz per 250 gallons)</li>
-                                                    <li>Water clarifier: 5ml per 1000 litres (0.7 fl oz per 250 gallons)</li>
-                                                    <li>Beneficial bacteria: 10ml per 1000 litres (1.3 fl oz per 250 gallons)</li>
-                                                    <li>Dechlorinator: 5ml per 1000 litres (0.7 fl oz per 250 gallons)</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="accordion-item">
-                                            <button class="accordion-trigger">Plant Fertilizer Measurements</button>
-                                            <div class="accordion-content">
-                                                <ul>
-                                                    <li>Liquid plant food: 5ml per litre of water (0.7 fl oz per gallon)</li>
-                                                    <li>Tomato fertilizer: 7ml per litre of water (0.9 fl oz per gallon)</li>
-                                                    <li>Granular fertilizer: 30-60g per square meter (1-2 oz per square yard)</li>
-                                                    <li>Slow-release fertilizer: 1-2g per litre of potting soil (0.035-0.07 oz per quart)</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="accordion-item">
-                                            <button class="accordion-trigger">Common Scoop Equivalents</button>
-                                            <div class="accordion-content">
-                                                <ul>
-                                                    <li>Standard teaspoon: approximately 5ml or 5g</li>
-                                                    <li>Standard tablespoon: approximately 15ml or 15g</li>
-                                                    <li>Small fertilizer scoop: approximately 5-10g</li>
-                                                    <li>Medium fertilizer scoop: approximately 20-30g</li>
-                                                    <li>Large fertilizer scoop: approximately 40-50g</li>
-                                                    <li>Coffee scoop: approximately 10g or 15ml</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-    </div>
+</div>
 </div>
     </div>
 </div>

@@ -797,12 +797,37 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize other components
   initProductCalculator()
   initAreaCalculator()
+  console.log("DOM loaded - Initializing application")
+
+  // Initialize tabs
+  initTabs()
+
+  // Populate product dropdowns
+  populateProductDropdowns()
+
+  // Initialize other components
+  initProductCalculator()
+  initAreaCalculator()
   initWaterCalculator()
   initAccordion()
   initGuideTabs()
 
   // Debug tab panels
   debugTabPanels()
+
+  console.log("All initialization complete")
+  console.log("Final tab panel display states:")
+  document.querySelectorAll(".tab-panel").forEach((panel) => {
+    console.log(
+      `${panel.id}: display=${window.getComputedStyle(panel).display}, visibility=${window.getComputedStyle(panel).visibility}`,
+    )
+  })
+  console.log("Final guide tab panel display states:")
+  document.querySelectorAll(".guide-tab-panel").forEach((panel) => {
+    console.log(
+      `${panel.id}: display=${window.getComputedStyle(panel).display}, visibility=${window.getComputedStyle(panel).visibility}`,
+    )
+  })
 })
 
 // Debug function to check tab panels
@@ -838,9 +863,10 @@ function initTabs() {
 
   console.log(`Found ${tabButtons.length} tab buttons and ${tabPanels.length} tab panels`)
 
-  // First, ensure all panels are hidden except the active one
+  // First, ensure all panels are hidden
   tabPanels.forEach((panel) => {
     panel.style.display = "none"
+    panel.classList.remove("active")
   })
 
   // Make the first panel visible by default
@@ -849,7 +875,7 @@ function initTabs() {
     tabPanels[0].classList.add("active")
   }
 
-  // Add click event listeners to tab buttons
+  // Add click event listeners
   tabButtons.forEach((button) => {
     button.addEventListener("click", function () {
       const tabId = this.getAttribute("data-tab")
@@ -892,21 +918,18 @@ function initGuideTabs() {
 
   // First, ensure all panels are hidden except the active one
   guideTabPanels.forEach((panel) => {
-    if (panel.classList.contains("active")) {
-      panel.style.display = "block"
-    } else {
-      panel.style.display = "none"
-    }
+    panel.style.display = "none"
   })
 
-  // Add click event listeners to guide tabs
-  guideTabs.forEach((tab) => {
-    // Remove any existing event listeners by cloning and replacing
-    const newTab = tab.cloneNode(true)
-    tab.parentNode.replaceChild(newTab, tab)
+  // Make the first panel visible by default
+  if (guideTabPanels.length > 0) {
+    guideTabPanels[0].style.display = "block"
+    guideTabPanels[0].classList.add("active")
+  }
 
-    newTab.addEventListener("click", function (e) {
-      e.preventDefault()
+  // Add click event listeners
+  guideTabs.forEach((tab) => {
+    tab.addEventListener("click", function () {
       const tabId = this.getAttribute("data-guide-tab")
       console.log(`Guide tab clicked: ${tabId}`)
 
@@ -933,17 +956,6 @@ function initGuideTabs() {
       }
     })
   })
-
-  // Ensure the first guide tab is active if none are
-  if (!document.querySelector(".guide-tab.active") && guideTabs.length > 0) {
-    guideTabs[0].classList.add("active")
-    const firstTabId = guideTabs[0].getAttribute("data-guide-tab")
-    const firstPanel = document.getElementById(firstTabId + "-panel")
-    if (firstPanel) {
-      firstPanel.classList.add("active")
-      firstPanel.style.display = "block"
-    }
-  }
 }
 
 // Populate product dropdowns
@@ -1364,12 +1376,23 @@ function initWaterCalculator() {
 // Initialize accordion
 function initAccordion() {
   const accordionTriggers = document.querySelectorAll(".accordion-trigger")
+  console.log(`Found ${accordionTriggers.length} accordion triggers`)
 
   if (accordionTriggers) {
     accordionTriggers.forEach((trigger) => {
       trigger.addEventListener("click", () => {
         const accordionItem = trigger.parentElement
         accordionItem.classList.toggle("active")
+
+        // Toggle display of accordion content
+        const content = trigger.nextElementSibling
+        if (content) {
+          if (accordionItem.classList.contains("active")) {
+            content.style.display = "block"
+          } else {
+            content.style.display = "none"
+          }
+        }
       })
     })
   }
