@@ -797,17 +797,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize other components
   initProductCalculator()
   initAreaCalculator()
-  console.log("DOM loaded - Initializing application")
-
-  // Initialize tabs
-  initTabs()
-
-  // Populate product dropdowns
-  populateProductDropdowns()
-
-  // Initialize other components
-  initProductCalculator()
-  initAreaCalculator()
   initWaterCalculator()
   initAccordion()
   initGuideTabs()

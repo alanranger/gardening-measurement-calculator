@@ -160,13 +160,13 @@ p {
   padding: var(--spacing);
 }
 
-/* Make sure tab panels are properly hidden/shown */
+/* Tab Panels */
 .tab-panel {
-  display: none !important;
+  display: none;
 }
 
 .tab-panel.active {
-  display: block !important;
+  display: block;
 }
 
 /* Cards */
@@ -673,11 +673,11 @@ select:focus {
 }
 
 .guide-tab-panel {
-  display: none !important;
+  display: none;
 }
 
 .guide-tab-panel.active {
-  display: block !important;
+  display: block;
 }
 
 /* Tables */
@@ -722,11 +722,13 @@ select:focus {
 }
 
 .accordion-content {
-  display: none !important;
+  display: none;
+  padding: var(--spacing);
+  border-top: 1px solid var(--border);
 }
 
 .accordion-item.active .accordion-content {
-  display: block !important;
+  display: block;
 }
 
 .accordion-content ul {
