@@ -800,7 +800,33 @@ document.addEventListener("DOMContentLoaded", () => {
   initWaterCalculator()
   initAccordion()
   initGuideTabs()
+
+  // Debug tab panels
+  debugTabPanels()
 })
+
+// Debug function to check tab panels
+function debugTabPanels() {
+  const tabPanels = document.querySelectorAll(".tab-panel")
+  console.log("Debugging tab panels:")
+
+  tabPanels.forEach((panel) => {
+    console.log(
+      `Panel ID: ${panel.id}, Display: ${window.getComputedStyle(panel).display}, Visibility: ${window.getComputedStyle(panel).visibility}`,
+    )
+    console.log(`Panel has ${panel.children.length} children`)
+    console.log(`Panel HTML content length: ${panel.innerHTML.length} characters`)
+  })
+
+  // Check if any panels are missing
+  const expectedPanels = ["product-panel", "area-panel", "water-panel", "guide-panel"]
+  expectedPanels.forEach((id) => {
+    const panel = document.getElementById(id)
+    if (!panel) {
+      console.error(`Expected panel with ID "${id}" is missing!`)
+    }
+  })
+}
 
 // Initialize tabs
 function initTabs() {
@@ -852,6 +878,11 @@ function initTabs() {
         console.log(`Activated panel: ${targetPanel.id}`)
       } else {
         console.error(`Panel not found: ${tabId}-panel`)
+        // Log all available panels for debugging
+        console.log("Available panels:")
+        tabPanels.forEach((p) => {
+          console.log(p.id)
+        })
       }
     })
   })
