@@ -185,6 +185,7 @@ button {
   background-color: #f1f1f1;
   color: #333;
   padding: 10px 15px;
+  border: 1px solid #ddd;
 }
 
 .secondary-button:hover {
@@ -395,6 +396,61 @@ button {
   border-radius: 20px;
   font-size: 0.8rem;
   z-index: 1000;
+}
+
+/* Footer */
+footer {
+  background-color: #f1f1f1;
+  padding: 15px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+  border-top: 1px solid #ddd;
+  margin-top: 20px;
+}
+
+/* Enhanced button styling to match screenshot */
+.find-product-btn,
+#find-product-btn,
+#find-area-product-btn,
+#find-water-product-btn {
+  background-color: #4caf50;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+}
+
+.find-product-btn:before,
+#find-product-btn:before,
+#find-area-product-btn:before,
+#find-water-product-btn:before {
+  content: "⚫";
+  margin-right: 8px;
+  font-size: 0.8em;
+}
+
+.my-presets-btn,
+#my-presets-btn,
+#area-presets-btn,
+#water-presets-btn {
+  background-color: white;
+  color: #333;
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+}
+
+.my-presets-btn:before,
+#my-presets-btn:before,
+#area-presets-btn:before,
+#water-presets-btn:before {
+  content: "★";
+  margin-right: 8px;
+  color: #ffc107;
 }
 
 /* Responsive adjustments */
