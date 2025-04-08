@@ -273,42 +273,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Fix calculation mode section
 function fixCalculationModeSection() {
-  const calculationModeSection = document.querySelector(".calculation-mode-section")
+  console.log("Fixing calculation mode section...")
 
-  // If the calculation mode section doesn't exist, create it
-  if (!calculationModeSection) {
-    console.log("Calculation mode section not found, creating it")
+  // Look for the calculation mode card instead of product-calculator-inputs
+  const calculationModeCard =
+    document.querySelector(".card .calculation-mode") ||
+    document.querySelector(".card:has(h3.card-title:contains('Calculation Mode'))") ||
+    document.querySelector(".card:nth-of-type(2)") // Fallback to second card
 
-    // Find the element where we want to insert the calculation mode section
-    const productCalculatorInputs = document.getElementById("product-calculator-inputs")
-    if (!productCalculatorInputs) {
-      console.error("Product calculator inputs section not found")
-      return
-    }
+  if (!calculationModeCard) {
+    console.error("Calculation mode card not found")
+    return
+  }
+
+  // Check if the calculation mode radio buttons exist
+  const calculationModeRadios = calculationModeCard.querySelectorAll('input[name="calculation-mode"]')
+
+  if (calculationModeRadios.length === 0) {
+    console.log("Calculation mode radio buttons not found, creating them")
 
     // Create the calculation mode section HTML
     const calculationModeSectionHTML = `
-      <div class="calculation-mode-section">
-        <div class="calculation-mode-title">Calculation Mode</div>
-        <div class="form-group">
-          <div class="radio-group">
-            <label>
-              <input type="radio" name="calculation-mode" value="product_to_water" checked>
-              Product to Water
-            </label>
-            <label>
-              <input type="radio" name="calculation-mode" value="water_to_product">
-              Water to Product
-            </label>
-            <label>
-              <input type="radio" name="calculation-mode" value="ratio_based">
-              Ratio Based
-            </label>
-          </div>
+      <div class="form-group">
+        <div class="radio-group">
+          <label>
+            <input type="radio" name="calculation-mode" value="product_to_water" checked>
+            Product to Water
+          </label>
+          <label>
+            <input type="radio" name="calculation-mode" value="water_to_product">
+            Water to Product
+          </label>
+          <label>
+            <input type="radio" name="calculation-mode" value="ratio_based">
+            Ratio Based
+          </label>
         </div>
+      </div>
 
-        <!-- Product to Water Panel -->
-        <div id="product_to_water-panel" class="calculation-mode-panel">
+      <!-- Product to Water Panel -->
+      <div id="product_to_water-panel" class="calculation-mode-panel">
+        <div class="form-row">
           <div class="form-group">
             <label for="product-amount">Product Amount:</label>
             <div class="input-group">
@@ -339,9 +344,11 @@ function fixCalculationModeSection() {
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Water to Product Panel -->
-        <div id="water_to_product-panel" class="calculation-mode-panel hidden">
+      <!-- Water to Product Panel -->
+      <div id="water_to_product-panel" class="calculation-mode-panel hidden">
+        <div class="form-row">
           <div class="form-group">
             <label for="water-amount-2">Water Amount:</label>
             <div class="input-group">
@@ -359,9 +366,11 @@ function fixCalculationModeSection() {
             <input type="number" id="ratio" value="10" min="0.1" step="0.1">
           </div>
         </div>
+      </div>
 
-        <!-- Ratio Based Panel -->
-        <div id="ratio_based-panel" class="calculation-mode-panel hidden">
+      <!-- Ratio Based Panel -->
+      <div id="ratio_based-panel" class="calculation-mode-panel hidden">
+        <div class="form-row">
           <div class="form-group">
             <label for="ratio-2">Ratio (<span id="ratio-label-2">g per litre</span>):</label>
             <input type="number" id="ratio-2" value="10" min="0.1" step="0.1">
@@ -382,31 +391,15 @@ function fixCalculationModeSection() {
       </div>
     `
 
-    // Find the calculation mode section container
-    const calculationModeContainer = document.querySelector(".calculation-mode")
-
-    if (calculationModeContainer) {
-      // If the container exists, replace its content
-      calculationModeContainer.innerHTML = calculationModeSectionHTML
-    } else {
-      // If the container doesn't exist, insert the section before the form actions
-      const formActions = productCalculatorInputs.querySelector(".form-actions")
-      if (formActions) {
-        const tempDiv = document.createElement("div")
-        tempDiv.innerHTML = calculationModeSectionHTML
-        productCalculatorInputs.insertBefore(tempDiv.firstElementChild, formActions)
-      } else {
-        // If form actions not found, append to the end of product calculator inputs
-        productCalculatorInputs.insertAdjacentHTML("beforeend", calculationModeSectionHTML)
-      }
-    }
+    // Replace the content of the calculation mode card
+    calculationModeCard.innerHTML = `<h3 class="card-title">Calculation Mode</h3>${calculationModeSectionHTML}`
 
     // Add event listeners to the calculation mode radio buttons
-    const calculationModeRadios = document.querySelectorAll('input[name="calculation-mode"]')
-    calculationModeRadios.forEach((radio) => {
+    const newCalculationModeRadios = calculationModeCard.querySelectorAll('input[name="calculation-mode"]')
+    newCalculationModeRadios.forEach((radio) => {
       radio.addEventListener("change", function () {
         // Hide all panels
-        document.querySelectorAll(".calculation-mode-panel").forEach((panel) => {
+        calculationModeCard.querySelectorAll(".calculation-mode-panel").forEach((panel) => {
           panel.classList.add("hidden")
         })
 
@@ -417,16 +410,17 @@ function fixCalculationModeSection() {
         }
       })
     })
-
-    // Update ratio labels
-    updateRatioLabels()
   } else {
-    console.log("Calculation mode section found, ensuring it's properly initialized")
+    console.log("Calculation mode radio buttons found, ensuring they're properly initialized")
 
     // Make sure the calculation mode radio buttons have event listeners
-    const calculationModeRadios = document.querySelectorAll('input[name="calculation-mode"]')
     calculationModeRadios.forEach((radio) => {
-      radio.addEventListener("change", function () {
+      // Remove existing listeners to avoid duplicates
+      const oldRadio = radio.cloneNode(true)
+      radio.parentNode.replaceChild(oldRadio, radio)
+
+      // Add new listener
+      oldRadio.addEventListener("change", function () {
         // Hide all panels
         document.querySelectorAll(".calculation-mode-panel").forEach((panel) => {
           panel.classList.add("hidden")
@@ -439,10 +433,10 @@ function fixCalculationModeSection() {
         }
       })
     })
-
-    // Update ratio labels
-    updateRatioLabels()
   }
+
+  // Update ratio labels
+  updateRatioLabels()
 }
 
 // Initialize tabs
@@ -514,27 +508,36 @@ function initCalculatorTypeSelector() {
       const selectedType = this.value
       console.log("Calculator type changed to:", selectedType)
 
-      // Hide all calculator inputs and results
-      document.getElementById("product-calculator-inputs").classList.add("hidden")
-      document.getElementById("area-calculator-inputs").classList.add("hidden")
-      document.getElementById("water-calculator-inputs").classList.add("hidden")
-      document.getElementById("product-calculator-results").classList.add("hidden")
-      document.getElementById("area-calculator-results").classList.add("hidden")
-      document.getElementById("water-calculator-results").classList.add("hidden")
-      document.getElementById("conversion-section").classList.add("hidden")
+      // Check if elements exist before trying to hide/show them
+      const productInputs = document.getElementById("product-calculator-inputs")
+      const areaInputs = document.getElementById("area-calculator-inputs")
+      const waterInputs = document.getElementById("water-calculator-inputs")
+      const productResults = document.getElementById("product-calculator-results")
+      const areaResults = document.getElementById("area-calculator-results")
+      const waterResults = document.getElementById("water-calculator-results")
+      const conversionSection = document.getElementById("conversion-section")
 
-      // Show the selected calculator inputs and results
+      // Hide all calculator inputs and results if they exist
+      if (productInputs) productInputs.classList.add("hidden")
+      if (areaInputs) areaInputs.classList.add("hidden")
+      if (waterInputs) waterInputs.classList.add("hidden")
+      if (productResults) productResults.classList.add("hidden")
+      if (areaResults) areaResults.classList.add("hidden")
+      if (waterResults) waterResults.classList.add("hidden")
+      if (conversionSection) conversionSection.classList.add("hidden")
+
+      // Show the selected calculator inputs and results if they exist
       if (selectedType === "product") {
-        document.getElementById("product-calculator-inputs").classList.remove("hidden")
-        document.getElementById("product-calculator-results").classList.remove("hidden")
+        if (productInputs) productInputs.classList.remove("hidden")
+        if (productResults) productResults.classList.remove("hidden")
       } else if (selectedType === "area") {
-        document.getElementById("area-calculator-inputs").classList.remove("hidden")
-        document.getElementById("area-calculator-results").classList.remove("hidden")
+        if (areaInputs) areaInputs.classList.remove("hidden")
+        if (areaResults) areaResults.classList.remove("hidden")
       } else if (selectedType === "water") {
-        document.getElementById("water-calculator-inputs").classList.remove("hidden")
-        document.getElementById("water-calculator-results").classList.remove("hidden")
+        if (waterInputs) waterInputs.classList.remove("hidden")
+        if (waterResults) waterResults.classList.remove("hidden")
       } else if (selectedType === "conversion") {
-        document.getElementById("conversion-section").classList.remove("hidden")
+        if (conversionSection) conversionSection.classList.remove("hidden")
       }
 
       // Update product type options based on calculator type
@@ -971,7 +974,10 @@ function updateRatioLabels() {
   const ratioLabel = document.getElementById("ratio-label")
   const ratioLabel2 = document.getElementById("ratio-label-2")
 
-  if (!measurementTypeRadio || !ratioLabel || !ratioLabel2) return
+  if (!measurementTypeRadio || (!ratioLabel && !ratioLabel2)) {
+    console.log("Required elements for updateRatioLabels not found")
+    return
+  }
 
   const measurementType = measurementTypeRadio.value
   const waterUnit = waterUnitSelect ? waterUnitSelect.value : "l"
@@ -1014,8 +1020,8 @@ function updateRatioLabels() {
     targetUnitText = targetUnit
   }
 
-  ratioLabel.textContent = `${unitText} per ${waterUnitText}`
-  ratioLabel2.textContent = `${unitText} per ${targetUnitText}`
+  if (ratioLabel) ratioLabel.textContent = `${unitText} per ${waterUnitText}`
+  if (ratioLabel2) ratioLabel2.textContent = `${unitText} per ${targetUnitText}`
 }
 
 // Handle product selection
@@ -2214,4 +2220,79 @@ function initDebugCopyFunctionality() {
       }
     })
   }
+}
+
+// Fix the initialization to avoid asynchronous response errors
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOM fully loaded and parsed")
+
+  // Initialize tab navigation
+  try {
+    initTabs()
+    console.log("Tabs initialized")
+  } catch (error) {
+    console.error("Error initializing tabs:", error)
+  }
+
+  // Initialize calculation mode panels
+  try {
+    initCalculationModePanels()
+    console.log("Calculation mode panels initialized")
+  } catch (error) {
+    console.error("Error initializing calculation mode panels:", error)
+  }
+
+  // Initialize accordion functionality
+  try {
+    initAccordion()
+    console.log("Accordion initialized")
+  } catch (error) {
+    console.error("Error initializing accordion:", error)
+  }
+
+  // Add event listeners to calculate buttons
+  const calculateBtn = document.getElementById("calculate-btn")
+  if (calculateBtn) {
+    calculateBtn.addEventListener("click", calculateProductDosage)
+  }
+
+  const calculateAreaBtn = document.getElementById("calculate-area-btn")
+  if (calculateAreaBtn) {
+    calculateAreaBtn.addEventListener("click", calculateAreaApplication)
+  }
+
+  const calculateWaterBtn = document.getElementById("calculate-water-btn")
+  if (calculateWaterBtn) {
+    calculateWaterBtn.addEventListener("click", calculateWaterDosage)
+  }
+
+  // Initialize other form elements
+  try {
+    initFormElements()
+    console.log("Form elements initialized")
+  } catch (error) {
+    console.error("Error initializing form elements:", error)
+  }
+
+  // Fix calculation mode section
+  try {
+    fixCalculationModeSection()
+    console.log("Calculation mode section fixed")
+  } catch (error) {
+    console.error("Error fixing calculation mode section:", error)
+  }
+
+  // Initialize debug info and copy functionality
+  try {
+    initDebugCopyFunctionality()
+    console.log("Debug functionality initialized")
+  } catch (error) {
+    console.error("Error initializing debug functionality:", error)
+  }
+})
+
+// Dummy function to represent form element initialization
+function initFormElements() {
+  // Add your form element initialization logic here
+  console.log("Initializing form elements...")
 }
