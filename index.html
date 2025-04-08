@@ -11,6 +11,9 @@
         <header>
             <h1>Gardener's Measurement Calculator</h1>
             <p class="subtitle">Calculate accurate quantities for all your gardening needs</p>
+            <div class="beta-warning">
+                <p>This is a beta version. Please double-check all calculations against product instructions.</p>
+            </div>
         </header>
 
         <!-- Tab Buttons - Make sure data-tab attributes match panel IDs -->
@@ -21,24 +24,413 @@
             <button class="tab-button" data-tab="conversion">Conversion Guide</button>
         </div>
 
-        <!-- Tab Panels - Make sure IDs match data-tab attributes -->
         <div class="tab-panels">
             <!-- Product Calculator Tab -->
             <div id="product-panel" class="tab-panel active">
                 <h2>Product Calculator</h2>
                 <p>Calculate the correct amount of product to use for your plants</p>
-                
-                <!-- Product calculator content here -->
-                <!-- This content can remain as is since this tab is working -->
+
+                <div class="form-group">
+                    <label for="product-type">Product Type:</label>
+                    <select id="product-type">
+                        <option value="liquid_fertilizer">Liquid Fertilizer</option>
+                        <option value="granular_fertilizer">Granular Fertilizer</option>
+                        <option value="lawn_fertilizer">Lawn Fertilizer</option>
+                        <option value="weed_killer">Weed Killer</option>
+                        <option value="pond_treatment">Pond Treatment</option>
+                        <option value="custom">Custom</option>
+                    </select>
+                    <div id="product-type-hint" class="hint"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Measurement Type:</label>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="measurement-type" value="weight" checked>
+                            Weight (g, kg, oz)
+                        </label>
+                        <label>
+                            <input type="radio" name="measurement-type" value="volume">
+                            Volume (ml, l, fl oz)
+                        </label>
+                        <label>
+                            <input type="radio" name="measurement-type" value="cap">
+                            Cap Measurement
+                        </label>
+                    </div>
+                </div>
+
+                <div id="cap-size-group" class="form-group hidden">
+                    <label for="cap-size">Cap Size (ml):</label>
+                    <input type="number" id="cap-size" value="10" min="1" step="0.1">
+                    <div class="hint">Standard cap is usually 10ml, but check your product</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Does your product have a scoop measure?</label>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="has-scoop" value="yes">
+                            Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="has-scoop" value="no" checked>
+                            No
+                        </label>
+                    </div>
+                </div>
+
+                <div id="scoop-size-group" class="form-group hidden">
+                    <label for="scoop-size">Scoop Size:</label>
+                    <div class="input-group">
+                        <input type="number" id="scoop-size" value="5" min="0.1" step="0.1">
+                        <select id="scoop-unit">
+                            <option value="g">g</option>
+                            <option value="ml">ml</option>
+                        </select>
+                    </div>
+                    <div class="hint">Check your product packaging for scoop size</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Calculation Mode:</label>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="calculation-mode" value="product_to_water" checked>
+                            Product to Water
+                        </label>
+                        <label>
+                            <input type="radio" name="calculation-mode" value="water_to_product">
+                            Water to Product
+                        </label>
+                        <label>
+                            <input type="radio" name="calculation-mode" value="ratio_based">
+                            Ratio Based
+                        </label>
+                    </div>
+                </div>
+
+                <div id="product-name-group" class="form-group">
+                    <label for="product-name">Product Name (optional):</label>
+                    <div class="input-with-button">
+                        <input type="text" id="product-name" placeholder="e.g., Miracle-Gro All Purpose">
+                        <button id="find-product-btn" class="secondary-button">Find Product</button>
+                    </div>
+                    <button id="my-presets-btn" class="secondary-button">My Presets</button>
+                </div>
+
+                <div id="product-search-panel" class="search-panel hidden">
+                    <div class="search-header">
+                        <h3>Find a Product</h3>
+                        <input type="text" id="product-search" placeholder="Search products...">
+                    </div>
+                    <div id="product-search-results" class="search-results"></div>
+                </div>
+
+                <div id="presets-panel" class="search-panel hidden">
+                    <div class="search-header">
+                        <h3>My Saved Presets</h3>
+                    </div>
+                    <div id="presets-list" class="search-results"></div>
+                </div>
+
+                <div id="product-instructions" class="instructions-panel hidden">
+                    <h3>Product Instructions</h3>
+                    <p id="instructions-text"></p>
+                </div>
+
+                <!-- Product to Water Panel -->
+                <div id="product_to_water-panel" class="calculation-mode-panel">
+                    <div class="form-group">
+                        <label for="product-amount">Product Amount:</label>
+                        <div class="input-group">
+                            <input type="number" id="product-amount" value="10" min="0.1" step="0.1">
+                            <select id="product-unit">
+                                <option value="g">g</option>
+                                <option value="kg">kg</option>
+                                <option value="ml">ml</option>
+                                <option value="l">l</option>
+                                <option value="oz">oz</option>
+                                <option value="lb">lb</option>
+                                <option value="tsp">tsp</option>
+                                <option value="tbsp">tbsp</option>
+                                <option value="cap">cap</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="water-amount">Water Amount:</label>
+                        <div class="input-group">
+                            <input type="number" id="water-amount" value="1" min="0.1" step="0.1">
+                            <select id="water-unit">
+                                <option value="l">liter</option>
+                                <option value="ml">ml</option>
+                                <option value="gal_uk">gallon (UK)</option>
+                                <option value="pt">pint</option>
+                                <option value="qt">quart</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Water to Product Panel -->
+                <div id="water_to_product-panel" class="calculation-mode-panel hidden">
+                    <div class="form-group">
+                        <label for="water-amount-2">Water Amount:</label>
+                        <div class="input-group">
+                            <input type="number" id="water-amount-2" value="1" min="0.1" step="0.1">
+                            <select id="water-unit-2">
+                                <option value="l">liter</option>
+                                <option value="ml">ml</option>
+                                <option value="gal_uk">gallon (UK)</option>
+                                <option value="pt">pint</option>
+                                <option value="qt">quart</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ratio">Ratio (<span id="ratio-label">g per liter</span>):</label>
+                        <input type="number" id="ratio" value="10" min="0.1" step="0.1">
+                    </div>
+                </div>
+
+                <!-- Ratio Based Panel -->
+                <div id="ratio_based-panel" class="calculation-mode-panel hidden">
+                    <div class="form-group">
+                        <label for="ratio-2">Ratio (<span id="ratio-label-2">g per liter</span>):</label>
+                        <input type="number" id="ratio-2" value="10" min="0.1" step="0.1">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="target-amount">Target Water Amount:</label>
+                        <div class="input-group">
+                            <input type="number" id="target-amount" value="1" min="0.1" step="0.1">
+                            <select id="target-unit">
+                                <option value="l">liter</option>
+                                <option value="ml">ml</option>
+                                <option value="gal_uk">gallon (UK)</option>
+                                <option value="pt">pint</option>
+                                <option value="qt">quart</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button id="calculate-btn" class="primary-button">Calculate</button>
+                    <button id="save-preset-btn" class="secondary-button">Save as Preset</button>
+                </div>
+
+                <div class="results">
+                    <div class="result-card">
+                        <h3>Metric Result</h3>
+                        <p id="metric-result">-</p>
+                    </div>
+
+                    <div class="result-card">
+                        <h3>Imperial Result</h3>
+                        <p id="imperial-result">-</p>
+                    </div>
+
+                    <div id="cap-result-card" class="result-card hidden">
+                        <h3>Cap Measurement</h3>
+                        <p id="cap-result">-</p>
+                    </div>
+
+                    <div id="scoop-result-card" class="result-card hidden">
+                        <h3>Scoop Measurement</h3>
+                        <p id="scoop-result">-</p>
+                    </div>
+
+                    <div class="result-card">
+                        <h3>Alternative Measurement</h3>
+                        <p id="alternative-result">-</p>
+                    </div>
+
+                    <div id="watering-can-section" class="result-card hidden">
+                        <h3 id="watering-can-title">For your watering can:</h3>
+                        <p id="watering-can-result">-</p>
+                        <p id="watering-can-info" class="hint">-</p>
+                    </div>
+                </div>
+
+                <div class="debug-section">
+                    <div id="debug-trigger" class="debug-trigger">
+                        <span>Debug Info</span>
+                        <span class="icon">▼</span>
+                    </div>
+                    <div id="debug-content" class="debug-content hidden">
+                        <pre id="debug-info"></pre>
+                        <button id="copy-debug-btn" class="secondary-button">Copy Debug Info</button>
+                    </div>
+                </div>
             </div>
 
             <!-- Area Calculator Tab -->
             <div id="area-panel" class="tab-panel">
                 <h2>Area Calculator</h2>
                 <p>Calculate how much product to use based on area.</p>
-                
-                <!-- Area calculator content here -->
-                <!-- This content can remain as is since this tab is working -->
+
+                <div class="form-group">
+                    <label>Area Shape:</label>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="area-shape" value="rectangle" checked>
+                            Rectangle
+                        </label>
+                        <label>
+                            <input type="radio" name="area-shape" value="circle">
+                            Circle
+                        </label>
+                    </div>
+                </div>
+
+                <div id="rectangle-inputs">
+                    <div class="form-group">
+                        <label for="length">Length:</label>
+                        <div class="input-group">
+                            <input type="number" id="length" value="5" min="0.1" step="0.1">
+                            <select id="area-unit">
+                                <option value="m">meters</option>
+                                <option value="cm">centimeters</option>
+                                <option value="ft">feet</option>
+                                <option value="in">inches</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="width">Width:</label>
+                        <input type="number" id="width" value="3" min="0.1" step="0.1">
+                    </div>
+                </div>
+
+                <div id="circle-inputs" class="hidden">
+                    <div class="form-group">
+                        <label for="diameter">Diameter:</label>
+                        <div class="input-group">
+                            <input type="number" id="diameter" value="3" min="0.1" step="0.1">
+                            <select id="circle-unit">
+                                <option value="m">meters</option>
+                                <option value="cm">centimeters</option>
+                                <option value="ft">feet</option>
+                                <option value="in">inches</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="calculated-area" class="calculated-value hidden">
+                    <h3>Calculated Area:</h3>
+                    <p id="area-result">-</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="area-product-type">Product Type:</label>
+                    <select id="area-product-type">
+                        <option value="lawn_fertilizer">Lawn Fertilizer</option>
+                        <option value="granular_fertilizer">Granular Fertilizer</option>
+                        <option value="weed_killer">Weed Killer</option>
+                        <option value="lawn_seed">Lawn Seed</option>
+                        <option value="mulch">Mulch</option>
+                        <option value="lime">Lime</option>
+                        <option value="pest_control">Pest Control</option>
+                        <option value="custom">Custom</option>
+                    </select>
+                    <div id="area-product-type-hint" class="hint"></div>
+                </div>
+
+                <div id="area-product-name-group" class="form-group">
+                    <label for="area-product-name">Product Name (optional):</label>
+                    <div class="input-with-button">
+                        <input type="text" id="area-product-name" placeholder="e.g., Evergreen Lawn Feed">
+                        <button id="find-area-product-btn" class="secondary-button">Find Product</button>
+                    </div>
+                    <button id="area-presets-btn" class="secondary-button">My Presets</button>
+                </div>
+
+                <div id="area-product-search-panel" class="search-panel hidden">
+                    <div class="search-header">
+                        <h3>Find a Product</h3>
+                        <input type="text" id="area-product-search" placeholder="Search products...">
+                    </div>
+                    <div id="area-product-search-results" class="search-results"></div>
+                </div>
+
+                <div id="area-presets-panel" class="search-panel hidden">
+                    <div class="search-header">
+                        <h3>My Saved Presets</h3>
+                    </div>
+                    <div id="area-presets-list" class="search-results"></div>
+                </div>
+
+                <div id="area-product-instructions" class="instructions-panel hidden">
+                    <h3>Product Instructions</h3>
+                    <p id="area-instructions-text"></p>
+                </div>
+
+                <div class="form-group">
+                    <label for="application-rate">Application Rate:</label>
+                    <div class="input-group">
+                        <input type="number" id="application-rate" value="35" min="0.1" step="0.1">
+                        <select id="rate-unit">
+                            <option value="g">g</option>
+                            <option value="kg">kg</option>
+                            <option value="ml">ml</option>
+                            <option value="l">l</option>
+                            <option value="oz">oz</option>
+                            <option value="lb">lb</option>
+                        </select>
+                        <span>per</span>
+                        <select id="rate-area-unit">
+                            <option value="sq_m">sq meter</option>
+                            <option value="sq_ft">sq foot</option>
+                            <option value="sq_yd">sq yard</option>
+                            <option value="plant">plant</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button id="calculate-area-btn" class="primary-button">Calculate</button>
+                    <button id="save-area-preset-btn" class="secondary-button">Save as Preset</button>
+                </div>
+
+                <div class="results">
+                    <div class="result-card">
+                        <h3>Total Amount Needed</h3>
+                        <p id="total-amount-result">-</p>
+                    </div>
+
+                    <div class="result-card">
+                        <h3>Alternative Measurement</h3>
+                        <p id="alternative-amount-result">-</p>
+                    </div>
+
+                    <div class="result-card">
+                        <h3>Metric Rate</h3>
+                        <p id="metric-rate-result">-</p>
+                    </div>
+
+                    <div class="result-card">
+                        <h3>Imperial Rate</h3>
+                        <p id="imperial-rate-result">-</p>
+                    </div>
+                </div>
+
+                <div class="debug-section">
+                    <div id="area-debug-trigger" class="debug-trigger">
+                        <span>Debug Info</span>
+                        <span class="icon">▼</span>
+                    </div>
+                    <div id="area-debug-content" class="debug-content hidden">
+                        <pre id="area-debug-info"></pre>
+                        <button id="copy-area-debug-btn" class="secondary-button">Copy Debug Info</button>
+                    </div>
+                </div>
             </div>
 
             <!-- Water Calculator Tab -->
@@ -132,6 +524,35 @@
                     <div id="water-product-type-hint" class="hint"></div>
                 </div>
 
+                <div id="water-product-name-group" class="form-group">
+                    <label for="water-product-name">Product Name (optional):</label>
+                    <div class="input-with-button">
+                        <input type="text" id="water-product-name" placeholder="e.g., TetraPond AlgoRem">
+                        <button id="find-water-product-btn" class="secondary-button">Find Product</button>
+                    </div>
+                    <button id="water-presets-btn" class="secondary-button">My Presets</button>
+                </div>
+
+                <div id="water-product-search-panel" class="search-panel hidden">
+                    <div class="search-header">
+                        <h3>Find a Product</h3>
+                        <input type="text" id="water-product-search" placeholder="Search products...">
+                    </div>
+                    <div id="water-product-search-results" class="search-results"></div>
+                </div>
+
+                <div id="water-presets-panel" class="search-panel hidden">
+                    <div class="search-header">
+                        <h3>My Saved Presets</h3>
+                    </div>
+                    <div id="water-presets-list" class="search-results"></div>
+                </div>
+
+                <div id="water-product-instructions" class="instructions-panel hidden">
+                    <h3>Product Instructions</h3>
+                    <p id="water-instructions-text"></p>
+                </div>
+
                 <div class="form-group">
                     <label for="dosage-amount">Dosage Amount (per 1000 liters):</label>
                     <div class="input-group">
@@ -166,6 +587,22 @@
                     <div class="result-card">
                         <h3>Imperial Dosage</h3>
                         <p id="water-imperial-dosage-result">-</p>
+                    </div>
+
+                    <div class="result-card">
+                        <h3>Alternative Dosage</h3>
+                        <p id="water-alternative-dosage-result">-</p>
+                    </div>
+                </div>
+
+                <div class="debug-section">
+                    <div id="water-debug-trigger" class="debug-trigger">
+                        <span>Debug Info</span>
+                        <span class="icon">▼</span>
+                    </div>
+                    <div id="water-debug-content" class="debug-content hidden">
+                        <pre id="water-debug-info"></pre>
+                        <button id="copy-water-debug-btn" class="secondary-button">Copy Debug Info</button>
                     </div>
                 </div>
             </div>
