@@ -1107,9 +1107,9 @@ function setupEventListeners() {
         document.getElementById("circle-inputs").classList.remove("hidden")
       }
     })
-  })
+  }
 
-  // Container shape change
+  // Container shape change\
   const containerShapeRadios = document.querySelectorAll('input[name="container-shape"]')
   containerShapeRadios.forEach((radio) => {
     radio.addEventListener("change", function () {
@@ -1121,7 +1121,7 @@ function setupEventListeners() {
         document.getElementById("circular-inputs").classList.remove("hidden")
       }
     })
-  })
+  }
 
   // Calculation mode change
   const calculationModeRadios = document.querySelectorAll('input[name="calculation-mode"]')
@@ -1135,7 +1135,7 @@ function setupEventListeners() {
       // Show the selected panel
       document.getElementById(`${this.value}-panel`).classList.remove("hidden")
     })
-  })
+  }
 
   // Measurement type change
   const measurementTypeRadios = document.querySelectorAll('input[name="measurement-type"]')
@@ -1147,7 +1147,7 @@ function setupEventListeners() {
         document.getElementById("cap-size-group").classList.add("hidden")
       }
     })
-  })
+  }
 
   // Has scoop change
   const hasScoopRadios = document.querySelectorAll('input[name="has-scoop"]')
@@ -1159,7 +1159,7 @@ function setupEventListeners() {
         document.getElementById("scoop-size-group").classList.add("hidden")
       }
     })
-  })
+  }
 
   // Also add event listeners to update the ratio when water units change
   // Add this to the setupEventListeners function:
@@ -1239,8 +1239,211 @@ function setupEventListeners() {
     })
   }
 
+  // Add these event listeners to the setupEventListeners function, after the existing water unit change listeners
+
+  // Add event listeners for water unit changes in product_to_water mode
+  const waterUnitSelect = document.getElementById("water-unit")
+  if (waterUnitSelect) {
+    waterUnitSelect.addEventListener("change", function () {
+      // Get the current product
+      const productNameSelect = document.getElementById("product-name-select")
+      const selectedId = productNameSelect.value
+      if (!selectedId) return
+
+      // Find the selected product
+      const allProducts = [...COMMON_PRODUCTS, ...AREA_TREATMENT_PRODUCTS, ...WATER_TREATMENT_PRODUCTS]
+      const selectedProduct = allProducts.find((p) => p.id === selectedId)
+
+      if (selectedProduct) {
+        // Get current values
+        const productAmount = Number.parseFloat(document.getElementById("product-amount").value)
+        const oldWaterAmount = Number.parseFloat(document.getElementById("water-amount").value)
+        const oldWaterUnit = document.getElementById("water-unit").value
+        const newWaterUnit = this.value
+
+        // Convert water amount to the new unit
+        let newWaterAmount = oldWaterAmount
+
+        // Convert from old unit to liters first
+        let waterAmountInLiters = oldWaterAmount
+        if (oldWaterUnit === "gal_uk") {
+          waterAmountInLiters = oldWaterAmount * 4.55 // Convert UK gallons to liters
+        } else if (oldWaterUnit === "ml") {
+          waterAmountInLiters = oldWaterAmount / 1000 // Convert ml to liters
+        }
+
+        // Then convert from liters to new unit
+        if (newWaterUnit === "gal_uk") {
+          newWaterAmount = waterAmountInLiters / 4.55 // Convert liters to UK gallons
+        } else if (newWaterUnit === "ml") {
+          newWaterAmount = waterAmountInLiters * 1000 // Convert liters to ml
+        } else {
+          newWaterAmount = waterAmountInLiters // Already in liters
+        }
+
+        // Update the water amount field
+        document.getElementById("water-amount").value = newWaterAmount.toFixed(2)
+
+        // Also update the ratio fields to maintain consistency
+        const ratio = productAmount / newWaterAmount
+
+        // Update ratio for water_to_product mode
+        const ratioField = document.getElementById("ratio")
+        if (ratioField) {
+          ratioField.value = ratio.toFixed(2)
+        }
+
+        // Update ratio for ratio_based mode
+        const ratioField2 = document.getElementById("ratio-2")
+        if (ratioField2) {
+          ratioField2.value = ratio.toFixed(2)
+        }
+      }
+    })
+  }
+
+  // Add event listeners for product unit changes
+  const productUnitSelect = document.getElementById("product-unit")
+  if (productUnitSelect) {
+    productUnitSelect.addEventListener("change", function () {
+      // Get the current product
+      const productNameSelect = document.getElementById("product-name-select")
+      const selectedId = productNameSelect.value
+      if (!selectedId) return
+
+      // Find the selected product
+      const allProducts = [...COMMON_PRODUCTS, ...AREA_TREATMENT_PRODUCTS, ...WATER_TREATMENT_PRODUCTS]
+      const selectedProduct = allProducts.find((p) => p.id === selectedId)
+
+      if (selectedProduct) {
+        // Get current values
+        const oldProductAmount = Number.parseFloat(document.getElementById("product-amount").value)
+        const oldProductUnit = document.getElementById("product-unit").value
+        const newProductUnit = this.value
+        const waterAmount = Number.parseFloat(document.getElementById("water-amount").value)
+
+        // Convert product amount to the new unit
+        let newProductAmount = oldProductAmount
+
+        // Handle unit conversions
+        if (oldProductUnit === "g" && newProductUnit === "kg") {
+          newProductAmount = oldProductAmount / 1000 // g to kg
+        } else if (oldProductUnit === "kg" && newProductUnit === "g") {
+          newProductAmount = oldProductAmount * 1000 // kg to g
+        } else if (oldProductUnit === "ml" && newProductUnit === "l") {
+          newProductAmount = oldProductAmount / 1000 // ml to l
+        } else if (oldProductUnit === "l" && newProductUnit === "ml") {
+          newProductAmount = oldProductAmount * 1000 // l to ml
+        } else if (oldProductUnit === "g" && newProductUnit === "oz") {
+          newProductAmount = oldProductAmount * 0.035274 // g to oz
+        } else if (oldProductUnit === "oz" && newProductUnit === "g") {
+          newProductAmount = oldProductAmount / 0.035274 // oz to g
+        } else if (oldProductUnit === "ml" && newProductUnit === "fl_oz") {
+          newProductAmount = oldProductAmount * 0.033814 // ml to fl oz
+        } else if (oldProductUnit === "fl_oz" && newProductUnit === "ml") {
+          newProductAmount = oldProductAmount / 0.033814 // fl oz to ml
+        }
+
+        // Update the product amount field
+        document.getElementById("product-amount").value = newProductAmount.toFixed(2)
+
+        // Also update the ratio fields to maintain consistency
+        const ratio = newProductAmount / waterAmount
+
+        // Update ratio for water_to_product mode
+        const ratioField = document.getElementById("ratio")
+        if (ratioField) {
+          ratioField.value = ratio.toFixed(2)
+        }
+
+        // Update ratio for ratio_based mode
+        const ratioField2 = document.getElementById("ratio-2")
+        if (ratioField2) {
+          ratioField2.value = ratio.toFixed(2)
+        }
+      }
+    })
+  }
+
+  // Enhance the water-amount-2 change event to update the water_to_product calculation
+  const waterAmount2Input = document.getElementById("water-amount-2")
+  if (waterAmount2Input) {
+    waterAmount2Input.addEventListener("change", function () {
+      // Get the current ratio
+      const ratio = Number.parseFloat(document.getElementById("ratio").value)
+      const waterUnit = document.getElementById("water-unit-2").value
+      const waterAmount = Number.parseFloat(this.value)
+
+      // Calculate product amount based on ratio and water amount
+      // Convert water amount to liters for calculation
+      let waterAmountInLiters = waterAmount
+      if (waterUnit === "gal_uk") {
+        waterAmountInLiters = waterAmount * 4.55 // Convert UK gallons to liters
+      } else if (waterUnit === "ml") {
+        waterAmountInLiters = waterAmount / 1000 // Convert ml to liters
+      }
+
+      // If ratio is specified per gallon, convert it to per liter
+      let ratioPerLiter = ratio
+      if (waterUnit === "gal_uk") {
+        ratioPerLiter = ratio / 4.55 // Convert ratio from per gallon to per liter
+      } else if (waterUnit === "ml") {
+        ratioPerLiter = ratio * 1000 // Convert ratio from per ml to per liter
+      }
+
+      // Update the target amount in ratio_based mode to match
+      document.getElementById("target-amount").value = waterAmount
+      document.getElementById("target-unit").value = waterUnit
+    })
+  }
+
+  // Enhance the target-amount change event to update the ratio_based calculation
+  const targetAmountInput = document.getElementById("target-amount")
+  if (targetAmountInput) {
+    targetAmountInput.addEventListener("change", function () {
+      // Get the current ratio
+      const ratio = Number.parseFloat(document.getElementById("ratio-2").value)
+      const targetUnit = document.getElementById("target-unit").value
+      const targetAmount = Number.parseFloat(this.value)
+
+      // Update the water amount in water_to_product mode to match
+      document.getElementById("water-amount-2").value = targetAmount
+      document.getElementById("water-unit-2").value = targetUnit
+    })
+  }
+
   // Initial setup
   showAppropriateCalculator(applicationMethodSelect.value)
+
+  // Update ratio labels when water units change
+  document.getElementById("water-unit-2").addEventListener("change", function () {
+    const productUnit =
+      document.querySelector('input[name="measurement-type"]:checked').value === "weight"
+        ? "g"
+        : document.querySelector('input[name="measurement-type"]:checked').value === "cap"
+          ? "cap"
+          : "ml"
+    updateRatioLabels(productUnit, this.value)
+  })
+
+  document.getElementById("target-unit").addEventListener("change", function () {
+    const productUnit =
+      document.querySelector('input[name="measurement-type"]:checked').value === "weight"
+        ? "g"
+        : document.querySelector('input[name="measurement-type"]:checked').value === "cap"
+          ? "cap"
+          : "ml"
+    updateRatioLabels(productUnit, this.value, true)
+  })
+
+  // Update ratio labels when measurement type changes
+  document.querySelectorAll('input[name="measurement-type"]').forEach((radio) => {
+    radio.addEventListener("change", function () {
+      const productUnit = this.value === "weight" ? "g" : this.value === "cap" ? "cap" : "ml"
+      updateRatioLabels(productUnit, document.getElementById("water-unit-2").value)
+      updateRatioLabels(productUnit, document.getElementById("target-unit").value, true)
+    })
+  })
 }
 
 // Function to update product type options based on selected application method
@@ -1446,6 +1649,30 @@ function updateCalculatorInputs(product) {
       // Calculate the ratio based on product's default values
       const defaultRatio = product.defaultDosage / product.defaultWaterAmount
 
+      // Set water amount for water_to_product mode
+      document.getElementById("water-amount-2").value = product.defaultWaterAmount
+      const waterUnit2Select = document.getElementById("water-unit-2")
+      if (waterUnit2Select) {
+        for (let i = 0; i < waterUnit2Select.options.length; i++) {
+          if (waterUnit2Select.options[i].value === product.defaultWaterUnit) {
+            waterUnit2Select.selectedIndex = i
+            break
+          }
+        }
+      }
+
+      // Set target amount for ratio_based mode
+      document.getElementById("target-amount").value = product.defaultWaterAmount
+      const targetUnitSelect = document.getElementById("target-unit")
+      if (targetUnitSelect) {
+        for (let i = 0; i < targetUnitSelect.options.length; i++) {
+          if (targetUnitSelect.options[i].value === product.defaultWaterUnit) {
+            targetUnitSelect.selectedIndex = i
+            break
+          }
+        }
+      }
+
       // Set ratio for water_to_product mode
       const ratioField = document.getElementById("ratio")
       if (ratioField) {
@@ -1481,6 +1708,10 @@ function updateCalculatorInputs(product) {
 
         ratioField2.value = convertedRatio.toFixed(2)
       }
+
+      // Update ratio labels to match the selected units
+      updateRatioLabels(product.defaultDosageUnit, document.getElementById("water-unit-2").value)
+      updateRatioLabels(product.defaultDosageUnit, document.getElementById("target-unit").value, true)
     }
   } else if (product.applicationMethod === "direct_application") {
     // Set application rate
@@ -1517,6 +1748,26 @@ function updateCalculatorInputs(product) {
         }
       }
     }
+  }
+}
+
+// Add this new function to update ratio labels based on the selected units
+// Add this function after the updateCalculatorInputs function:
+
+// Function to update ratio labels based on selected units
+function updateRatioLabels(productUnit, waterUnit, isSecondLabel = false) {
+  const labelId = isSecondLabel ? "ratio-label-2" : "ratio-label"
+  const ratioLabel = document.getElementById(labelId)
+
+  if (ratioLabel) {
+    let waterUnitDisplay = waterUnit
+    if (waterUnit === "l") {
+      waterUnitDisplay = "litre"
+    } else if (waterUnit === "gal_uk") {
+      waterUnitDisplay = "gallon (UK)"
+    }
+
+    ratioLabel.textContent = `${productUnit} per ${waterUnitDisplay}`
   }
 }
 
@@ -1987,7 +2238,7 @@ function updateDebugInfo() {
       if (waterUnit === "l") {
         ratioPerLiter = ratio
       } else if (waterUnit === "ml") {
-        ratioPerLiter = ratio * 1000 // Convert from per ml to per liter
+        ratioPerLiter = ratio * 1000 // Convert ratio from per ml to per liter
       } else if (waterUnit === "gal_uk") {
         ratioPerLiter = ratio / 4.55 // Convert from per gallon to per liter
       }
@@ -2011,7 +2262,7 @@ function updateDebugInfo() {
       if (waterUnit === "l") {
         ratioPerLiter = ratio
       } else if (waterUnit === "ml") {
-        ratioPerLiter = ratio * 1000 // Convert from per ml to per liter
+        ratioPerLiter = ratio * 1000 // Convert ratio from per ml to per liter
       } else if (waterUnit === "gal_uk") {
         ratioPerLiter = ratio / 4.55 // Convert from per gallon to per liter
       }
