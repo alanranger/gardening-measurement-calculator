@@ -1191,6 +1191,14 @@ function setupEventListeners() {
     })
   }
 
+  // Calculate button click
+  const calculateBtn = document.getElementById("calculate-btn")
+  if (calculateBtn) {
+    calculateBtn.addEventListener("click", () => {
+      performCalculation()
+    })
+  }
+
   // Debug panel toggle
   const debugTrigger = document.getElementById("debug-trigger")
   const debugContent = document.getElementById("debug-content")
@@ -1204,6 +1212,93 @@ function setupEventListeners() {
       }
     })
   }
+
+  // Copy debug info button
+  const copyDebugBtn = document.getElementById("copy-debug-btn")
+  if (copyDebugBtn) {
+    copyDebugBtn.addEventListener("click", () => {
+      const debugInfo = document.getElementById("debug-info")
+      if (debugInfo) {
+        navigator.clipboard
+          .writeText(debugInfo.textContent)
+          .then(() => {
+            alert("Debug info copied to clipboard!")
+          })
+          .catch((err) => {
+            console.error("Could not copy text: ", err)
+          })
+      }
+    })
+  }
+
+  // Area shape change
+  const areaShapeRadios = document.querySelectorAll('input[name="area-shape"]')
+  areaShapeRadios.forEach((radio) => {
+    radio.addEventListener("change", function () {
+      if (this.value === "rectangle") {
+        document.getElementById("rectangle-inputs").classList.remove("hidden")
+        document.getElementById("circle-inputs").classList.add("hidden")
+      } else if (this.value === "circle") {
+        document.getElementById("rectangle-inputs").classList.add("hidden")
+        document.getElementById("circle-inputs").classList.remove("hidden")
+      }
+    })
+  }
+
+  // Container shape change\
+  const containerShapeRadios = document.querySelectorAll('input[name="container-shape"]')
+  containerShapeRadios.forEach((radio) => {
+    radio.addEventListener("change", function () {
+      if (this.value === "rectangular") {
+        document.getElementById("rectangular-inputs").classList.remove("hidden")
+        document.getElementById("circular-inputs").classList.add("hidden")
+      } else if (this.value === "circular") {
+        document.getElementById("rectangular-inputs").classList.add("hidden")
+        document.getElementById("circular-inputs").classList.remove("hidden")
+      }
+    })
+  }
+
+  // Calculation mode change
+  const calculationModeRadios = document.querySelectorAll('input[name="calculation-mode"]')
+  calculationModeRadios.forEach((radio) => {
+    radio.addEventListener("change", function () {
+      // Hide all panels
+      document.getElementById("product_to_water-panel").classList.add("hidden")
+      document.getElementById("water_to_product-panel").classList.add("hidden")
+      document.getElementById("ratio_based-panel").classList.add("hidden")
+
+      // Show the selected panel
+      document.getElementById(`${this.value}-panel`).classList.remove("hidden")
+    })
+  }
+
+  // Measurement type change
+  const measurementTypeRadios = document.querySelectorAll('input[name="measurement-type"]')
+  measurementTypeRadios.forEach((radio) => {
+    radio.addEventListener("change", function () {
+      if (this.value === "cap") {
+        document.getElementById("cap-size-group").classList.remove("hidden")
+      } else {
+        document.getElementById("cap-size-group").classList.add("hidden")
+      }
+    })
+  }
+
+  // Has scoop change
+  const hasScoopRadios = document.querySelectorAll('input[name="has-scoop"]')
+  hasScoopRadios.forEach((radio) => {
+    radio.addEventListener("change", function () {
+      if (this.value === "yes") {
+        document.getElementById("scoop-size-group").classList.remove("hidden")
+      } else {
+        document.getElementById("scoop-size-group").classList.add("hidden")
+      }
+    })
+  }
+
+  // Initial setup
+  showAppropriateCalculator(applicationMethodSelect.value)
 }
 
 // Function to show the appropriate calculator based on application method
@@ -1334,4 +1429,437 @@ function updateCalculatorInputs(product) {
       }
     }
   }
+}
+
+// Function to perform calculation based on selected application method
+function performCalculation() {
+  console.log("Performing calculation")
+
+  // Get the selected application method
+  const applicationMethod = document.getElementById("application-method").value
+
+  // Perform the appropriate calculation
+  if (applicationMethod === "water_mixing") {
+    calculateWaterMixing()
+  } else if (applicationMethod === "direct_application") {
+    calculateDirectApplication()
+  } else if (applicationMethod === "water_treatment") {
+    calculateWaterTreatment()
+  }
+
+  // Update debug info
+  updateDebugInfo()
+}
+
+// Function to calculate water mixing
+function calculateWaterMixing() {
+  console.log("Calculating water mixing")
+
+  // Get calculation mode
+  const calculationMode = document.querySelector('input[name="calculation-mode"]:checked').value
+
+  // Get measurement type
+  const measurementType = document.querySelector('input[name="measurement-type"]:checked').value
+
+  // Get values based on calculation mode
+  let productAmount, productUnit, waterAmount, waterUnit, ratio
+
+  if (calculationMode === "product_to_water") {
+    productAmount = Number.parseFloat(document.getElementById("product-amount").value)
+    productUnit = document.getElementById("product-unit").value
+    waterAmount = Number.parseFloat(document.getElementById("water-amount").value)
+    waterUnit = document.getElementById("water-unit").value
+
+    // Calculate ratio (product per unit of water)
+    ratio = productAmount / waterAmount
+  } else if (calculationMode === "water_to_product") {
+    waterAmount = Number.parseFloat(document.getElementById("water-amount-2").value)
+    waterUnit = document.getElementById("water-unit-2").value
+    ratio = Number.parseFloat(document.getElementById("ratio").value)
+
+    // Calculate product amount
+    productAmount = ratio * waterAmount
+    productUnit = measurementType === "weight" ? "g" : "ml"
+  } else if (calculationMode === "ratio_based") {
+    ratio = Number.parseFloat(document.getElementById("ratio-2").value)
+    waterAmount = Number.parseFloat(document.getElementById("target-amount").value)
+    waterUnit = document.getElementById("target-unit").value
+
+    // Calculate product amount
+    productAmount = ratio * waterAmount
+    productUnit = measurementType === "weight" ? "g" : "ml"
+  }
+
+  // Convert to standard units for calculations
+  const standardProductAmount = convertToStandardUnit(productAmount, productUnit)
+  const standardWaterAmount = convertToStandardUnit(waterAmount, waterUnit)
+
+  // Calculate results
+  let metricResult, imperialResult, alternativeResult
+
+  if (measurementType === "weight") {
+    // Weight-based calculation
+    metricResult = `${productAmount.toFixed(2)} ${productUnit} per ${waterAmount} ${waterUnit}`
+    imperialResult = `${convertMetricToImperial(productAmount, productUnit).toFixed(2)} ${getImperialUnit(productUnit)} per ${convertMetricToImperial(waterAmount, waterUnit).toFixed(2)} ${getImperialUnit(waterUnit)}`
+    alternativeResult = `${convertToTeaspoons(productAmount, productUnit).toFixed(2)} teaspoons per ${waterAmount} ${waterUnit}`
+  } else if (measurementType === "volume") {
+    // Volume-based calculation
+    metricResult = `${productAmount.toFixed(2)} ${productUnit} per ${waterAmount} ${waterUnit}`
+    imperialResult = `${convertMetricToImperial(productAmount, productUnit).toFixed(2)} ${getImperialUnit(productUnit)} per ${convertMetricToImperial(waterAmount, waterUnit).toFixed(2)} ${getImperialUnit(waterUnit)}`
+    alternativeResult = `${convertToTeaspoons(productAmount, productUnit).toFixed(2)} teaspoons per ${waterAmount} ${waterUnit}`
+  } else if (measurementType === "cap") {
+    // Cap-based calculation
+    const capSize = Number.parseFloat(document.getElementById("cap-size").value)
+    const capAmount = productAmount
+    const mlAmount = capAmount * capSize
+
+    metricResult = `${mlAmount.toFixed(2)} ml per ${waterAmount} ${waterUnit}`
+    imperialResult = `${convertMetricToImperial(mlAmount, "ml").toFixed(2)} fl oz per ${convertMetricToImperial(waterAmount, waterUnit).toFixed(2)} ${getImperialUnit(waterUnit)}`
+    alternativeResult = `${convertToTeaspoons(mlAmount, "ml").toFixed(2)} teaspoons per ${waterAmount} ${waterUnit}`
+
+    // Update cap result
+    document.getElementById("cap-result").textContent = `${capAmount.toFixed(2)} caps (${mlAmount.toFixed(2)} ml)`
+    document.getElementById("cap-result-card").classList.remove("hidden")
+  }
+
+  // Check if product has a scoop
+  const hasScoop = document.querySelector('input[name="has-scoop"]:checked').value === "yes"
+  if (hasScoop) {
+    const scoopSize = Number.parseFloat(document.getElementById("scoop-size").value)
+    const scoopUnit = document.getElementById("scoop-unit").value
+    const scoopAmount = productAmount / scoopSize
+
+    document.getElementById("scoop-result").textContent =
+      `${scoopAmount.toFixed(2)} scoops (${productAmount.toFixed(2)} ${productUnit})`
+    document.getElementById("scoop-result-card").classList.remove("hidden")
+  } else {
+    document.getElementById("scoop-result-card").classList.add("hidden")
+  }
+
+  // Calculate for standard watering can (8-10 litres)
+  const wateringCanSize = 9 // Average 9 litres
+  let wateringCanAmount
+
+  if (waterUnit === "l") {
+    wateringCanAmount = (productAmount / waterAmount) * wateringCanSize
+  } else if (waterUnit === "ml") {
+    wateringCanAmount = (productAmount / waterAmount) * (wateringCanSize * 1000)
+  } else if (waterUnit === "gal_uk") {
+    wateringCanAmount = (productAmount / waterAmount) * (wateringCanSize / 4.55)
+  }
+
+  document.getElementById("watering-can-title").textContent = `For a ${wateringCanSize} litre watering can:`
+  document.getElementById("watering-can-result").textContent = `${wateringCanAmount.toFixed(2)} ${productUnit}`
+  document.getElementById("watering-can-info").textContent =
+    `Based on the ratio of ${ratio.toFixed(2)} ${productUnit} per ${waterUnit}`
+  document.getElementById("watering-can-section").classList.remove("hidden")
+
+  // Update results
+  document.getElementById("metric-result").textContent = metricResult
+  document.getElementById("imperial-result").textContent = imperialResult
+  document.getElementById("alternative-result").textContent = alternativeResult
+}
+
+// Function to calculate direct application
+function calculateDirectApplication() {
+  console.log("Calculating direct application")
+
+  // Get area shape
+  const areaShape = document.querySelector('input[name="area-shape"]:checked').value
+
+  // Calculate area
+  let area, areaUnit
+
+  if (areaShape === "rectangle") {
+    const length = Number.parseFloat(document.getElementById("length").value)
+    const width = Number.parseFloat(document.getElementById("width").value)
+    const unit = document.getElementById("area-unit").value
+
+    area = length * width
+    areaUnit = unit === "m" || unit === "cm" ? "sq_m" : "sq_ft"
+
+    // Convert to square meters if needed
+    if (unit === "cm") {
+      area = area / 10000 // Convert from sq cm to sq m
+    } else if (unit === "ft") {
+      area = area * 0.093 // Convert from sq ft to sq m
+    } else if (unit === "in") {
+      area = area * 0.00064516 // Convert from sq in to sq m
+    }
+
+    // Update calculated area
+    document.getElementById("area-result").textContent =
+      `${area.toFixed(2)} ${areaUnit === "sq_m" ? "square meters" : "square feet"}`
+    document.getElementById("calculated-area").classList.remove("hidden")
+  } else if (areaShape === "circle") {
+    const diameter = Number.parseFloat(document.getElementById("diameter").value)
+    const unit = document.getElementById("circle-unit").value
+
+    // Calculate radius
+    const radius = diameter / 2
+
+    // Calculate area (π * r²)
+    area = Math.PI * Math.pow(radius, 2)
+    areaUnit = unit === "m" || unit === "cm" ? "sq_m" : "sq_ft"
+
+    // Convert to square meters if needed
+    if (unit === "cm") {
+      area = area / 10000 // Convert from sq cm to sq m
+    } else if (unit === "ft") {
+      area = area * 0.093 // Convert from sq ft to sq m
+    } else if (unit === "in") {
+      area = area * 0.00064516 // Convert from sq in to sq m
+    }
+
+    // Update calculated area
+    document.getElementById("area-result").textContent =
+      `${area.toFixed(2)} ${areaUnit === "sq_m" ? "square meters" : "square feet"}`
+    document.getElementById("calculated-area").classList.remove("hidden")
+  }
+
+  // Get application rate
+  const applicationRate = Number.parseFloat(document.getElementById("application-rate").value)
+  const rateUnit = document.getElementById("rate-unit").value
+  const rateAreaUnit = document.getElementById("rate-area-unit").value
+
+  // Calculate total amount needed
+  let totalAmount
+
+  if (rateAreaUnit === "sq_m" || rateAreaUnit === "sq_ft" || rateAreaUnit === "sq_yd") {
+    // Convert area to the same unit as the rate
+    let convertedArea = area
+
+    if (areaUnit === "sq_m" && rateAreaUnit === "sq_ft") {
+      convertedArea = area * 10.764 // Convert from sq m to sq ft
+    } else if (areaUnit === "sq_m" && rateAreaUnit === "sq_yd") {
+      convertedArea = area * 1.196 // Convert from sq m to sq yd
+    } else if (areaUnit === "sq_ft" && rateAreaUnit === "sq_m") {
+      convertedArea = area * 0.093 // Convert from sq ft to sq m
+    } else if (areaUnit === "sq_ft" && rateAreaUnit === "sq_yd") {
+      convertedArea = area * 0.111 // Convert from sq ft to sq yd
+    }
+
+    totalAmount = applicationRate * convertedArea
+  } else if (rateAreaUnit === "plant") {
+    // Assume one plant per square meter (or adjust as needed)
+    const plantsPerSqM = 1
+    const totalPlants = area * plantsPerSqM
+
+    totalAmount = applicationRate * totalPlants
+  }
+
+  // Calculate alternative measurement
+  let alternativeAmount
+
+  if (rateUnit === "g" || rateUnit === "kg") {
+    // Convert to teaspoons (approximate)
+    alternativeAmount = `${convertToTeaspoons(totalAmount, rateUnit).toFixed(2)} teaspoons`
+  } else if (rateUnit === "ml" || rateUnit === "l") {
+    // Convert to tablespoons (approximate)
+    alternativeAmount = `${convertToTablespoons(totalAmount, rateUnit).toFixed(2)} tablespoons`
+  } else {
+    alternativeAmount = "Not applicable"
+  }
+
+  // Calculate metric and imperial rates
+  let metricRate, imperialRate
+
+  if (rateAreaUnit === "sq_m") {
+    metricRate = `${applicationRate.toFixed(2)} ${rateUnit} per square meter`
+    imperialRate = `${convertMetricToImperial(applicationRate, rateUnit).toFixed(2)} ${getImperialUnit(rateUnit)} per square yard`
+  } else if (rateAreaUnit === "sq_ft") {
+    metricRate = `${(applicationRate /   per square yard`
+  } else if (rateAreaUnit === "sq_ft") {
+    metricRate = `${(applicationRate / 0.093).toFixed(2)} ${rateUnit} per square meter`
+    imperialRate = `${applicationRate.toFixed(2)} ${rateUnit} per square foot`
+  } else if (rateAreaUnit === "sq_yd") {
+    metricRate = `${(applicationRate / 1.196).toFixed(2)} ${rateUnit} per square meter`
+    imperialRate = `${applicationRate.toFixed(2)} ${rateUnit} per square yard`
+  } else if (rateAreaUnit === "plant") {
+    metricRate = `${applicationRate.toFixed(2)} ${rateUnit} per plant`
+    imperialRate = `${convertMetricToImperial(applicationRate, rateUnit).toFixed(2)} ${getImperialUnit(rateUnit)} per plant`
+  }
+
+  // Update results
+  document.getElementById("total-amount-result").textContent = `${totalAmount.toFixed(2)} ${rateUnit}`
+  document.getElementById("alternative-amount-result").textContent = alternativeAmount
+  document.getElementById("metric-rate-result").textContent = metricRate
+  document.getElementById("imperial-rate-result").textContent = imperialRate
+}
+
+// Function to calculate water treatment
+function calculateWaterTreatment() {
+  console.log("Calculating water treatment")
+
+  // Get container shape
+  const containerShape = document.querySelector('input[name="container-shape"]:checked').value
+
+  // Calculate volume
+  let volume,
+    volumeUnit = "l"
+  const dimensionUnit = document.getElementById("dimension-unit").value
+
+  if (containerShape === "rectangular") {
+    const length = Number.parseFloat(document.getElementById("container-length").value)
+    const width = Number.parseFloat(document.getElementById("container-width").value)
+    const height = Number.parseFloat(document.getElementById("container-height").value)
+
+    // Calculate volume
+    volume = length * width * height
+
+    // Convert to litres based on dimension unit
+    if (dimensionUnit === "cm") {
+      volume = volume / 1000 // Convert from cubic cm to litres
+    } else if (dimensionUnit === "m") {
+      volume = volume * 1000 // Convert from cubic m to litres
+    } else if (dimensionUnit === "in") {
+      volume = volume * 0.016387 // Convert from cubic inches to litres
+    } else if (dimensionUnit === "ft") {
+      volume = volume * 28.3168 // Convert from cubic feet to litres
+    }
+  } else if (containerShape === "circular") {
+    const diameter = Number.parseFloat(document.getElementById("container-diameter").value)
+    const depth = Number.parseFloat(document.getElementById("container-depth").value)
+
+    // Calculate radius
+    const radius = diameter / 2
+
+    // Calculate volume (π * r² * h)
+    volume = Math.PI * Math.pow(radius, 2) * depth
+
+    // Convert to litres based on dimension unit
+    if (dimensionUnit === "cm") {
+      volume = volume / 1000 // Convert from cubic cm to litres
+    } else if (dimensionUnit === "m") {
+      volume = volume * 1000 // Convert from cubic m to litres
+    } else if (dimensionUnit === "in") {
+      volume = volume * 0.016387 // Convert from cubic inches to litres
+    } else if (dimensionUnit === "ft") {
+      volume = volume * 28.3168 // Convert from cubic feet to litres
+    }
+  }
+
+  // Update calculated volume
+  document.getElementById("volume-result").textContent = `${volume.toFixed(2)} litres`
+  document.getElementById("volume-conversion").textContent = `(${(volume * 0.22).toFixed(2)} UK gallons)`
+  document.getElementById("calculated-volume").classList.remove("hidden")
+
+  // Get water volume (use calculated volume or manual input)
+  let waterVolume
+  if (!isNaN(volume) && volume > 0) {
+    waterVolume = volume
+  } else {
+    waterVolume = Number.parseFloat(document.getElementById("water-volume").value)
+    const waterVolumeUnit = document.getElementById("water-volume-unit").value
+
+    // Convert to litres if needed
+    if (waterVolumeUnit === "ml") {
+      waterVolume = waterVolume / 1000
+    } else if (waterVolumeUnit === "gal_uk") {
+      waterVolume = waterVolume * 4.55
+    }
+  }
+
+  // Get dosage amount
+  const dosageAmount = Number.parseFloat(document.getElementById("dosage-amount").value)
+  const dosageUnit = document.getElementById("dosage-unit").value
+
+  // Calculate total amount needed (based on dosage per 1000 litres)
+  const totalAmount = (dosageAmount * waterVolume) / 1000
+
+  // Calculate metric and imperial dosages
+  const metricDosage = `${dosageAmount.toFixed(2)} ${dosageUnit} per 1000 litres`
+  const imperialDosage = `${convertMetricToImperial(dosageAmount, dosageUnit).toFixed(2)} ${getImperialUnit(dosageUnit)} per 220 gallons`
+
+  // Calculate alternative dosage
+  let alternativeDosage
+
+  if (dosageUnit === "ml" || dosageUnit === "l") {
+    alternativeDosage = `${convertToTeaspoons(dosageAmount, dosageUnit).toFixed(2)} teaspoons per 1000 litres`
+  } else if (dosageUnit === "g" || dosageUnit === "kg") {
+    // Approximate conversion (depends on density)
+    alternativeDosage = `${convertToTeaspoons(dosageAmount, dosageUnit).toFixed(2)} teaspoons per 1000 litres`
+  } else {
+    alternativeDosage = "Not applicable"
+  }
+
+  // Update results
+  document.getElementById("water-total-amount-result").textContent = `${totalAmount.toFixed(2)} ${dosageUnit}`
+  document.getElementById("water-metric-dosage-result").textContent = metricDosage
+  document.getElementById("water-imperial-dosage-result").textContent = imperialDosage
+  document.getElementById("water-alternative-dosage-result").textContent = alternativeDosage
+}
+
+// Function to update debug info
+function updateDebugInfo() {
+  console.log("Updating debug info")
+
+  const debugInfo = document.getElementById("debug-info")
+  if (!debugInfo) return
+
+  // Get all form values
+  const formValues = {
+    applicationMethod: document.getElementById("application-method").value,
+    productType: document.getElementById("product-type").value,
+    productName: document.getElementById("product-name-select").value,
+    calculationMode: document.querySelector('input[name="calculation-mode"]:checked')?.value,
+    measurementType: document.querySelector('input[name="measurement-type"]:checked')?.value,
+    // Add more values as needed
+  }
+
+  // Format debug info
+  const debugText = JSON.stringify(formValues, null, 2)
+
+  // Update debug info
+  debugInfo.textContent = debugText
+}
+
+// Utility functions for conversions
+
+// Convert to standard unit (g, ml)
+function convertToStandardUnit(value, unit) {
+  if (unit === "kg") return value * 1000
+  if (unit === "l") return value * 1000
+  if (unit === "oz") return value * 28.35
+  if (unit === "lb") return value * 453.592
+  if (unit === "tsp") return value * 5
+  if (unit === "tbsp") return value * 15
+  if (unit === "cap") return value * 10 // Assuming standard cap is 10ml
+  return value
+}
+
+// Convert metric to imperial
+function convertMetricToImperial(value, unit) {
+  if (unit === "g") return value * 0.035274 // g to oz
+  if (unit === "kg") return value * 2.20462 // kg to lb
+  if (unit === "ml") return value * 0.033814 // ml to fl oz
+  if (unit === "l") return value * 0.219969 // l to UK gal
+  return value
+}
+
+// Get imperial unit
+function getImperialUnit(unit) {
+  if (unit === "g") return "oz"
+  if (unit === "kg") return "lb"
+  if (unit === "ml") return "fl oz"
+  if (unit === "l") return "gal"
+  return unit
+}
+
+// Convert to teaspoons
+function convertToTeaspoons(value, unit) {
+  if (unit === "ml") return value / 5
+  if (unit === "l") return (value * 1000) / 5
+  if (unit === "g") return value / 5 // Approximate (depends on density)
+  if (unit === "kg") return (value * 1000) / 5 // Approximate (depends on density)
+  return value
+}
+
+// Convert to tablespoons
+function convertToTablespoons(value, unit) {
+  if (unit === "ml") return value / 15
+  if (unit === "l") return (value * 1000) / 15
+  if (unit === "g") return value / 15 // Approximate (depends on density)
+  if (unit === "kg") return (value * 1000) / 15 // Approximate (depends on density)
+  return value
 }
