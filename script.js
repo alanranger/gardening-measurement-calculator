@@ -1283,7 +1283,7 @@ function setupEventListeners() {
 
   // Calculation mode change
   const calculationModeRadios = document.querySelectorAll('input[name="calculation-mode"]')
-  calculationModeRadios.forEach((radio) => {
+  areaShapeRadios.forEach((radio) => {
     radio.addEventListener("change", function () {
       // Hide all panels
       document.getElementById("product_to_water-panel").classList.add("hidden")
@@ -1825,4 +1825,3 @@ function updateDebugInfo() {
     `
   }
 }
-})\
