@@ -1,5 +1,6 @@
 // Product Database
 const COMMON_PRODUCTS = [
+  // Liquid Fertilizers
   {
     id: "miracle-gro-all-purpose",
     name: "Miracle-Gro All Purpose Liquid Plant Food",
@@ -34,31 +35,23 @@ const COMMON_PRODUCTS = [
     id: "tomorite",
     name: "Levington Tomorite Tomato Food",
     type: "liquid_fertilizer",
-    measurementType: "cap",
-    defaultDosage: 2,
-    defaultDosageUnit: "cap",
+    measurementType: "volume",
+    defaultDosage: 20,
+    defaultDosageUnit: "ml",
     defaultWaterAmount: 4.5,
     defaultWaterUnit: "l",
     instructions: "Add 20ml to 4.5 litres (1 gallon) of water. Apply twice a week when plants are in flower/fruit.",
-    capSize: {
-      fullCapML: 10,
-      markings: { half: 5, full: 10 },
-    },
   },
   {
     id: "phostrogen-liquid",
     name: "Phostrogen Liquid Plant Food",
     type: "liquid_fertilizer",
-    measurementType: "cap",
-    defaultDosage: 1,
-    defaultDosageUnit: "cap",
+    measurementType: "volume",
+    defaultDosage: 10,
+    defaultDosageUnit: "ml",
     defaultWaterAmount: 4.5,
     defaultWaterUnit: "l",
     instructions: "Add 10ml to 4.5 litres (1 gallon) of water. Apply weekly during growing season.",
-    capSize: {
-      fullCapML: 10,
-      markings: { half: 5, full: 10 },
-    },
   },
   {
     id: "westland-liquid-seaweed",
@@ -93,6 +86,107 @@ const COMMON_PRODUCTS = [
     defaultWaterUnit: "plant",
     instructions: "Pour 1 litre around the base of each plant every 1-2 weeks. No dilution required.",
   },
+  {
+    id: "maxicrop-seaweed-extract",
+    name: "Maxicrop Seaweed Extract",
+    type: "liquid_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 15,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 4.5,
+    defaultWaterUnit: "l",
+    instructions: "Add 15ml to 4.5 litres (1 gallon) of water. Apply every 2 weeks during growing season.",
+  },
+  {
+    id: "biobizz-bio-grow",
+    name: "BioBizz Bio-Grow Organic Fertilizer",
+    type: "liquid_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 4,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions: "Add 4ml per litre of water. Apply during vegetative growth phase.",
+  },
+  {
+    id: "biobizz-bio-bloom",
+    name: "BioBizz Bio-Bloom Organic Fertilizer",
+    type: "liquid_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 4,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions: "Add 4ml per litre of water. Apply during flowering and fruiting phase.",
+  },
+  {
+    id: "canna-terra-vega",
+    name: "CANNA Terra Vega",
+    type: "liquid_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 5,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions: "Add 5ml per litre of water. Apply during vegetative growth phase.",
+  },
+  {
+    id: "canna-terra-flores",
+    name: "CANNA Terra Flores",
+    type: "liquid_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 5,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions: "Add 5ml per litre of water. Apply during flowering and fruiting phase.",
+  },
+  {
+    id: "plant-magic-old-timer-grow",
+    name: "Plant Magic Old Timer Grow",
+    type: "liquid_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 4,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions: "Add 4ml per litre of water. Apply during vegetative growth phase.",
+  },
+  {
+    id: "plant-magic-old-timer-bloom",
+    name: "Plant Magic Old Timer Bloom",
+    type: "liquid_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 4,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions: "Add 4ml per litre of water. Apply during flowering and fruiting phase.",
+  },
+  {
+    id: "westland-orchid-feed",
+    name: "Westland Orchid Feed",
+    type: "liquid_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 5,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions: "Add 5ml per litre of water. Apply every 2 weeks during growing season.",
+  },
+  {
+    id: "westland-citrus-feed",
+    name: "Westland Citrus Feed",
+    type: "liquid_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 5,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions: "Add 5ml per litre of water. Apply every 2 weeks during growing season.",
+  },
+
+  // Granular Fertilizers
   {
     id: "growmore-granular",
     name: "Growmore Granular Garden Fertilizer",
@@ -155,6 +249,80 @@ const COMMON_PRODUCTS = [
     instructions: "Dissolve 10g in 4.5 litres (1 gallon) of water. Apply every 7-14 days.",
   },
   {
+    id: "chempak-formula-3",
+    name: "Chempak Formula 3 High Potash Feed",
+    type: "granular_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 8,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 4.5,
+    defaultWaterUnit: "l",
+    instructions: "Dissolve 8g in 4.5 litres (1 gallon) of water. Apply every 10-14 days during flowering.",
+  },
+  {
+    id: "chempak-formula-2",
+    name: "Chempak Formula 2 High Nitrogen Feed",
+    type: "granular_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 8,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 4.5,
+    defaultWaterUnit: "l",
+    instructions: "Dissolve 8g in 4.5 litres (1 gallon) of water. Apply every 10-14 days during vegetative growth.",
+  },
+  {
+    id: "miracle-gro-azalea-feed",
+    name: "Miracle-Gro Azalea, Camellia & Rhododendron Feed",
+    type: "granular_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 7,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 4.5,
+    defaultWaterUnit: "l",
+    instructions: "Dissolve 7g in 4.5 litres (1 gallon) of water. Apply every 1-2 weeks during growing season.",
+    hasScoop: true,
+    scoopSize: 7,
+    scoopUnit: "g",
+  },
+  {
+    id: "miracle-gro-rose-feed",
+    name: "Miracle-Gro Rose & Shrub Feed",
+    type: "granular_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 7,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 4.5,
+    defaultWaterUnit: "l",
+    instructions: "Dissolve 7g in 4.5 litres (1 gallon) of water. Apply every 1-2 weeks during growing season.",
+    hasScoop: true,
+    scoopSize: 7,
+    scoopUnit: "g",
+  },
+  {
+    id: "westland-rose-food",
+    name: "Westland Rose Food",
+    type: "granular_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 35,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "plant",
+    instructions: "Apply 35g per rose bush. Work into the soil surface and water in well. Apply in spring and summer.",
+  },
+  {
+    id: "westland-tomato-food",
+    name: "Westland Tomato Feed Granules",
+    type: "granular_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 10,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 4.5,
+    defaultWaterUnit: "l",
+    instructions: "Dissolve 10g in 4.5 litres (1 gallon) of water. Apply twice weekly when plants are in flower/fruit.",
+  },
+
+  // Weed Killers
+  {
     id: "roundup-fast-action",
     name: "Roundup Fast Action Weedkiller",
     type: "weed_killer",
@@ -199,6 +367,61 @@ const COMMON_PRODUCTS = [
     instructions: "Dilute 15ml in 1 litre of water. Apply when weeds are actively growing in dry conditions.",
   },
   {
+    id: "roundup-tough",
+    name: "Roundup Tough Weedkiller",
+    type: "weed_killer",
+    measurementType: "volume",
+    defaultDosage: 30,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions: "Dilute 30ml in 1 litre of water. Apply when weeds are actively growing. For tough weeds.",
+  },
+  {
+    id: "resolva-pro",
+    name: "Resolva Pro Weedkiller Concentrate",
+    type: "weed_killer",
+    measurementType: "volume",
+    defaultDosage: 25,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions: "Dilute 25ml in 1 litre of water. Apply when weeds are actively growing. Kills roots and all.",
+  },
+  {
+    id: "weedol-rootkill-plus",
+    name: "Weedol Rootkill Plus",
+    type: "weed_killer",
+    measurementType: "volume",
+    defaultDosage: 20,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions: "Dilute 20ml in 1 litre of water. Apply when weeds are actively growing. Kills down to the roots.",
+  },
+  {
+    id: "roundup-path",
+    name: "Roundup Path & Drive Weedkiller",
+    type: "weed_killer",
+    measurementType: "volume",
+    defaultDosage: 25,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions: "Dilute 25ml in 1 litre of water. Apply to weeds on paths, drives and patios.",
+  },
+  {
+    id: "vitax-sh-weedkiller",
+    name: "Vitax SBK Brushwood Killer",
+    type: "weed_killer",
+    measurementType: "volume",
+    defaultDosage: 10,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "l",
+    instructions: "Dilute 10ml in 1 litre of water. For control of woody weeds, brambles and brushwood.",
+  },
+  {
     id: "tetra-pond-algae",
     name: "TetraPond AlgoRem",
     type: "pond_treatment",
@@ -213,6 +436,7 @@ const COMMON_PRODUCTS = [
 
 // Area Treatment Products
 const AREA_TREATMENT_PRODUCTS = [
+  // Lawn Fertilizers
   {
     id: "evergreen-complete-4in1",
     name: "Evergreen Complete 4-in-1 Lawn Feed",
@@ -257,6 +481,74 @@ const AREA_TREATMENT_PRODUCTS = [
     defaultWaterUnit: "sq_m",
     instructions: "Dissolve 15g in a watering can (4.5L) and apply to 10 square metres of lawn.",
   },
+  {
+    id: "evergreen-autumn",
+    name: "Evergreen Autumn Lawn Care",
+    type: "lawn_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 35,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions: "Apply 35g per square metre using a spreader. Best applied in autumn to prepare lawn for winter.",
+  },
+  {
+    id: "miracle-gro-patch-magic",
+    name: "Miracle-Gro Patch Magic",
+    type: "lawn_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 30,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 0.1,
+    defaultWaterUnit: "sq_m",
+    instructions: "Apply 30g per 0.1 square metre (10cm x 10cm patch). Water thoroughly after application.",
+  },
+  {
+    id: "westland-aftercut-all-in-one",
+    name: "Westland Aftercut All In One",
+    type: "lawn_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 35,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions: "Apply 35g per square metre using a spreader. Apply after mowing when grass is dry.",
+  },
+  {
+    id: "scotts-lawn-builder",
+    name: "Scotts Lawn Builder Lawn Food",
+    type: "lawn_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 30,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions: "Apply 30g per square metre using a spreader. Water in if no rain falls within 48 hours.",
+  },
+  {
+    id: "evergreen-no-rake-moss-control",
+    name: "Evergreen No Rake Moss Control",
+    type: "lawn_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 35,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions: "Apply 35g per square metre using a spreader. Apply when moss is actively growing.",
+  },
+  {
+    id: "miracle-gro-liquid-lawn-feed",
+    name: "Miracle-Gro Liquid Lawn Feed",
+    type: "lawn_fertilizer",
+    measurementType: "volume",
+    defaultDosage: 15,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions: "Dilute 15ml in a watering can (4.5L) and apply to 1 square metre of lawn.",
+  },
+
+  // Granular Fertilizers
   {
     id: "growmore-granular",
     name: "Growmore Granular Garden Fertilizer",
@@ -325,10 +617,55 @@ const AREA_TREATMENT_PRODUCTS = [
     instructions:
       "Apply 100g per square metre. Mix into soil before planting or apply to surface for established plants.",
   },
+  {
+    id: "westland-fish-blood-bone",
+    name: "Westland Fish, Blood & Bone",
+    type: "granular_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 70,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions: "Apply 70g per square metre. Fork lightly into the soil surface and water in well.",
+  },
+  {
+    id: "miracle-gro-slow-release",
+    name: "Miracle-Gro Slow Release Plant Food",
+    type: "granular_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 30,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions: "Apply 30g per square metre. Lightly work into the soil surface. Feeds for up to 6 months.",
+  },
+  {
+    id: "chicken-manure-pellets",
+    name: "Chicken Manure Pellets",
+    type: "granular_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 100,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions: "Apply 100g per square metre. Fork lightly into the soil surface and water in well.",
+  },
+  {
+    id: "westland-rose-food-granular",
+    name: "Westland Rose Food Granular",
+    type: "granular_fertilizer",
+    measurementType: "weight",
+    defaultDosage: 100,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 1,
+    defaultWaterUnit: "sq_m",
+    instructions: "Apply 100g per square metre around roses. Water in well after application.",
+  },
 ]
 
 // Water Treatment Products
 const WATER_TREATMENT_PRODUCTS = [
+  // Pond Treatments
   {
     id: "tetra-pond-algae",
     name: "TetraPond AlgoRem",
@@ -362,6 +699,53 @@ const WATER_TREATMENT_PRODUCTS = [
     defaultWaterUnit: "l",
     instructions: "Add 100ml per 1000 litres of pond water. Repeat after 7 days if necessary.",
   },
+  {
+    id: "pondxpert-sludge-away",
+    name: "PondXpert Sludge Away",
+    type: "pond_treatment",
+    measurementType: "volume",
+    defaultDosage: 100,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1000,
+    defaultWaterUnit: "l",
+    instructions:
+      "Add 100ml per 1000 litres of pond water. Breaks down sludge and organic waste at the bottom of the pond.",
+  },
+  {
+    id: "oase-aquaactiv-phosless",
+    name: "Oase AquaActiv PhosLess",
+    type: "pond_treatment",
+    measurementType: "weight",
+    defaultDosage: 500,
+    defaultDosageUnit: "g",
+    defaultWaterAmount: 10000,
+    defaultWaterUnit: "l",
+    instructions: "Add 500g per 10,000 litres of pond water. Place in filter system or area with good water flow.",
+  },
+  {
+    id: "nishikoi-pond-treatment",
+    name: "Nishikoi Health Guard Pond Treatment",
+    type: "pond_treatment",
+    measurementType: "volume",
+    defaultDosage: 25,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1000,
+    defaultWaterUnit: "l",
+    instructions: "Add 25ml per 1000 litres of pond water. Helps maintain healthy fish and plants.",
+  },
+  {
+    id: "tetra-pond-crystal-water",
+    name: "TetraPond Crystal Water",
+    type: "pond_treatment",
+    measurementType: "volume",
+    defaultDosage: 50,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1000,
+    defaultWaterUnit: "l",
+    instructions: "Add 50ml per 1000 litres of pond water. Clears cloudy water within 24 hours.",
+  },
+
+  // Algaecides
   {
     id: "api-pond-algaefix",
     name: "API PondCare Algaefix",
@@ -407,6 +791,41 @@ const WATER_TREATMENT_PRODUCTS = [
     instructions: "Add 10g per 1000 litres of pond water. Repeat weekly as necessary.",
   },
   {
+    id: "cloverleaf-blanket-answer",
+    name: "Cloverleaf Blanket Answer",
+    type: "algaecide",
+    measurementType: "volume",
+    defaultDosage: 20,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1000,
+    defaultWaterUnit: "l",
+    instructions: "Add 20ml per 1000 litres of pond water. Specifically targets blanketweed.",
+  },
+  {
+    id: "nishikoi-clear-waters",
+    name: "Nishikoi Clear Waters",
+    type: "algaecide",
+    measurementType: "volume",
+    defaultDosage: 25,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1000,
+    defaultWaterUnit: "l",
+    instructions: "Add 25ml per 1000 litres of pond water. Controls green water and string algae.",
+  },
+  {
+    id: "pondxpert-barley-straw-extract",
+    name: "PondXpert Barley Straw Extract",
+    type: "algaecide",
+    measurementType: "volume",
+    defaultDosage: 50,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 1000,
+    defaultWaterUnit: "l",
+    instructions: "Add 50ml per 1000 litres of pond water. Natural algae control, safe for all pond life.",
+  },
+
+  // Water Clarifiers
+  {
     id: "tetra-aquasafe",
     name: "Tetra AquaSafe Water Conditioner",
     type: "water_clarifier",
@@ -438,6 +857,50 @@ const WATER_TREATMENT_PRODUCTS = [
     defaultWaterAmount: 100,
     defaultWaterUnit: "l",
     instructions: "Add 10ml per 100 litres when setting up a new pond or adding new water.",
+  },
+  {
+    id: "seachem-prime",
+    name: "Seachem Prime Water Conditioner",
+    type: "water_clarifier",
+    measurementType: "volume",
+    defaultDosage: 5,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 200,
+    defaultWaterUnit: "l",
+    instructions: "Add 5ml per 200 litres of new water. Detoxifies ammonia, nitrite, and nitrate.",
+  },
+  {
+    id: "fluval-aquaplus",
+    name: "Fluval Aquaplus Water Conditioner",
+    type: "water_clarifier",
+    measurementType: "volume",
+    defaultDosage: 5,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 10,
+    defaultWaterUnit: "l",
+    instructions: "Add 5ml per 10 litres of new water. Neutralizes chlorine and chloramine.",
+  },
+  {
+    id: "api-accu-clear",
+    name: "API Accu-Clear Water Clarifier",
+    type: "water_clarifier",
+    measurementType: "volume",
+    defaultDosage: 5,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 40,
+    defaultWaterUnit: "l",
+    instructions: "Add 5ml per 40 litres of pond water. Clumps floating particles for easy filter removal.",
+  },
+  {
+    id: "blagdon-pond-guardian",
+    name: "Blagdon Pond Guardian",
+    type: "water_clarifier",
+    measurementType: "volume",
+    defaultDosage: 10,
+    defaultDosageUnit: "ml",
+    defaultWaterAmount: 100,
+    defaultWaterUnit: "l",
+    instructions: "Add 10ml per 100 litres of new water. Makes tap water safe for fish and plants.",
   },
 ]
 
@@ -1064,9 +1527,7 @@ function handleProductSelect(product) {
   // Get DOM elements
   const productNameInput = document.getElementById("product-name")
   const productTypeSelect = document.getElementById("product-type")
-  const productTypeHint = document.getElementById(
-    'product-type-hint")eHint = document.getElementById("product-type-hint',
-  )
+  const productTypeHint = document.getElementById("product-type-hint")
   const measurementTypeRadios = document.querySelectorAll('input[name="measurement-type"]')
   const capSizeGroup = document.getElementById("cap-size-group")
   const capSizeInput = document.getElementById("cap-size")
@@ -1080,6 +1541,7 @@ function handleProductSelect(product) {
   const instructionsText = document.getElementById("instructions-text")
   const productInstructions = document.getElementById("product-instructions")
   const customInstructionsInput = document.getElementById("custom-instructions")
+  const calculationModeRadios = document.querySelectorAll('input[name="calculation-mode"]')
 
   // Set product name
   if (productNameInput) productNameInput.value = product.name
@@ -1108,6 +1570,17 @@ function handleProductSelect(product) {
     }
   }
 
+  // Set calculation mode to product_to_water to match manufacturer's instructions
+  if (calculationModeRadios && calculationModeRadios.length > 0) {
+    const productToWaterRadio = Array.from(calculationModeRadios).find((r) => r.value === "product_to_water")
+    if (productToWaterRadio) {
+      productToWaterRadio.checked = true
+      // Trigger change event to show the correct panel
+      const event = new Event("change")
+      productToWaterRadio.dispatchEvent(event)
+    }
+  }
+
   // Set product amount and unit
   if (productAmountInput) productAmountInput.value = product.defaultDosage
   if (productUnitSelect) productUnitSelect.value = product.defaultDosageUnit
@@ -1116,8 +1589,19 @@ function handleProductSelect(product) {
   if (waterAmountInput) waterAmountInput.value = product.defaultWaterAmount
   if (waterUnitSelect) waterUnitSelect.value = product.defaultWaterUnit
 
-  // Set ratio
-  if (ratioInput) ratioInput.value = product.defaultDosage
+  // Set ratio (for water_to_product mode, but we're defaulting to product_to_water)
+  if (ratioInput) {
+    // Calculate the ratio based on product dosage and water amount
+    const ratio = calculateRatio(
+      product.defaultDosage,
+      product.defaultDosageUnit,
+      product.defaultWaterAmount,
+      product.defaultWaterUnit,
+      product.measurementType,
+      product.capSize?.fullCapML || 10,
+    )
+    ratioInput.value = ratio
+  }
 
   // Set water amount for water to product mode
   if (waterAmount2Input) waterAmount2Input.value = product.defaultWaterAmount
@@ -1129,6 +1613,50 @@ function handleProductSelect(product) {
 
   // Update ratio labels
   updateRatioLabels()
+}
+
+// Add a helper function to calculate ratio
+function calculateRatio(productAmount, productUnit, waterAmount, waterUnit, measurementType, capSize) {
+  // Convert product amount to standard units (g or ml)
+  let standardProductAmount = 0
+
+  if (productUnit === "g" || productUnit === "ml") {
+    standardProductAmount = productAmount
+  } else if (productUnit === "kg") {
+    standardProductAmount = productAmount * 1000 // kg to g
+  } else if (productUnit === "l") {
+    standardProductAmount = productAmount * 1000 // l to ml
+  } else if (productUnit === "oz") {
+    standardProductAmount = productAmount * 28.35 // oz to g
+  } else if (productUnit === "lb") {
+    standardProductAmount = productAmount * 453.59 // lb to g
+  } else if (productUnit === "tsp") {
+    standardProductAmount = productAmount * 5 // tsp to ml (approximate)
+  } else if (productUnit === "tbsp") {
+    standardProductAmount = productAmount * 15 // tbsp to ml (approximate)
+  } else if (productUnit === "cap") {
+    standardProductAmount = productAmount * capSize // cap to ml
+  }
+
+  // Convert water amount to standard units (litres)
+  let standardWaterAmount = 0
+  if (waterUnit === "l") {
+    standardWaterAmount = waterAmount
+  } else if (waterUnit === "ml") {
+    standardWaterAmount = waterAmount / 1000 // ml to l
+  } else if (waterUnit === "gal_uk") {
+    standardWaterAmount = waterAmount * 4.546 // UK gallon to l
+  }
+
+  // Calculate ratio (product per water unit)
+  let ratio = standardProductAmount / standardWaterAmount
+
+  // If measurement type is cap, convert back to caps
+  if (measurementType === "cap") {
+    ratio = ratio / capSize
+  }
+
+  return ratio.toFixed(1)
 }
 
 // Implementation of preset functionality
@@ -2236,143 +2764,4 @@ function initDebugCopyFunctionality() {
       }
     })
   }
-}
-
-// Modify the handleProductSelect function to ensure it sets the calculation mode to match the product instructions
-function handleProductSelect(product) {
-  if (!product) return
-
-  // Get DOM elements
-  const productNameInput = document.getElementById("product-name")
-  const productTypeSelect = document.getElementById("product-type")
-  const productTypeHint = document.getElementById("product-type-hint")
-  const measurementTypeRadios = document.querySelectorAll('input[name="measurement-type"]')
-  const capSizeGroup = document.getElementById("cap-size-group")
-  const capSizeInput = document.getElementById("cap-size")
-  const productAmountInput = document.getElementById("product-amount")
-  const productUnitSelect = document.getElementById("product-unit")
-  const waterAmountInput = document.getElementById("water-amount")
-  const waterUnitSelect = document.getElementById("water-unit")
-  const ratioInput = document.getElementById("ratio")
-  const waterAmount2Input = document.getElementById("water-amount-2")
-  const waterUnit2Select = document.getElementById("water-unit-2")
-  const instructionsText = document.getElementById("instructions-text")
-  const productInstructions = document.getElementById("product-instructions")
-  const customInstructionsInput = document.getElementById("custom-instructions")
-  const calculationModeRadios = document.querySelectorAll('input[name="calculation-mode"]')
-
-  // Set product name
-  if (productNameInput) productNameInput.value = product.name
-
-  // Set custom instructions if available
-  if (customInstructionsInput) customInstructionsInput.value = product.instructions || ""
-
-  // Set product type
-  if (productTypeSelect) {
-    productTypeSelect.value = product.type
-    if (productTypeHint) {
-      productTypeHint.textContent = PRODUCT_TYPE_HINTS[product.type] || ""
-    }
-  }
-
-  // Set measurement type
-  if (measurementTypeRadios && measurementTypeRadios.length > 0) {
-    const radio = Array.from(measurementTypeRadios).find((r) => r.value === product.measurementType)
-    if (radio) radio.checked = true
-
-    if (product.measurementType === "cap" && capSizeGroup && capSizeInput) {
-      capSizeGroup.classList.remove("hidden")
-      capSizeInput.value = product.capSize?.fullCapML || 10
-    } else if (capSizeGroup) {
-      capSizeGroup.classList.add("hidden")
-    }
-  }
-
-  // Set calculation mode to product_to_water to match manufacturer's instructions
-  if (calculationModeRadios && calculationModeRadios.length > 0) {
-    const productToWaterRadio = Array.from(calculationModeRadios).find((r) => r.value === "product_to_water")
-    if (productToWaterRadio) {
-      productToWaterRadio.checked = true
-      // Trigger change event to show the correct panel
-      const event = new Event("change")
-      productToWaterRadio.dispatchEvent(event)
-    }
-  }
-
-  // Set product amount and unit
-  if (productAmountInput) productAmountInput.value = product.defaultDosage
-  if (productUnitSelect) productUnitSelect.value = product.defaultDosageUnit
-
-  // Set water amount and unit
-  if (waterAmountInput) waterAmountInput.value = product.defaultWaterAmount
-  if (waterUnitSelect) waterUnitSelect.value = product.defaultWaterUnit
-
-  // Set ratio (for water_to_product mode, but we're defaulting to product_to_water)
-  if (ratioInput) {
-    // Calculate the ratio based on product dosage and water amount
-    const ratio = calculateRatio(
-      product.defaultDosage,
-      product.defaultDosageUnit,
-      product.defaultWaterAmount,
-      product.defaultWaterUnit,
-      product.measurementType,
-      product.capSize?.fullCapML || 10,
-    )
-    ratioInput.value = ratio
-  }
-
-  // Set water amount for water to product mode
-  if (waterAmount2Input) waterAmount2Input.value = product.defaultWaterAmount
-  if (waterUnit2Select) waterUnit2Select.value = product.defaultWaterUnit
-
-  // Show product instructions
-  if (instructionsText) instructionsText.textContent = product.instructions
-  if (productInstructions) productInstructions.classList.remove("hidden")
-
-  // Update ratio labels
-  updateRatioLabels()
-}
-
-// Add a helper function to calculate ratio
-function calculateRatio(productAmount, productUnit, waterAmount, waterUnit, measurementType, capSize) {
-  // Convert product amount to standard units (g or ml)
-  let standardProductAmount = 0
-
-  if (productUnit === "g" || productUnit === "ml") {
-    standardProductAmount = productAmount
-  } else if (productUnit === "kg") {
-    standardProductAmount = productAmount * 1000 // kg to g
-  } else if (productUnit === "l") {
-    standardProductAmount = productAmount * 1000 // l to ml
-  } else if (productUnit === "oz") {
-    standardProductAmount = productAmount * 28.35 // oz to g
-  } else if (productUnit === "lb") {
-    standardProductAmount = productAmount * 453.59 // lb to g
-  } else if (productUnit === "tsp") {
-    standardProductAmount = productAmount * 5 // tsp to ml (approximate)
-  } else if (productUnit === "tbsp") {
-    standardProductAmount = productAmount * 15 // tbsp to ml (approximate)
-  } else if (productUnit === "cap") {
-    standardProductAmount = productAmount * capSize // cap to ml
-  }
-
-  // Convert water amount to standard units (litres)
-  let standardWaterAmount = 0
-  if (waterUnit === "l") {
-    standardWaterAmount = waterAmount
-  } else if (waterUnit === "ml") {
-    standardWaterAmount = waterAmount / 1000 // ml to l
-  } else if (waterUnit === "gal_uk") {
-    standardWaterAmount = waterAmount * 4.546 // UK gallon to l
-  }
-
-  // Calculate ratio (product per water unit)
-  let ratio = standardProductAmount / standardWaterAmount
-
-  // If measurement type is cap, convert back to caps
-  if (measurementType === "cap") {
-    ratio = ratio / capSize
-  }
-
-  return ratio.toFixed(1)
 }
