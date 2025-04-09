@@ -435,6 +435,29 @@ button {
   color: white;
 }
 
+/* Add styles for test instructions */
+.test-instructions {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 5px;
+  padding: 4px 10px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  text-align: center;
+}
+
+/* Make sure the test trigger button stands out more */
+.test-trigger {
+  background-color: #673ab7;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.test-trigger:hover {
+  background-color: #5e35b1;
+}
+
 .test-progress {
   margin-bottom: 15px;
   background-color: #f1f1f1;

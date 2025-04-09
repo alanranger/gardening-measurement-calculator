@@ -1156,9 +1156,9 @@ function setupEventListeners() {
         document.getElementById("circle-inputs").classList.remove("hidden")
       }
     })
-  })
+  }
 
-  // Container shape change
+  // Container shape change\
   const containerShapeRadios = document.querySelectorAll('input[name="container-shape"]')
   containerShapeRadios.forEach((radio) => {
     radio.addEventListener("change", function () {
@@ -1170,7 +1170,7 @@ function setupEventListeners() {
         document.getElementById("circular-inputs").classList.remove("hidden")
       }
     })
-  })
+  }
 
   // Calculation mode change
   const calculationModeRadios = document.querySelectorAll('input[name="calculation-mode"]')
@@ -1184,7 +1184,7 @@ function setupEventListeners() {
       // Show the selected panel
       document.getElementById(`${this.value}-panel`).classList.remove("hidden")
     })
-  })
+  }
 
   // Measurement type change
   const measurementTypeRadios = document.querySelectorAll('input[name="measurement-type"]')
@@ -1196,7 +1196,7 @@ function setupEventListeners() {
         document.getElementById("cap-size-group").classList.add("hidden")
       }
     })
-  })
+  }
 
   // Has scoop change
   const hasScoopRadios = document.querySelectorAll('input[name="has-scoop"]')
@@ -1208,7 +1208,7 @@ function setupEventListeners() {
         document.getElementById("scoop-size-group").classList.add("hidden")
       }
     })
-  })
+  }
 
   // Add water unit change listeners to update ratios
   const waterUnit2Select = document.getElementById("water-unit-2")
@@ -3100,10 +3100,21 @@ const TestRunner = {
 // Add event listener to run tests button
 document.addEventListener("DOMContentLoaded", () => {
   const testTrigger = document.getElementById("test-trigger")
-  if (testTrigger) {
-    testTrigger.addEventListener("click", () => {
-      const testContent = document.getElementById("test-content")
-      if (testContent && !testContent.classList.contains("hidden")) {
+  const testContent = document.getElementById("test-content")
+
+  if (testTrigger && testContent) {
+    testTrigger.addEventListener("click", function () {
+      // Toggle the visibility of the test panel
+      testContent.classList.toggle("hidden")
+
+      // Update the icon
+      const icon = this.querySelector(".icon")
+      if (icon) {
+        icon.textContent = testContent.classList.contains("hidden") ? "▼" : "▲"
+      }
+
+      // If the panel is now visible, run the tests
+      if (!testContent.classList.contains("hidden")) {
         // Reset progress bar
         const progressBar = document.getElementById("test-progress-bar")
         const progressText = document.getElementById("test-progress-text")
@@ -3112,8 +3123,16 @@ document.addEventListener("DOMContentLoaded", () => {
           progressText.textContent = "0%"
         }
 
-        // Run tests
-        TestRunner.runAllTests()
+        // Clear previous test results
+        const testResults = document.getElementById("test-results")
+        if (testResults) {
+          testResults.textContent = "Preparing to run tests...\n\n"
+        }
+
+        // Add a small delay before running tests to allow UI to update
+        setTimeout(() => {
+          TestRunner.runAllTests()
+        }, 100)
       }
     })
   }
