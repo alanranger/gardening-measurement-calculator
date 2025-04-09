@@ -28,56 +28,8 @@
           </select>
       </div>
 
-      <!-- Step Indicator for Product Calculator -->
-      <div id="product-step-indicator" class="step-indicator">
-          <div class="step active" data-step="1">
-              <div class="step-number">1</div>
-              <div class="step-title">Select Product</div>
-          </div>
-          <div class="step" data-step="2">
-              <div class="step-number">2</div>
-              <div class="step-title">Set Measurements</div>
-          </div>
-          <div class="step" data-step="3">
-              <div class="step-number">3</div>
-              <div class="step-title">View Results</div>
-          </div>
-      </div>
-
-      <!-- Step Indicator for Area Calculator -->
-      <div id="area-step-indicator" class="step-indicator hidden">
-          <div class="step active" data-step="1">
-              <div class="step-number">1</div>
-              <div class="step-title">Measure Area</div>
-          </div>
-          <div class="step" data-step="2">
-              <div class="step-number">2</div>
-              <div class="step-title">Select Product</div>
-          </div>
-          <div class="step" data-step="3">
-              <div class="step-number">3</div>
-              <div class="step-title">View Results</div>
-          </div>
-      </div>
-
-      <!-- Step Indicator for Water Calculator -->
-      <div id="water-step-indicator" class="step-indicator hidden">
-          <div class="step active" data-step="1">
-              <div class="step-number">1</div>
-              <div class="step-title">Measure Volume</div>
-          </div>
-          <div class="step" data-step="2">
-              <div class="step-number">2</div>
-              <div class="step-title">Select Product</div>
-          </div>
-          <div class="step" data-step="3">
-              <div class="step-number">3</div>
-              <div class="step-title">View Results</div>
-          </div>
-      </div>
-
-      <!-- Product Dosage Calculator - Step 1 -->
-      <div id="product-calculator-step1" class="calculator-section">
+      <!-- Product Dosage Calculator -->
+      <div id="product-calculator-inputs" class="calculator-section">
           <h2>Product Calculator</h2>
           <p>Calculate the correct amount of product to use for your plants</p>
 
@@ -175,17 +127,7 @@
                       </div>
                   </div>
               </div>
-
-              <div class="step-buttons">
-                  <button id="product-step1-next" class="next-step-btn">Next: Set Measurements</button>
-              </div>
           </div>
-      </div>
-
-      <!-- Product Dosage Calculator - Step 2 -->
-      <div id="product-calculator-step2" class="calculator-section hidden">
-          <h2>Product Calculator</h2>
-          <p>Set the measurements for your product</p>
 
           <!-- Calculation Mode -->
           <div class="card">
@@ -287,18 +229,15 @@
                   </div>
               </div>
 
-              <div class="step-buttons">
-                  <button id="product-step2-prev" class="prev-step-btn">Back: Select Product</button>
-                  <button id="calculate-btn" class="next-step-btn">Calculate Results</button>
+              <div class="form-actions">
+                  <button id="calculate-btn" class="primary-button">Calculate</button>
+                  <button id="save-preset-btn" class="secondary-button">Save as Preset</button>
               </div>
           </div>
       </div>
 
-      <!-- Product Calculator Results - Step 3 -->
-      <div id="product-calculator-step3" class="calculator-section hidden">
-          <h2>Product Calculator Results</h2>
-          <p>Here are your calculation results</p>
-          
+      <!-- Product Calculator Results -->
+      <div id="product-calculator-results" class="calculator-section">
           <div class="card">
               <h3 class="card-title">Results</h3>
               <div class="results">
@@ -333,20 +272,11 @@
                       <p id="watering-can-info" class="hint">-</p>
                   </div>
               </div>
-
-              <div class="form-actions">
-                  <button id="save-preset-btn" class="secondary-button">Save as Preset</button>
-              </div>
-
-              <div class="step-buttons">
-                  <button id="product-step3-prev" class="prev-step-btn">Back: Set Measurements</button>
-                  <button id="product-step3-restart" class="next-step-btn">Start New Calculation</button>
-              </div>
           </div>
       </div>
 
-      <!-- Area Calculator - Step 1 -->
-      <div id="area-calculator-step1" class="calculator-section hidden">
+      <!-- Area Calculator -->
+      <div id="area-calculator-inputs" class="calculator-section hidden">
           <h2>Area Calculator</h2>
           <p>Calculate how much product to use based on area.</p>
           
@@ -409,20 +339,6 @@
                       <p id="area-result">-</p>
                   </div>
 
-                  <div class="step-buttons">
-                      <button id="area-step1-next" class="next-step-btn">Next: Select Product</button>
-                  </div>
-              </div>
-          </div>
-      </div>
-
-      <!-- Area Calculator - Step 2 -->
-      <div id="area-calculator-step2" class="calculator-section hidden">
-          <h2>Area Calculator</h2>
-          <p>Select product and application rate</p>
-          
-          <div class="card">
-              <div class="form-section">
                   <div class="form-group">
                       <label for="product-type">Product Type:</label>
                       <select id="product-type" class="full-width">
@@ -460,19 +376,16 @@
                       </div>
                   </div>
 
-                  <div class="step-buttons">
-                      <button id="area-step2-prev" class="prev-step-btn">Back: Measure Area</button>
-                      <button id="calculate-area-btn" class="next-step-btn">Calculate Results</button>
+                  <div class="form-actions">
+                      <button id="calculate-area-btn" class="primary-button">Calculate</button>
+                      <button id="save-area-preset-btn" class="secondary-button">Save as Preset</button>
                   </div>
               </div>
           </div>
       </div>
 
-      <!-- Area Calculator Results - Step 3 -->
-      <div id="area-calculator-step3" class="calculator-section hidden">
-          <h2>Area Calculator Results</h2>
-          <p>Here are your calculation results</p>
-          
+      <!-- Area Calculator Results -->
+      <div id="area-calculator-results" class="calculator-section hidden">
           <div class="card">
               <h3 class="card-title">Results</h3>
               <div class="results">
@@ -496,20 +409,11 @@
                       <p id="imperial-rate-result">-</p>
                   </div>
               </div>
-
-              <div class="form-actions">
-                  <button id="save-area-preset-btn" class="secondary-button">Save as Preset</button>
-              </div>
-
-              <div class="step-buttons">
-                  <button id="area-step3-prev" class="prev-step-btn">Back: Select Product</button>
-                  <button id="area-step3-restart" class="next-step-btn">Start New Calculation</button>
-              </div>
           </div>
       </div>
 
-      <!-- Water Calculator - Step 1 -->
-      <div id="water-calculator-step1" class="calculator-section hidden">
+      <!-- Water Calculator -->
+      <div id="water-calculator-inputs" class="calculator-section hidden">
           <h2>Water Calculator</h2>
           <p>Calculate how much product to use based on water volume.</p>
           
@@ -591,20 +495,6 @@
                       </div>
                   </div>
 
-                  <div class="step-buttons">
-                      <button id="water-step1-next" class="next-step-btn">Next: Select Product</button>
-                  </div>
-              </div>
-          </div>
-      </div>
-
-      <!-- Water Calculator - Step 2 -->
-      <div id="water-calculator-step2" class="calculator-section hidden">
-          <h2>Water Calculator</h2>
-          <p>Select product and dosage rate</p>
-          
-          <div class="card">
-              <div class="form-section">
                   <div class="form-group">
                       <label for="product-type">Product Type:</label>
                       <select id="product-type" class="full-width">
@@ -635,19 +525,16 @@
                       </div>
                   </div>
 
-                  <div class="step-buttons">
-                      <button id="water-step2-prev" class="prev-step-btn">Back: Measure Volume</button>
-                      <button id="calculate-water-btn" class="next-step-btn">Calculate Results</button>
+                  <div class="form-actions">
+                      <button id="calculate-water-btn" class="primary-button">Calculate</button>
+                      <button id="save-water-preset-btn" class="secondary-button">Save as Preset</button>
                   </div>
               </div>
           </div>
       </div>
 
-      <!-- Water Calculator Results - Step 3 -->
-      <div id="water-calculator-step3" class="calculator-section hidden">
-          <h2>Water Calculator Results</h2>
-          <p>Here are your calculation results</p>
-          
+      <!-- Water Calculator Results -->
+      <div id="water-calculator-results" class="calculator-section hidden">
           <div class="card">
               <h3 class="card-title">Results</h3>
               <div class="results">
@@ -670,15 +557,6 @@
                       <h4>Alternative Dosage</h4>
                       <p id="water-alternative-dosage-result">-</p>
                   </div>
-              </div>
-
-              <div class="form-actions">
-                  <button id="save-water-preset-btn" class="secondary-button">Save as Preset</button>
-              </div>
-
-              <div class="step-buttons">
-                  <button id="water-step3-prev" class="prev-step-btn">Back: Select Product</button>
-                  <button id="water-step3-restart" class="next-step-btn">Start New Calculation</button>
               </div>
           </div>
       </div>
