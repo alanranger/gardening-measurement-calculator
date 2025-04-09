@@ -1268,7 +1268,7 @@ function setupEventListeners() {
     })
   }
 
-  // Container shape change\\
+  // Container shape change\
   const containerShapeRadios = document.querySelectorAll('input[name="container-shape"]')
   containerShapeRadios.forEach((radio) => {
     radio.addEventListener("change", function () {
@@ -1795,8 +1795,6 @@ function calculateDirectApplication() {
   if (rateAreaUnit === "sq_m") {
     metricRate = `${applicationRate.toFixed(2)} ${rateUnit} per square meter`
     imperialRate = `${convertMetricToImperial(applicationRate, rateUnit).toFixed(2)} ${getImperialUnit(rateUnit)} per square yard`
-  } else if (rateAreaUnit === "sq_ft") {
-    metricRate = `${(applicationRate /   per square yard`
   } else if (rateAreaUnit === "sq_ft") {
     metricRate = `${(applicationRate / 0.093).toFixed(2)} ${rateUnit} per square meter`
     imperialRate = `${applicationRate.toFixed(2)} ${rateUnit} per square foot`
