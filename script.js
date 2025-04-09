@@ -713,6 +713,10 @@ const WATER_TREATMENT_PRODUCTS = [
   },
   {
     id: "blagdon-clear-pond",
+    name: "Blagdon  Repeat after 2-3 weeks if necessary.",
+  },
+  {
+    id: "blagdon-clear-pond",
     name: "Blagdon Clear Pond Treatment",
     type: "pond_treatment",
     applicationMethod: "water_treatment",
@@ -815,55 +819,6 @@ const PRODUCT_TYPE_HINTS = {
   weed_killer: "Typical usage: 10ml per litre of water",
   pond_treatment: "Typical usage: 50ml per 1000 litres of water",
   custom: "Enter your own measurements for a custom product",
-}
-
-// Function to get formatted unit display
-function getFormattedUnitDisplay(unit) {
-  switch (unit) {
-    case "l":
-      return "litre"
-    case "ml":
-      return "millilitre"
-    case "g":
-      return "gram"
-    case "kg":
-      return "kilogram"
-    case "oz":
-      return "ounce"
-    case "lb":
-      return "pound"
-    case "gal_uk":
-      return "gallon (UK)"
-    case "sq_m":
-      return "square metre"
-    case "sq_ft":
-      return "square foot"
-    case "sq_yd":
-      return "square yard"
-    case "plant":
-      return "plant"
-    case "cap":
-      return "cap"
-    case "tsp":
-      return "teaspoon"
-    case "tbsp":
-      return "tablespoon"
-    default:
-      return unit
-  }
-}
-
-// Function to determine appropriate decimal precision based on value
-function getDecimalPrecision(value) {
-  if (value < 0.1) {
-    return 4 // Very small values need more precision
-  } else if (value < 1) {
-    return 3 // Small values need more precision
-  } else if (value < 10) {
-    return 2 // Medium values
-  } else {
-    return 1 // Large values
-  }
 }
 
 // Initialize the application
@@ -1922,34 +1877,24 @@ function calculateWaterMixing() {
 
   if (measurementType === "weight") {
     // Weight-based calculation
-    const precision = getDecimalPrecision(productAmount)
-    const waterUnitDisplay = getFormattedUnitDisplay(waterUnit)
-
-    metricResult = `${productAmount.toFixed(precision)} ${getFormattedUnitDisplay(productUnit)} for ${waterAmount.toFixed(1)} ${waterUnitDisplay}`
-    imperialResult = `${convertMetricToImperial(productAmount, productUnit).toFixed(precision)} ${getImperialUnit(productUnit)} for ${convertMetricToImperial(waterAmount, waterUnit).toFixed(2)} ${getImperialUnit(waterUnit)}`
-    alternativeResult = `${convertToTeaspoons(productAmount, productUnit).toFixed(precision)} teaspoons for ${waterAmount.toFixed(1)} ${waterUnitDisplay}`
+    metricResult = `${productAmount.toFixed(2)} ${productUnit} for ${waterAmount} ${waterUnit}`
+    imperialResult = `${convertMetricToImperial(productAmount, productUnit).toFixed(2)} ${getImperialUnit(productUnit)} for ${convertMetricToImperial(waterAmount, waterUnit).toFixed(2)} ${getImperialUnit(waterUnit)}`
+    alternativeResult = `${convertToTeaspoons(productAmount, productUnit).toFixed(2)} teaspoons for ${waterAmount} ${waterUnit}`
   } else if (measurementType === "volume") {
     // Volume-based calculation
-    const precision = getDecimalPrecision(productAmount)
-    const waterUnitDisplay = getFormattedUnitDisplay(waterUnit)
-
-    metricResult = `${productAmount.toFixed(precision)} ${getFormattedUnitDisplay(productUnit)} for ${waterAmount.toFixed(1)} ${waterUnitDisplay}`
-    imperialResult = `${convertMetricToImperial(productAmount, productUnit).toFixed(precision)} ${getImperialUnit(productUnit)} for ${convertMetricToImperial(waterAmount, waterUnit).toFixed(2)} ${getImperialUnit(waterUnit)}`
-    alternativeResult = `${convertToTeaspoons(productAmount, productUnit).toFixed(precision)} teaspoons for ${waterAmount.toFixed(1)} ${waterUnitDisplay}`
+    metricResult = `${productAmount.toFixed(2)} ${productUnit} for ${waterAmount} ${waterUnit}`
+    imperialResult = `${convertMetricToImperial(productAmount, productUnit).toFixed(2)} ${getImperialUnit(productUnit)} for ${convertMetricToImperial(waterAmount, waterUnit).toFixed(2)} ${getImperialUnit(waterUnit)}`
+    alternativeResult = `${convertToTeaspoons(productAmount, productUnit).toFixed(2)} teaspoons for ${waterAmount} ${waterUnit}`
   } else if (measurementType === "cap") {
     // Cap-based calculation
     const mlAmount = productAmount * capSize
-    const precision = getDecimalPrecision(productAmount)
-    const mlPrecision = getDecimalPrecision(mlAmount)
-    const waterUnitDisplay = getFormattedUnitDisplay(waterUnit)
 
-    metricResult = `${productAmount.toFixed(precision)} caps (${mlAmount.toFixed(mlPrecision)} ml) for ${waterAmount.toFixed(1)} ${waterUnitDisplay}`
-    imperialResult = `${productAmount.toFixed(precision)} caps (${convertMetricToImperial(mlAmount, "ml").toFixed(mlPrecision)} fl oz) for ${convertMetricToImperial(waterAmount, waterUnit).toFixed(2)} ${getImperialUnit(waterUnit)}`
-    alternativeResult = `${convertToTeaspoons(mlAmount, "ml").toFixed(precision)} teaspoons for ${waterAmount.toFixed(1)} ${waterUnitDisplay}`
+    metricResult = `${productAmount.toFixed(2)} caps (${mlAmount.toFixed(2)} ml) for ${waterAmount} ${waterUnit}`
+    imperialResult = `${productAmount.toFixed(2)} caps (${convertMetricToImperial(mlAmount, "ml").toFixed(2)} fl oz) for ${convertMetricToImperial(waterAmount, waterUnit).toFixed(2)} ${getImperialUnit(waterUnit)}`
+    alternativeResult = `${convertToTeaspoons(mlAmount, "ml").toFixed(2)} teaspoons for ${waterAmount} ${waterUnit}`
 
     // Update cap result
-    document.getElementById("cap-result").textContent =
-      `${productAmount.toFixed(precision)} caps (${mlAmount.toFixed(mlPrecision)} ml)`
+    document.getElementById("cap-result").textContent = `${productAmount.toFixed(2)} caps (${mlAmount.toFixed(2)} ml)`
     document.getElementById("cap-result-card").classList.remove("hidden")
   }
 
@@ -1986,20 +1931,16 @@ function calculateWaterMixing() {
 
   // Format the watering can result based on measurement type
   let wateringCanResult
-  const wateringCanPrecision = getDecimalPrecision(wateringCanAmount)
-
   if (measurementType === "cap") {
-    const mlAmount = wateringCanAmount * capSize
-    const mlPrecision = getDecimalPrecision(mlAmount)
-    wateringCanResult = `${wateringCanAmount.toFixed(wateringCanPrecision)} caps (${mlAmount.toFixed(mlPrecision)} ml)`
+    wateringCanResult = `${wateringCanAmount.toFixed(2)} caps (${(wateringCanAmount * capSize).toFixed(2)} ml)`
   } else {
-    wateringCanResult = `${wateringCanAmount.toFixed(wateringCanPrecision)} ${getFormattedUnitDisplay(productUnit)}`
+    wateringCanResult = `${wateringCanAmount.toFixed(2)} ${productUnit}`
   }
 
   document.getElementById("watering-can-title").textContent = `For a ${wateringCanSize} litre watering can:`
   document.getElementById("watering-can-result").textContent = wateringCanResult
   document.getElementById("watering-can-info").textContent =
-    `Based on the ratio of ${ratioPerLiter.toFixed(3)} ${getFormattedUnitDisplay(productUnit)} per litre`
+    `Based on the ratio of ${ratioPerLiter.toFixed(2)} ${productUnit} per litre`
   document.getElementById("watering-can-section").classList.remove("hidden")
 
   // Add a warning if the ratio significantly differs from the product's recommended ratio
@@ -2064,13 +2005,11 @@ function calculateWaterMixing() {
   // Add a result card that matches exactly what the user requested
   const userRequestedResult = document.createElement("div")
   userRequestedResult.className = "result-card"
-  const precision = getDecimalPrecision(productAmount)
-
   userRequestedResult.innerHTML = `
-  <h3>Your Requested Amount</h3>
-  <p>${productAmount.toFixed(precision)} ${getFormattedUnitDisplay(productUnit)} for ${waterAmount.toFixed(2)} ${getFormattedUnitDisplay(waterUnit)}</p>
-  <p class="hint">Based on ${ratio.toFixed(3)} ${getFormattedUnitDisplay(productUnit)} per ${getFormattedUnitDisplay(waterUnit)}</p>
-`
+    <h3>Your Requested Amount</h3>
+    <p>${productAmount.toFixed(2)} ${productUnit} for ${waterAmount} ${waterUnit}</p>
+    <p class="hint">Based on ${ratio} ${productUnit} per ${waterUnit}</p>
+  `
 
   // Find the results container and add the new card
   const resultsContainer = document.querySelector("#water-mixing-results .results")
@@ -2121,19 +2060,16 @@ function calculateDirectApplication() {
   }
 
   // Calculate results
-  const precision = getDecimalPrecision(productAmount)
-  const metricResult = `${productAmount.toFixed(precision)} ${getFormattedUnitDisplay(rateUnit)} for ${area.toFixed(2)} square metres`
-  const imperialResult = `${convertMetricToImperial(productAmount, rateUnit).toFixed(precision)} ${getImperialUnit(rateUnit)} for ${convertMetricToImperial(area, "sq_m").toFixed(2)} square feet`
-  const alternativeResult = `${convertToTeaspoons(productAmount, rateUnit).toFixed(precision)} teaspoons for ${area.toFixed(2)} square metres`
+  const metricResult = `${productAmount.toFixed(2)} ${rateUnit} for ${area.toFixed(2)} sq metres`
+  const imperialResult = `${convertMetricToImperial(productAmount, rateUnit).toFixed(2)} ${getImperialUnit(rateUnit)} for ${convertMetricToImperial(area, "sq_m").toFixed(2)} sq ft`
+  const alternativeResult = `${convertToTeaspoons(productAmount, rateUnit).toFixed(2)} teaspoons for ${area.toFixed(2)} sq metres`
 
   // Update results
-  document.getElementById("total-amount-result").textContent =
-    `${productAmount.toFixed(precision)} ${getFormattedUnitDisplay(rateUnit)}`
+  document.getElementById("total-amount-result").textContent = `${productAmount.toFixed(2)} ${rateUnit}`
   document.getElementById("alternative-amount-result").textContent = alternativeResult
-  document.getElementById("metric-rate-result").textContent =
-    `${applicationRate.toFixed(precision)} ${getFormattedUnitDisplay(rateUnit)} per square metre`
+  document.getElementById("metric-rate-result").textContent = `${applicationRate.toFixed(2)} ${rateUnit} per sq metre`
   document.getElementById("imperial-rate-result").textContent =
-    `${convertMetricToImperial(applicationRate, rateUnit).toFixed(precision)} ${getImperialUnit(rateUnit)} per square foot`
+    `${convertMetricToImperial(applicationRate, rateUnit).toFixed(2)} ${getImperialUnit(rateUnit)} per sq foot`
 }
 
 // Function to calculate water treatment
@@ -2202,20 +2138,18 @@ function calculateWaterTreatment() {
 
   // Calculate product amount (dosage is per 1000 liters)
   const productAmount = (dosageAmount * finalVolume) / 1000
-  const precision = getDecimalPrecision(productAmount)
 
   // Calculate results
-  const metricResult = `${productAmount.toFixed(precision)} ${getFormattedUnitDisplay(dosageUnit)} for ${finalVolume.toFixed(1)} litres`
-  const imperialResult = `${convertMetricToImperial(productAmount, dosageUnit).toFixed(precision)} ${getImperialUnit(dosageUnit)} for ${(finalVolume * 0.22).toFixed(2)} gallons (UK)`
-  const alternativeResult = `${convertToTeaspoons(productAmount, dosageUnit).toFixed(precision)} teaspoons for ${finalVolume.toFixed(1)} litres`
+  const metricResult = `${productAmount.toFixed(2)} ${dosageUnit} for ${finalVolume.toFixed(2)} litres`
+  const imperialResult = `${convertMetricToImperial(productAmount, dosageUnit).toFixed(2)} ${getImperialUnit(dosageUnit)} for ${(finalVolume * 0.22).toFixed(2)} gallons (UK)`
+  const alternativeResult = `${convertToTeaspoons(productAmount, dosageUnit).toFixed(2)} teaspoons for ${finalVolume.toFixed(2)} litres`
 
   // Update results
-  document.getElementById("water-total-amount-result").textContent =
-    `${productAmount.toFixed(precision)} ${getFormattedUnitDisplay(dosageUnit)}`
+  document.getElementById("water-total-amount-result").textContent = `${productAmount.toFixed(2)} ${dosageUnit}`
   document.getElementById("water-metric-dosage-result").textContent =
-    `${dosageAmount.toFixed(2)} ${getFormattedUnitDisplay(dosageUnit)} per 1000 litres`
+    `${dosageAmount.toFixed(2)} ${dosageUnit} per 1000 litres`
   document.getElementById("water-imperial-dosage-result").textContent =
-    `${(dosageAmount * 4.55).toFixed(2)} ${getFormattedUnitDisplay(dosageUnit)} per 1000 gallons (UK)`
+    `${(dosageAmount * 4.55).toFixed(2)} ${dosageUnit} per 1000 gallons (UK)`
   document.getElementById("water-alternative-dosage-result").textContent = alternativeResult
 }
 
@@ -2239,18 +2173,20 @@ function convertMetricToImperial(value, unit) {
 
 // Function to get imperial unit
 function getImperialUnit(unit) {
-  if (unit === "g") {
-    return "ounce"
+  const oz = "oz"
+  const g = "g"
+  if (unit === g) {
+    return oz
   } else if (unit === "kg") {
-    return "pound"
+    return "lb"
   } else if (unit === "ml") {
-    return "fluid ounce"
+    return "fl oz"
   } else if (unit === "l") {
-    return "gallon (UK)"
+    return "gallons (UK)"
   } else if (unit === "sq_m") {
-    return "square foot"
+    return "sq ft"
   }
-  return getFormattedUnitDisplay(unit)
+  return unit
 }
 
 // Function to convert to teaspoons
