@@ -1283,7 +1283,7 @@ function setupEventListeners() {
 
   // Calculation mode change
   const calculationModeRadios = document.querySelectorAll('input[name="calculation-mode"]')
-  calculationModeRadios.forEach((radio) => {
+  areaShapeRadios.forEach((radio) => {
     radio.addEventListener("change", function () {
       // Hide all panels
       document.getElementById("product_to_water-panel").classList.add("hidden")
@@ -1606,7 +1606,7 @@ function calculateWaterMixing() {
 
     // Calculate product amount
     productAmount = ratio * waterAmount
-    productUnit = measurementType === "weight" ? "g" : "ml"
+    productUnit = measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"
   } else if (calculationMode === "ratio_based") {
     ratio = Number.parseFloat(document.getElementById("ratio-2").value)
     waterAmount = Number.parseFloat(document.getElementById("target-amount").value)
@@ -1614,7 +1614,7 @@ function calculateWaterMixing() {
 
     // Calculate product amount
     productAmount = ratio * waterAmount
-    productUnit = measurementType === "weight" ? "g" : "ml"
+    productUnit = measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"
   }
 
   // Convert to standard units for calculations
@@ -1922,14 +1922,115 @@ function updateDebugInfo() {
   const debugInfo = document.getElementById("debug-info")
   if (!debugInfo) return
 
-  // Get all form values
+  // Get application method
+  const applicationMethod = document.getElementById("application-method").value
+
+  // Get all form values based on application method
   const formValues = {
-    applicationMethod: document.getElementById("application-method").value,
+    applicationMethod: applicationMethod,
     productType: document.getElementById("product-type").value,
     productName: document.getElementById("product-name-select").value,
     calculationMode: document.querySelector('input[name="calculation-mode"]:checked')?.value,
     measurementType: document.querySelector('input[name="measurement-type"]:checked')?.value,
-    // Add more values as needed
+  }
+
+  // Add specific values based on application method
+  if (applicationMethod === "water_mixing") {
+    // Add water mixing specific values
+    const calculationMode = document.querySelector('input[name="calculation-mode"]:checked').value
+
+    if (calculationMode === "product_to_water") {
+      formValues.productAmount = document.getElementById("product-amount").value
+      formValues.productUnit = document.getElementById("product-unit").value
+      formValues.waterAmount = document.getElementById("water-amount").value
+      formValues.waterUnit = document.getElementById("water-unit").value
+    } else if (calculationMode === "water_to_product") {
+      formValues.waterAmount = document.getElementById("water-amount-2").value
+      formValues.waterUnit = document.getElementById("water-unit-2").value
+      formValues.ratio = document.getElementById("ratio").value
+    } else if (calculationMode === "ratio_based") {
+      formValues.ratio = document.getElementById("ratio-2").value
+      formValues.targetAmount = document.getElementById("target-amount").value
+      formValues.targetUnit = document.getElementById("target-unit").value
+    }
+
+    // Add cap and scoop info if applicable
+    const measurementType = document.querySelector('input[name="measurement-type"]:checked').value
+    if (measurementType === "cap") {
+      formValues.capSize = document.getElementById("cap-size").value
+    }
+
+    const hasScoop = document.querySelector('input[name="has-scoop"]:checked').value
+    if (hasScoop === "yes") {
+      formValues.scoopSize = document.getElementById("scoop-size").value
+      formValues.scoopUnit = document.getElementById("scoop-unit").value
+    }
+  } else if (applicationMethod === "direct_application") {
+    // Add direct application specific values
+    const areaShape = document.querySelector('input[name="area-shape"]:checked').value
+    formValues.areaShape = areaShape
+
+    if (areaShape === "rectangle") {
+      formValues.length = document.getElementById("length").value
+      formValues.width = document.getElementById("width").value
+      formValues.areaUnit = document.getElementById("area-unit").value
+    } else if (areaShape === "circle") {
+      formValues.diameter = document.getElementById("diameter").value
+      formValues.circleUnit = document.getElementById("circle-unit").value
+    }
+
+    formValues.applicationRate = document.getElementById("application-rate").value
+    formValues.rateUnit = document.getElementById("rate-unit").value
+    formValues.rateAreaUnit = document.getElementById("rate-area-unit").value
+  } else if (applicationMethod === "water_treatment") {
+    // Add water treatment specific values
+    const containerShape = document.querySelector('input[name="container-shape"]:checked').value
+    formValues.containerShape = containerShape
+    formValues.dimensionUnit = document.getElementById("dimension-unit").value
+
+    if (containerShape === "rectangular") {
+      formValues.containerLength = document.getElementById("container-length").value
+      formValues.containerWidth = document.getElementById("container-width").value
+      formValues.containerHeight = document.getElementById("container-height").value
+    } else if (containerShape === "circular") {
+      formValues.containerDiameter = document.getElementById("container-diameter").value
+      formValues.containerDepth = document.getElementById("container-depth").value
+    }
+
+    formValues.waterVolume = document.getElementById("water-volume").value
+    formValues.waterVolumeUnit = document.getElementById("water-volume-unit").value
+    formValues.dosageAmount = document.getElementById("dosage-amount").value
+    formValues.dosageUnit = document.getElementById("dosage-unit").value
+  }
+
+  // Add calculation results if available
+  if (applicationMethod === "water_mixing") {
+    formValues.metricResult = document.getElementById("metric-result").textContent
+    formValues.imperialResult = document.getElementById("imperial-result").textContent
+    formValues.alternativeResult = document.getElementById("alternative-result").textContent
+
+    if (!document.getElementById("cap-result-card").classList.contains("hidden")) {
+      formValues.capResult = document.getElementById("cap-result").textContent
+    }
+
+    if (!document.getElementById("scoop-result-card").classList.contains("hidden")) {
+      formValues.scoopResult = document.getElementById("scoop-result").textContent
+    }
+
+    formValues.wateringCanResult = document.getElementById("watering-can-result").textContent
+  } else if (applicationMethod === "direct_application") {
+    formValues.areaResult = document.getElementById("area-result").textContent
+    formValues.totalAmountResult = document.getElementById("total-amount-result").textContent
+    formValues.alternativeAmountResult = document.getElementById("alternative-amount-result").textContent
+    formValues.metricRateResult = document.getElementById("metric-rate-result").textContent
+    formValues.imperialRateResult = document.getElementById("imperial-rate-result").textContent
+  } else if (applicationMethod === "water_treatment") {
+    formValues.volumeResult = document.getElementById("volume-result").textContent
+    formValues.volumeConversion = document.getElementById("volume-conversion").textContent
+    formValues.waterTotalAmountResult = document.getElementById("water-total-amount-result").textContent
+    formValues.waterMetricDosageResult = document.getElementById("water-metric-dosage-result").textContent
+    formValues.waterImperialDosageResult = document.getElementById("water-imperial-dosage-result").textContent
+    formValues.waterAlternativeDosageResult = document.getElementById("water-alternative-dosage-result").textContent
   }
 
   // Format debug info
