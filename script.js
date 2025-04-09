@@ -1360,7 +1360,7 @@ function updateProductTypeOptions(selectedMethod) {
       .join(" ")
 
     option.textContent = displayName
-    productTypeSelect.appendChild(customOption)
+    productTypeSelect.appendChild(option)
   })
 
   // Add custom option
@@ -1825,3 +1825,4 @@ function updateDebugInfo() {
     `
   }
 }
+})\
