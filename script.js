@@ -727,7 +727,7 @@ const WATER_TREATMENT_PRODUCTS = [
   {
     id: "api-pond-algaefix",
     name: "API PondCare Algaefix",
-    type: "algaecide",
+    type: "pond_treatment",
     measurementType: "volume",
     defaultDosage: 5,
     defaultDosageUnit: "ml",
@@ -738,7 +738,7 @@ const WATER_TREATMENT_PRODUCTS = [
   {
     id: "tetrapond-algofin",
     name: "TetraPond AlgoFin",
-    type: "algaecide",
+    type: "pond_treatment",
     measurementType: "volume",
     defaultDosage: 10,
     defaultDosageUnit: "ml",
@@ -749,7 +749,7 @@ const WATER_TREATMENT_PRODUCTS = [
   {
     id: "blagdon-green-away",
     name: "Blagdon Green Away",
-    type: "algaecide",
+    type: "pond_treatment",
     measurementType: "volume",
     defaultDosage: 25,
     defaultDosageUnit: "ml",
@@ -760,7 +760,7 @@ const WATER_TREATMENT_PRODUCTS = [
   {
     id: "evolution-aqua-stop-blanketweed",
     name: "Evolution Aqua Stop Blanketweed",
-    type: "algaecide",
+    type: "pond_treatment",
     measurementType: "weight",
     defaultDosage: 10,
     defaultDosageUnit: "g",
@@ -771,7 +771,7 @@ const WATER_TREATMENT_PRODUCTS = [
   {
     id: "cloverleaf-blanket-answer",
     name: "Cloverleaf Blanket Answer",
-    type: "algaecide",
+    type: "pond_treatment",
     measurementType: "volume",
     defaultDosage: 20,
     defaultDosageUnit: "ml",
@@ -782,7 +782,7 @@ const WATER_TREATMENT_PRODUCTS = [
   {
     id: "nishikoi-clear-waters",
     name: "Nishikoi Clear Waters",
-    type: "algaecide",
+    type: "pond_treatment",
     measurementType: "volume",
     defaultDosage: 25,
     defaultDosageUnit: "ml",
@@ -793,7 +793,7 @@ const WATER_TREATMENT_PRODUCTS = [
   {
     id: "pondxpert-barley-straw-extract",
     name: "PondXpert Barley Straw Extract",
-    type: "algaecide",
+    type: "pond_treatment",
     measurementType: "volume",
     defaultDosage: 50,
     defaultDosageUnit: "ml",
@@ -806,7 +806,7 @@ const WATER_TREATMENT_PRODUCTS = [
   {
     id: "tetra-aquasafe",
     name: "Tetra AquaSafe Water Conditioner",
-    type: "water_clarifier",
+    type: "pond_treatment",
     measurementType: "volume",
     defaultDosage: 5,
     defaultDosageUnit: "ml",
@@ -817,7 +817,7 @@ const WATER_TREATMENT_PRODUCTS = [
   {
     id: "api-stress-coat",
     name: "API Stress Coat Water Conditioner",
-    type: "water_clarifier",
+    type: "pond_treatment",
     measurementType: "volume",
     defaultDosage: 5,
     defaultDosageUnit: "ml",
@@ -828,7 +828,7 @@ const WATER_TREATMENT_PRODUCTS = [
   {
     id: "interpet-fresh-start",
     name: "Interpet Fresh Start",
-    type: "water_clarifier",
+    type: "pond_treatment",
     measurementType: "volume",
     defaultDosage: 10,
     defaultDosageUnit: "ml",
@@ -839,7 +839,7 @@ const WATER_TREATMENT_PRODUCTS = [
   {
     id: "seachem-prime",
     name: "Seachem Prime Water Conditioner",
-    type: "water_clarifier",
+    type: "pond_treatment",
     measurementType: "volume",
     defaultDosage: 5,
     defaultDosageUnit: "ml",
@@ -850,7 +850,7 @@ const WATER_TREATMENT_PRODUCTS = [
   {
     id: "fluval-aquaplus",
     name: "Fluval Aquaplus Water Conditioner",
-    type: "water_clarifier",
+    type: "pond_treatment",
     measurementType: "volume",
     defaultDosage: 5,
     defaultDosageUnit: "ml",
@@ -861,7 +861,7 @@ const WATER_TREATMENT_PRODUCTS = [
   {
     id: "api-accu-clear",
     name: "API Accu-Clear Water Clarifier",
-    type: "water_clarifier",
+    type: "pond_treatment",
     measurementType: "volume",
     defaultDosage: 5,
     defaultDosageUnit: "ml",
@@ -872,7 +872,7 @@ const WATER_TREATMENT_PRODUCTS = [
   {
     id: "blagdon-pond-guardian",
     name: "Blagdon Pond Guardian",
-    type: "water_clarifier",
+    type: "pond_treatment",
     measurementType: "volume",
     defaultDosage: 10,
     defaultDosageUnit: "ml",
@@ -889,79 +889,198 @@ const PRODUCT_TYPE_HINTS = {
   lawn_fertilizer: "Typical usage: 35g per square metre",
   weed_killer: "Typical usage: 10ml per litre of water",
   pond_treatment: "Typical usage: 50ml per 1000 litres of water",
-  algaecide: "Typical usage: 5ml per 100 litres of water",
-  water_clarifier: "Typical usage: 5ml per 10 litres of water",
   custom: "Enter your own measurements for a custom product",
-}
-
-// Direct function to populate product dropdown
-function populateProductDropdown() {
-  console.log("Directly populating product dropdown")
-
-  const productTypeSelect = document.getElementById("product-type")
-  const productNameSelect = document.getElementById("product-name-select")
-
-  if (!productTypeSelect || !productNameSelect) {
-    console.error("Required elements not found")
-    return
-  }
-
-  // Get selected product type
-  const selectedType = productTypeSelect.value
-  console.log("Selected product type:", selectedType)
-
-  // Clear existing options except the first one
-  while (productNameSelect.options.length > 1) {
-    productNameSelect.remove(1)
-  }
-
-  // Filter products by type
-  const filteredProducts = COMMON_PRODUCTS.filter((product) => product.type === selectedType)
-  console.log("Filtered products:", filteredProducts.length)
-
-  // Add filtered products to dropdown
-  filteredProducts.forEach((product) => {
-    const option = document.createElement("option")
-    option.value = product.id
-    option.textContent = product.name
-    productNameSelect.appendChild(option)
-  })
-
-  console.log("Product dropdown populated with", filteredProducts.length, "products")
 }
 
 // Initialize the application
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM fully loaded and parsed")
 
-  // Add direct event listener to product type select
-  const productTypeSelect = document.getElementById("product-type")
-  if (productTypeSelect) {
-    productTypeSelect.addEventListener("change", function () {
-      console.log("Product type changed to:", this.value)
-      populateProductDropdown()
-    })
+  // Initialize product dropdown
+  initializeProductDropdown()
 
-    // Populate dropdown on initial load
-    console.log("Initial population of product dropdown")
-    populateProductDropdown()
-  } else {
-    console.error("Product type select element not found")
+  // Initialize accordion functionality
+  initializeAccordion()
+
+  // Add other initialization code here
+  setupEventListeners()
+})
+
+// Function to initialize product dropdown
+function initializeProductDropdown() {
+  console.log("Initializing product dropdown")
+
+  const productTypeSelect = document.getElementById("product-type")
+  const productNameSelect = document.getElementById("product-name-select")
+  const productTypeHint = document.getElementById("product-type-hint")
+
+  if (!productTypeSelect || !productNameSelect) {
+    console.error("Required product selection elements not found")
+    return
   }
 
-  // Add direct event listener to calculator type select
+  // Update product type hint
+  if (productTypeHint) {
+    productTypeHint.textContent = PRODUCT_TYPE_HINTS[productTypeSelect.value] || ""
+  }
+
+  // Function to populate product dropdown based on selected type
+  function populateProductDropdown() {
+    const selectedType = productTypeSelect.value
+    console.log("Populating products for type:", selectedType)
+
+    // Update hint text
+    if (productTypeHint) {
+      productTypeHint.textContent = PRODUCT_TYPE_HINTS[selectedType] || ""
+    }
+
+    // Clear existing options except the first one
+    while (productNameSelect.options.length > 1) {
+      productNameSelect.remove(1)
+    }
+
+    // Get products for the selected type
+    let products = []
+
+    // Select products based on calculator type and product type
+    const calculatorType = document.getElementById("calculator-type").value
+
+    if (calculatorType === "product") {
+      // For product calculator, use COMMON_PRODUCTS
+      products = COMMON_PRODUCTS.filter((product) => product.type === selectedType)
+    } else if (calculatorType === "area") {
+      // For area calculator, use AREA_TREATMENT_PRODUCTS
+      products = AREA_TREATMENT_PRODUCTS.filter((product) => product.type === selectedType)
+    } else if (calculatorType === "water") {
+      // For water calculator, use WATER_TREATMENT_PRODUCTS
+      products = WATER_TREATMENT_PRODUCTS.filter((product) => product.type === selectedType)
+    }
+
+    console.log(`Found ${products.length} products for type ${selectedType} in calculator ${calculatorType}`)
+
+    // Add products to dropdown
+    products.forEach((product) => {
+      const option = document.createElement("option")
+      option.value = product.id
+      option.textContent = product.name
+      productNameSelect.appendChild(option)
+    })
+
+    // If custom type is selected, hide the dropdown
+    if (selectedType === "custom") {
+      document.getElementById("common-product-section").classList.add("hidden")
+      document.getElementById("custom-product-section").classList.remove("hidden")
+      document.getElementById("use-custom-product").checked = true
+    } else {
+      // Show the dropdown for non-custom types
+      document.getElementById("common-product-section").classList.remove("hidden")
+      document.getElementById("custom-product-section").classList.add("hidden")
+      document.getElementById("use-custom-product").checked = false
+    }
+  }
+
+  // Add event listener to product type select
+  productTypeSelect.addEventListener("change", populateProductDropdown)
+
+  // Add event listener to calculator type select
   const calculatorTypeSelect = document.getElementById("calculator-type")
   if (calculatorTypeSelect) {
-    calculatorTypeSelect.addEventListener("change", function () {
-      console.log("Calculator type changed to:", this.value)
+    calculatorTypeSelect.addEventListener("change", populateProductDropdown)
+  }
 
-      // Trigger product type change to update dropdown
-      if (productTypeSelect) {
-        const event = new Event("change")
-        productTypeSelect.dispatchEvent(event)
+  // Initial population
+  populateProductDropdown()
+}
+
+// Function to initialize accordion functionality
+function initializeAccordion() {
+  console.log("Initializing accordion functionality")
+
+  const accordionItems = document.querySelectorAll(".accordion-item")
+
+  accordionItems.forEach((item) => {
+    const trigger = item.querySelector(".accordion-trigger")
+    const content = item.querySelector(".accordion-content")
+
+    if (trigger && content) {
+      trigger.addEventListener("click", () => {
+        // Toggle active class
+        item.classList.toggle("active")
+
+        // Update icon
+        const icon = trigger.querySelector(".icon")
+        if (icon) {
+          icon.textContent = item.classList.contains("active") ? "▲" : "▼"
+        }
+      })
+    }
+  })
+}
+
+// Function to set up other event listeners
+function setupEventListeners() {
+  console.log("Setting up event listeners")
+
+  // Custom product toggle
+  const useCustomProduct = document.getElementById("use-custom-product")
+  if (useCustomProduct) {
+    useCustomProduct.addEventListener("change", function () {
+      if (this.checked) {
+        document.getElementById("common-product-section").classList.add("hidden")
+        document.getElementById("custom-product-section").classList.remove("hidden")
+      } else {
+        document.getElementById("common-product-section").classList.remove("hidden")
+        document.getElementById("custom-product-section").classList.add("hidden")
       }
     })
-  } else {
-    console.error("Calculator type select element not found")
   }
-})
+
+  // Product selection change
+  const productNameSelect = document.getElementById("product-name-select")
+  if (productNameSelect) {
+    productNameSelect.addEventListener("change", function () {
+      const selectedId = this.value
+      if (!selectedId) return
+
+      // Find the selected product
+      const calculatorType = document.getElementById("calculator-type").value
+      let selectedProduct = null
+
+      if (calculatorType === "product") {
+        selectedProduct = COMMON_PRODUCTS.find((p) => p.id === selectedId)
+      } else if (calculatorType === "area") {
+        selectedProduct = AREA_TREATMENT_PRODUCTS.find((p) => p.id === selectedId)
+      } else if (calculatorType === "water") {
+        selectedProduct = WATER_TREATMENT_PRODUCTS.find((p) => p.id === selectedId)
+      }
+
+      if (selectedProduct) {
+        // Display product instructions
+        const instructionsPanel = document.getElementById("product-instructions")
+        const instructionsText = document.getElementById("instructions-text")
+
+        if (instructionsPanel && instructionsText) {
+          instructionsText.textContent = selectedProduct.instructions
+          instructionsPanel.classList.remove("hidden")
+        }
+
+        // Set default values based on product
+        // (This would be expanded in a full implementation)
+      }
+    })
+  }
+
+  // Debug panel toggle
+  const debugTrigger = document.getElementById("debug-trigger")
+  const debugContent = document.getElementById("debug-content")
+
+  if (debugTrigger && debugContent) {
+    debugTrigger.addEventListener("click", function () {
+      debugContent.classList.toggle("hidden")
+      const icon = this.querySelector(".icon")
+      if (icon) {
+        icon.textContent = debugContent.classList.contains("hidden") ? "▼" : "▲"
+      }
+    })
+  }
+}
