@@ -621,3 +621,72 @@ h1 {
 .section-intro {
   margin-bottom: 20px;
 }
+
+/* Enhanced mobile responsiveness */
+@media (max-width: 480px) {
+  /* Make inputs and selects larger for touch targets */
+  input[type="text"],
+  input[type="number"],
+  select {
+    padding: 12px;
+    font-size: 16px; /* Prevents iOS zoom on focus */
+    height: 44px;
+  }
+
+  /* Improve spacing in input groups */
+  .input-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .input-group input,
+  .input-group select {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .input-group span {
+    margin: 4px 0;
+    align-self: flex-start;
+  }
+
+  /* Make buttons easier to tap */
+  button {
+    min-height: 48px;
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  /* Adjust step sections */
+  .step-section {
+    padding: 12px;
+  }
+
+  /* Make result cards full width */
+  .result-card {
+    width: 100%;
+  }
+
+  /* Adjust calculation mode panels */
+  .calculation-mode-panel {
+    padding: 12px;
+  }
+
+  /* Improve form spacing */
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  /* Make headers more compact */
+  header {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+}
