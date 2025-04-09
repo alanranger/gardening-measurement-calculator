@@ -277,27 +277,38 @@ function initCalculatorTypeSelector() {
       const selectedType = this.value
       console.log("Calculator type changed to:", selectedType)
 
-      // Hide all calculator inputs and results
-      document.getElementById("product-calculator-inputs").classList.add("hidden")
-      document.getElementById("area-calculator-inputs").classList.add("hidden")
-      document.getElementById("water-calculator-inputs").classList.add("hidden")
-      document.getElementById("product-calculator-results").classList.add("hidden")
-      document.getElementById("area-calculator-results").classList.add("hidden")
-      document.getElementById("water-calculator-results").classList.add("hidden")
-      document.getElementById("conversion-section").classList.add("hidden")
+      // Safely hide all calculator inputs and results
+      const hideElement = (id) => {
+        const element = document.getElementById(id)
+        if (element) element.classList.add("hidden")
+      }
 
-      // Show the selected calculator inputs and results
+      const showElement = (id) => {
+        const element = document.getElementById(id)
+        if (element) element.classList.remove("hidden")
+      }
+
+      // Hide all calculator sections
+      hideElement("product-calculator-inputs")
+      hideElement("area-calculator-inputs")
+      hideElement("water-calculator-inputs")
+      hideElement("product-calculator-results")
+      hideElement("area-calculator-results")
+      hideElement("water-calculator-results")
+      hideElement("conversion-guide")
+
+      // Show the selected calculator sections
       if (selectedType === "product") {
-        document.getElementById("product-calculator-inputs").classList.remove("hidden")
-        document.getElementById("product-calculator-results").classList.remove("hidden")
+        showElement("product-calculator-inputs")
+        showElement("product-calculator-results")
       } else if (selectedType === "area") {
-        document.getElementById("area-calculator-inputs").classList.remove("hidden")
-        document.getElementById("area-calculator-results").classList.remove("hidden")
+        showElement("area-calculator-inputs")
+        showElement("area-calculator-results")
       } else if (selectedType === "water") {
-        document.getElementById("water-calculator-inputs").classList.remove("hidden")
-        document.getElementById("water-calculator-results").classList.remove("hidden")
+        showElement("water-calculator-inputs")
+        showElement("water-calculator-results")
       } else if (selectedType === "conversion") {
-        document.getElementById("conversion-section").classList.remove("hidden")
+        showElement("conversion-guide")
       }
 
       // Update product type options based on calculator type
@@ -566,7 +577,7 @@ function updateProductNameDropdown(selectedType) {
   }
 
   // Get the current calculator type
-  const calculatorType = document.getElementById("calculator-type").value
+  const calculatorType = document.getElementById("calculator-type")?.value || "product"
 
   // Choose the appropriate product list based on calculator type
   let productList = COMMON_PRODUCTS
@@ -617,12 +628,15 @@ function initAreaCalculator() {
           console.log("Area shape changed to:", shape)
 
           // Toggle appropriate inputs
+          const rectangleInputs = document.getElementById("rectangle-inputs")
+          const circleInputs = document.getElementById("circle-inputs")
+
           if (shape === "rectangle") {
-            document.getElementById("rectangle-inputs")?.classList.remove("hidden")
-            document.getElementById("circle-inputs")?.classList.add("hidden")
+            if (rectangleInputs) rectangleInputs.classList.remove("hidden")
+            if (circleInputs) circleInputs.classList.add("hidden")
           } else if (shape === "circle") {
-            document.getElementById("rectangle-inputs")?.classList.add("hidden")
-            document.getElementById("circle-inputs")?.classList.remove("hidden")
+            if (rectangleInputs) rectangleInputs.classList.add("hidden")
+            if (circleInputs) circleInputs.classList.remove("hidden")
           }
         })
       }
@@ -660,12 +674,15 @@ function initWaterCalculator() {
           console.log("Container shape changed to:", shape)
 
           // Toggle appropriate inputs
+          const rectangularInputs = document.getElementById("rectangular-inputs")
+          const circularInputs = document.getElementById("circular-inputs")
+
           if (shape === "rectangular") {
-            document.getElementById("rectangular-inputs")?.classList.remove("hidden")
-            document.getElementById("circular-inputs")?.classList.add("hidden")
+            if (rectangularInputs) rectangularInputs.classList.remove("hidden")
+            if (circularInputs) circularInputs.classList.add("hidden")
           } else if (shape === "circular") {
-            document.getElementById("rectangular-inputs")?.classList.add("hidden")
-            document.getElementById("circular-inputs")?.classList.remove("hidden")
+            if (rectangularInputs) rectangularInputs.classList.add("hidden")
+            if (circularInputs) circularInputs.classList.remove("hidden")
           }
         })
       }
@@ -1462,7 +1479,7 @@ function calculateArea() {
   // Get input values
   let length = Number.parseFloat(document.getElementById("length")?.value || "0")
   let width = Number.parseFloat(document.getElementById("width")?.value || "0")
-  const areaUnit = document.getElementById("area-unit")?.value || "sq_m"
+  const areaUnit = document.getElementById("area-unit")?.value || "m"
   let diameter = Number.parseFloat(document.getElementById("diameter")?.value || "0")
   const circleUnit = document.getElementById("circle-unit")?.value || "m"
   const areaShape = document.querySelector('input[name="area-shape"]:checked')?.value || "rectangle"
