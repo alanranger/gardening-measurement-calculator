@@ -769,13 +769,27 @@
         </div>
 
         <div class="debug-section">
-            <div id="debug-trigger" class="debug-trigger">
-                <span>Debug Info</span>
-                <span class="icon">▼</span>
+            <div class="debug-buttons">
+                <div id="debug-trigger" class="debug-trigger">
+                    <span>Debug Info</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div id="test-trigger" class="debug-trigger test-trigger">
+                    <span>Run Tests</span>
+                    <span class="icon">▼</span>
+                </div>
             </div>
             <div id="debug-content" class="debug-content hidden">
                 <pre id="debug-info"></pre>
                 <button id="copy-debug-btn" class="secondary-button">Copy Debug Info</button>
+            </div>
+            <div id="test-content" class="debug-content hidden">
+                <div class="test-progress">
+                    <div id="test-progress-bar" class="test-progress-bar"></div>
+                    <div id="test-progress-text">0%</div>
+                </div>
+                <pre id="test-results"></pre>
+                <button id="copy-test-btn" class="secondary-button">Copy Test Results</button>
             </div>
         </div>
         
