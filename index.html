@@ -17,21 +17,21 @@
             </div>
         </header>
 
-        <!-- Step 1: Calculator Type Selection -->
+        <!-- Step 1: Application Method Selection -->
         <div class="step-section calculator-selection">
             <div class="step-header">
                 <div class="step-number">1</div>
-                <div class="step-title">Select Calculator Type</div>
+                <div class="step-title">Select Application Method</div>
             </div>
             
             <div class="form-group">
-                <label for="calculator-type">What do you want to calculate?</label>
-                <select id="calculator-type" class="prominent-select">
-                    <option value="product">Product Dosage (for mixing with water)</option>
-                    <option value="area">Area Treatment (for lawns and garden beds)</option>
-                    <option value="water">Water Treatment (for ponds and containers)</option>
+                <label for="application-method">How will you apply the product?</label>
+                <select id="application-method" class="prominent-select">
+                    <option value="water_mixing">Mix with water (for spraying/watering)</option>
+                    <option value="direct_application">Apply directly to soil/lawn</option>
+                    <option value="water_treatment">Add to water (ponds/aquariums)</option>
                 </select>
-                <div class="hint">Choose the type of calculation you need to perform</div>
+                <div class="hint">Choose how you plan to use the product</div>
             </div>
         </div>
 
@@ -45,12 +45,7 @@
             <div class="form-group">
                 <label for="product-type">Product Type:</label>
                 <select id="product-type" class="prominent-select">
-                    <option value="liquid_fertilizer">Liquid Fertilizer</option>
-                    <option value="granular_fertilizer">Granular Fertilizer</option>
-                    <option value="lawn_fertilizer">Lawn Fertilizer</option>
-                    <option value="weed_killer">Weed Killer</option>
-                    <option value="pond_treatment">Pond Treatment</option>
-                    <option value="custom">Custom Product</option>
+                    <!-- Options will be populated by JavaScript based on application method -->
                 </select>
                 <div id="product-type-hint" class="hint"></div>
             </div>
@@ -102,8 +97,8 @@
                 <div class="step-title">Measurement Requirements</div>
             </div>
 
-            <!-- Product Dosage Calculator Inputs -->
-            <div id="product-calculator-inputs">
+            <!-- Water Mixing Calculator Inputs -->
+            <div id="water-mixing-calculator">
                 <div class="form-group">
                     <label>Measurement Type:</label>
                     <div class="radio-group">
@@ -248,8 +243,8 @@
                 </div>
             </div>
 
-            <!-- Area Calculator Inputs -->
-            <div id="area-calculator-inputs" class="hidden">
+            <!-- Direct Application Calculator Inputs -->
+            <div id="direct-application-calculator" class="hidden">
                 <div class="form-group">
                     <label>Area Shape:</label>
                     <div class="radio-group">
@@ -327,8 +322,8 @@
                 </div>
             </div>
 
-            <!-- Water Calculator Inputs -->
-            <div id="water-calculator-inputs" class="hidden">
+            <!-- Water Treatment Calculator Inputs -->
+            <div id="water-treatment-calculator" class="hidden">
                 <div class="form-group">
                     <label>Container Shape:</label>
                     <div class="radio-group">
@@ -429,8 +424,8 @@
                 <div class="step-title">Results</div>
             </div>
 
-            <!-- Product Calculator Results -->
-            <div id="product-calculator-results">
+            <!-- Water Mixing Calculator Results -->
+            <div id="water-mixing-results">
                 <div class="results">
                     <div class="result-card">
                         <h3>Metric Result</h3>
@@ -465,8 +460,8 @@
                 </div>
             </div>
 
-            <!-- Area Calculator Results -->
-            <div id="area-calculator-results" class="hidden">
+            <!-- Direct Application Calculator Results -->
+            <div id="direct-application-results" class="hidden">
                 <div class="results">
                     <div class="result-card">
                         <h3>Total Amount Needed</h3>
@@ -490,8 +485,8 @@
                 </div>
             </div>
 
-            <!-- Water Calculator Results -->
-            <div id="water-calculator-results" class="hidden">
+            <!-- Water Treatment Calculator Results -->
+            <div id="water-treatment-results" class="hidden">
                 <div class="results">
                     <div class="result-card">
                         <h3>Total Amount Needed</h3>
@@ -573,56 +568,56 @@
                     </div>
                     <div class="accordion-content">
                         <table class="conversion-table">
-    <thead>
-        <tr>
-            <th>From</th>
-            <th>To</th>
-            <th>Multiply By</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Milliliters (ml)</td>
-            <td>Fluid Ounces (fl oz)</td>
-            <td>0.034</td>
-        </tr>
-        <tr>
-            <td>Fluid Ounces (fl oz)</td>
-            <td>Milliliters (ml)</td>
-            <td>29.57</td>
-        </tr>
-        <tr>
-            <td>Litres (l)</td>
-            <td>Gallons (UK)</td>
-            <td>0.22</td>
-        </tr>
-        <tr>
-            <td>Gallons (UK)</td>
-            <td>Litres (l)</td>
-            <td>4.55</td>
-        </tr>
-        <tr>
-            <td>Teaspoons (tsp)</td>
-            <td>Milliliters (ml)</td>
-            <td>5</td>
-        </tr>
-        <tr>
-            <td>Tablespoons (tbsp)</td>
-            <td>Milliliters (ml)</td>
-            <td>15</td>
-        </tr>
-        <tr>
-            <td>Cups</td>
-            <td>Milliliters (ml)</td>
-            <td>237</td>
-        </tr>
-        <tr>
-            <td>Milliliters (ml)</td>
-            <td>Cups</td>
-            <td>0.004</td>
-        </tr>
-    </tbody>
-</table>
+                            <thead>
+                                <tr>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Multiply By</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Milliliters (ml)</td>
+                                    <td>Fluid Ounces (fl oz)</td>
+                                    <td>0.034</td>
+                                </tr>
+                                <tr>
+                                    <td>Fluid Ounces (fl oz)</td>
+                                    <td>Milliliters (ml)</td>
+                                    <td>29.57</td>
+                                </tr>
+                                <tr>
+                                    <td>Litres (l)</td>
+                                    <td>Gallons (UK)</td>
+                                    <td>0.22</td>
+                                </tr>
+                                <tr>
+                                    <td>Gallons (UK)</td>
+                                    <td>Litres (l)</td>
+                                    <td>4.55</td>
+                                </tr>
+                                <tr>
+                                    <td>Teaspoons (tsp)</td>
+                                    <td>Milliliters (ml)</td>
+                                    <td>5</td>
+                                </tr>
+                                <tr>
+                                    <td>Tablespoons (tbsp)</td>
+                                    <td>Milliliters (ml)</td>
+                                    <td>15</td>
+                                </tr>
+                                <tr>
+                                    <td>Cups</td>
+                                    <td>Milliliters (ml)</td>
+                                    <td>237</td>
+                                </tr>
+                                <tr>
+                                    <td>Milliliters (ml)</td>
+                                    <td>Cups</td>
+                                    <td>0.004</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
@@ -723,51 +718,51 @@
                     </div>
                     <div class="accordion-content">
                         <table class="conversion-table">
-    <thead>
-        <tr>
-            <th>Measurement</th>
-            <th>Equivalent</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>1 standard watering can</td>
-            <td>~8-10 litres (2 gallons)</td>
-        </tr>
-        <tr>
-            <td>1 standard plant pot (6 inch)</td>
-            <td>~1.5 litres of compost</td>
-        </tr>
-        <tr>
-            <td>1 standard seed tray</td>
-            <td>~2-3 litres of compost</td>
-        </tr>
-        <tr>
-            <td>1 wheelbarrow load</td>
-            <td>~60-80 litres</td>
-        </tr>
-        <tr>
-            <td>1 bag of compost</td>
-            <td>~40-50 litres</td>
-        </tr>
-        <tr>
-            <td>1 cap (standard)</td>
-            <td>~10ml</td>
-        </tr>
-        <tr>
-            <td>1 teaspoon</td>
-            <td>~5ml</td>
-        </tr>
-        <tr>
-            <td>1 tablespoon</td>
-            <td>~15ml</td>
-        </tr>
-        <tr>
-            <td>20 drops</td>
-            <td>~1ml</td>
-        </tr>
-    </tbody>
-</table>
+                            <thead>
+                                <tr>
+                                    <th>Measurement</th>
+                                    <th>Equivalent</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1 standard watering can</td>
+                                    <td>~8-10 litres (2 gallons)</td>
+                                </tr>
+                                <tr>
+                                    <td>1 standard plant pot (6 inch)</td>
+                                    <td>~1.5 litres of compost</td>
+                                </tr>
+                                <tr>
+                                    <td>1 standard seed tray</td>
+                                    <td>~2-3 litres of compost</td>
+                                </tr>
+                                <tr>
+                                    <td>1 wheelbarrow load</td>
+                                    <td>~60-80 litres</td>
+                                </tr>
+                                <tr>
+                                    <td>1 bag of compost</td>
+                                    <td>~40-50 litres</td>
+                                </tr>
+                                <tr>
+                                    <td>1 cap (standard)</td>
+                                    <td>~10ml</td>
+                                </tr>
+                                <tr>
+                                    <td>1 teaspoon</td>
+                                    <td>~5ml</td>
+                                </tr>
+                                <tr>
+                                    <td>1 tablespoon</td>
+                                    <td>~15ml</td>
+                                </tr>
+                                <tr>
+                                    <td>20 drops</td>
+                                    <td>~1ml</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

@@ -5,6 +5,7 @@ const COMMON_PRODUCTS = [
     id: "miracle-gro-all-purpose",
     name: "Miracle-Gro All Purpose Liquid Plant Food",
     type: "liquid_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "cap",
     defaultDosage: 0.5,
     defaultDosageUnit: "cap",
@@ -20,6 +21,7 @@ const COMMON_PRODUCTS = [
     id: "baby-bio-houseplant",
     name: "Baby Bio Houseplant Food",
     type: "liquid_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "cap",
     defaultDosage: 0.5,
     defaultDosageUnit: "cap",
@@ -35,6 +37,7 @@ const COMMON_PRODUCTS = [
     id: "tomorite",
     name: "Levington Tomorite Tomato Food",
     type: "liquid_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "volume",
     defaultDosage: 20,
     defaultDosageUnit: "ml",
@@ -46,6 +49,7 @@ const COMMON_PRODUCTS = [
     id: "phostrogen-liquid",
     name: "Phostrogen Liquid Plant Food",
     type: "liquid_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "volume",
     defaultDosage: 10,
     defaultDosageUnit: "ml",
@@ -57,6 +61,7 @@ const COMMON_PRODUCTS = [
     id: "westland-liquid-seaweed",
     name: "Westland Liquid Seaweed Plant Food",
     type: "liquid_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "volume",
     defaultDosage: 20,
     defaultDosageUnit: "ml",
@@ -68,6 +73,7 @@ const COMMON_PRODUCTS = [
     id: "chilli-focus",
     name: "Growth Technology Chilli Focus",
     type: "liquid_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "volume",
     defaultDosage: 5,
     defaultDosageUnit: "ml",
@@ -79,6 +85,7 @@ const COMMON_PRODUCTS = [
     id: "miracle-gro-pour-feed",
     name: "Miracle-Gro Pour & Feed Ready-to-Use",
     type: "liquid_fertilizer",
+    applicationMethod: "direct_application",
     measurementType: "volume",
     defaultDosage: 1000,
     defaultDosageUnit: "ml",
@@ -90,6 +97,7 @@ const COMMON_PRODUCTS = [
     id: "maxicrop-seaweed-extract",
     name: "Maxicrop Seaweed Extract",
     type: "liquid_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "volume",
     defaultDosage: 15,
     defaultDosageUnit: "ml",
@@ -101,6 +109,7 @@ const COMMON_PRODUCTS = [
     id: "biobizz-bio-grow",
     name: "BioBizz Bio-Grow Organic Fertilizer",
     type: "liquid_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "volume",
     defaultDosage: 4,
     defaultDosageUnit: "ml",
@@ -112,6 +121,7 @@ const COMMON_PRODUCTS = [
     id: "biobizz-bio-bloom",
     name: "BioBizz Bio-Bloom Organic Fertilizer",
     type: "liquid_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "volume",
     defaultDosage: 4,
     defaultDosageUnit: "ml",
@@ -123,6 +133,7 @@ const COMMON_PRODUCTS = [
     id: "canna-terra-vega",
     name: "CANNA Terra Vega",
     type: "liquid_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "volume",
     defaultDosage: 5,
     defaultDosageUnit: "ml",
@@ -134,6 +145,7 @@ const COMMON_PRODUCTS = [
     id: "canna-terra-flores",
     name: "CANNA Terra Flores",
     type: "liquid_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "volume",
     defaultDosage: 5,
     defaultDosageUnit: "ml",
@@ -145,6 +157,7 @@ const COMMON_PRODUCTS = [
     id: "plant-magic-old-timer-grow",
     name: "Plant Magic Old Timer Grow",
     type: "liquid_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "volume",
     defaultDosage: 4,
     defaultDosageUnit: "ml",
@@ -156,6 +169,7 @@ const COMMON_PRODUCTS = [
     id: "plant-magic-old-timer-bloom",
     name: "Plant Magic Old Timer Bloom",
     type: "liquid_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "volume",
     defaultDosage: 4,
     defaultDosageUnit: "ml",
@@ -167,6 +181,7 @@ const COMMON_PRODUCTS = [
     id: "westland-orchid-feed",
     name: "Westland Orchid Feed",
     type: "liquid_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "volume",
     defaultDosage: 5,
     defaultDosageUnit: "ml",
@@ -178,6 +193,7 @@ const COMMON_PRODUCTS = [
     id: "westland-citrus-feed",
     name: "Westland Citrus Feed",
     type: "liquid_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "volume",
     defaultDosage: 5,
     defaultDosageUnit: "ml",
@@ -191,6 +207,7 @@ const COMMON_PRODUCTS = [
     id: "miracle-gro-water-soluble",
     name: "Miracle-Gro Water Soluble Plant Food",
     type: "granular_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "weight",
     defaultDosage: 7,
     defaultDosageUnit: "g",
@@ -205,6 +222,7 @@ const COMMON_PRODUCTS = [
     id: "phostrogen-all-purpose",
     name: "Phostrogen All Purpose Plant Food",
     type: "granular_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "weight",
     defaultDosage: 8,
     defaultDosageUnit: "g",
@@ -219,6 +237,7 @@ const COMMON_PRODUCTS = [
     id: "westland-feed-all",
     name: "Westland Feed All Plant Food",
     type: "granular_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "weight",
     defaultDosage: 10,
     defaultDosageUnit: "g",
@@ -230,6 +249,7 @@ const COMMON_PRODUCTS = [
     id: "chempak-formula-3",
     name: "Chempak Formula 3 High Potash Feed",
     type: "granular_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "weight",
     defaultDosage: 8,
     defaultDosageUnit: "g",
@@ -241,6 +261,7 @@ const COMMON_PRODUCTS = [
     id: "chempak-formula-2",
     name: "Chempak Formula 2 High Nitrogen Feed",
     type: "granular_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "weight",
     defaultDosage: 8,
     defaultDosageUnit: "g",
@@ -252,6 +273,7 @@ const COMMON_PRODUCTS = [
     id: "miracle-gro-azalea-feed",
     name: "Miracle-Gro Azalea, Camellia & Rhododendron Feed",
     type: "granular_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "weight",
     defaultDosage: 7,
     defaultDosageUnit: "g",
@@ -266,6 +288,7 @@ const COMMON_PRODUCTS = [
     id: "miracle-gro-rose-feed",
     name: "Miracle-Gro Rose & Shrub Feed",
     type: "granular_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "weight",
     defaultDosage: 7,
     defaultDosageUnit: "g",
@@ -280,6 +303,7 @@ const COMMON_PRODUCTS = [
     id: "westland-tomato-food",
     name: "Westland Tomato Feed Granules",
     type: "granular_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "weight",
     defaultDosage: 10,
     defaultDosageUnit: "g",
@@ -293,6 +317,7 @@ const COMMON_PRODUCTS = [
     id: "roundup-fast-action",
     name: "Roundup Fast Action Weedkiller",
     type: "weed_killer",
+    applicationMethod: "water_mixing",
     measurementType: "volume",
     defaultDosage: 25,
     defaultDosageUnit: "ml",
@@ -304,6 +329,7 @@ const COMMON_PRODUCTS = [
     id: "weedol-lawn-weedkiller",
     name: "Weedol Lawn Weedkiller Concentrate",
     type: "weed_killer",
+    applicationMethod: "water_mixing",
     measurementType: "volume",
     defaultDosage: 10,
     defaultDosageUnit: "ml",
@@ -315,6 +341,7 @@ const COMMON_PRODUCTS = [
     id: "resolva-24h",
     name: "Resolva 24H Concentrate Weedkiller",
     type: "weed_killer",
+    applicationMethod: "water_mixing",
     measurementType: "volume",
     defaultDosage: 20,
     defaultDosageUnit: "ml",
@@ -326,6 +353,7 @@ const COMMON_PRODUCTS = [
     id: "doff-glyphosate",
     name: "Doff Glyphosate Weedkiller",
     type: "weed_killer",
+    applicationMethod: "water_mixing",
     measurementType: "volume",
     defaultDosage: 15,
     defaultDosageUnit: "ml",
@@ -337,6 +365,7 @@ const COMMON_PRODUCTS = [
     id: "roundup-tough",
     name: "Roundup Tough Weedkiller",
     type: "weed_killer",
+    applicationMethod: "water_mixing",
     measurementType: "volume",
     defaultDosage: 30,
     defaultDosageUnit: "ml",
@@ -348,6 +377,7 @@ const COMMON_PRODUCTS = [
     id: "resolva-pro",
     name: "Resolva Pro Weedkiller Concentrate",
     type: "weed_killer",
+    applicationMethod: "water_mixing",
     measurementType: "volume",
     defaultDosage: 25,
     defaultDosageUnit: "ml",
@@ -359,6 +389,7 @@ const COMMON_PRODUCTS = [
     id: "weedol-rootkill-plus",
     name: "Weedol Rootkill Plus",
     type: "weed_killer",
+    applicationMethod: "water_mixing",
     measurementType: "volume",
     defaultDosage: 20,
     defaultDosageUnit: "ml",
@@ -370,6 +401,7 @@ const COMMON_PRODUCTS = [
     id: "roundup-path",
     name: "Roundup Path & Drive Weedkiller",
     type: "weed_killer",
+    applicationMethod: "water_mixing",
     measurementType: "volume",
     defaultDosage: 25,
     defaultDosageUnit: "ml",
@@ -381,6 +413,7 @@ const COMMON_PRODUCTS = [
     id: "vitax-sh-weedkiller",
     name: "Vitax SBK Brushwood Killer",
     type: "weed_killer",
+    applicationMethod: "water_mixing",
     measurementType: "volume",
     defaultDosage: 10,
     defaultDosageUnit: "ml",
@@ -397,6 +430,7 @@ const AREA_TREATMENT_PRODUCTS = [
     id: "evergreen-complete-4in1",
     name: "Evergreen Complete 4-in-1 Lawn Feed",
     type: "lawn_fertilizer",
+    applicationMethod: "direct_application",
     measurementType: "weight",
     defaultDosage: 35,
     defaultDosageUnit: "g",
@@ -408,6 +442,7 @@ const AREA_TREATMENT_PRODUCTS = [
     id: "miracle-gro-evergreen-complete",
     name: "Miracle-Gro EverGreen Complete Lawn Food",
     type: "lawn_fertilizer",
+    applicationMethod: "direct_application",
     measurementType: "weight",
     defaultDosage: 35,
     defaultDosageUnit: "g",
@@ -419,6 +454,7 @@ const AREA_TREATMENT_PRODUCTS = [
     id: "westland-safelawn",
     name: "Westland SafeLawn Natural Lawn Feed",
     type: "lawn_fertilizer",
+    applicationMethod: "direct_application",
     measurementType: "weight",
     defaultDosage: 70,
     defaultDosageUnit: "g",
@@ -430,6 +466,7 @@ const AREA_TREATMENT_PRODUCTS = [
     id: "miracle-gro-lawn-food",
     name: "Miracle-Gro Water Soluble Lawn Food",
     type: "lawn_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "weight",
     defaultDosage: 15,
     defaultDosageUnit: "g",
@@ -441,6 +478,7 @@ const AREA_TREATMENT_PRODUCTS = [
     id: "evergreen-autumn",
     name: "Evergreen Autumn Lawn Care",
     type: "lawn_fertilizer",
+    applicationMethod: "direct_application",
     measurementType: "weight",
     defaultDosage: 35,
     defaultDosageUnit: "g",
@@ -452,6 +490,7 @@ const AREA_TREATMENT_PRODUCTS = [
     id: "miracle-gro-patch-magic",
     name: "Miracle-Gro Patch Magic",
     type: "lawn_fertilizer",
+    applicationMethod: "direct_application",
     measurementType: "weight",
     defaultDosage: 30,
     defaultDosageUnit: "g",
@@ -463,6 +502,7 @@ const AREA_TREATMENT_PRODUCTS = [
     id: "westland-aftercut-all-in-one",
     name: "Westland Aftercut All In One",
     type: "lawn_fertilizer",
+    applicationMethod: "direct_application",
     measurementType: "weight",
     defaultDosage: 35,
     defaultDosageUnit: "g",
@@ -474,6 +514,7 @@ const AREA_TREATMENT_PRODUCTS = [
     id: "scotts-lawn-builder",
     name: "Scotts Lawn Builder Lawn Food",
     type: "lawn_fertilizer",
+    applicationMethod: "direct_application",
     measurementType: "weight",
     defaultDosage: 30,
     defaultDosageUnit: "g",
@@ -485,6 +526,7 @@ const AREA_TREATMENT_PRODUCTS = [
     id: "evergreen-no-rake-moss-control",
     name: "Evergreen No Rake Moss Control",
     type: "lawn_fertilizer",
+    applicationMethod: "direct_application",
     measurementType: "weight",
     defaultDosage: 35,
     defaultDosageUnit: "g",
@@ -496,6 +538,7 @@ const AREA_TREATMENT_PRODUCTS = [
     id: "miracle-gro-liquid-lawn-feed",
     name: "Miracle-Gro Liquid Lawn Feed",
     type: "lawn_fertilizer",
+    applicationMethod: "water_mixing",
     measurementType: "volume",
     defaultDosage: 15,
     defaultDosageUnit: "ml",
@@ -509,6 +552,7 @@ const AREA_TREATMENT_PRODUCTS = [
     id: "growmore-granular",
     name: "Growmore Granular Garden Fertilizer",
     type: "granular_fertilizer",
+    applicationMethod: "direct_application",
     measurementType: "weight",
     defaultDosage: 70,
     defaultDosageUnit: "g",
@@ -520,6 +564,7 @@ const AREA_TREATMENT_PRODUCTS = [
     id: "miracle-gro-shake-n-feed",
     name: "Miracle-Gro Shake 'n' Feed All Purpose",
     type: "granular_fertilizer",
+    applicationMethod: "direct_application",
     measurementType: "weight",
     defaultDosage: 50,
     defaultDosageUnit: "g",
@@ -531,6 +576,7 @@ const AREA_TREATMENT_PRODUCTS = [
     id: "westland-gro-sure",
     name: "Westland Gro-Sure All Purpose Plant Food",
     type: "granular_fertilizer",
+    applicationMethod: "direct_application",
     measurementType: "weight",
     defaultDosage: 100,
     defaultDosageUnit: "g",
@@ -542,6 +588,7 @@ const AREA_TREATMENT_PRODUCTS = [
     id: "vitax-q4",
     name: "Vitax Q4 Fertilizer",
     type: "granular_fertilizer",
+    applicationMethod: "direct_application",
     measurementType: "weight",
     defaultDosage: 70,
     defaultDosageUnit: "g",
@@ -554,6 +601,7 @@ const AREA_TREATMENT_PRODUCTS = [
     id: "blood-fish-bone",
     name: "Blood, Fish & Bone Organic Fertilizer",
     type: "granular_fertilizer",
+    applicationMethod: "direct_application",
     measurementType: "weight",
     defaultDosage: 80,
     defaultDosageUnit: "g",
@@ -565,6 +613,7 @@ const AREA_TREATMENT_PRODUCTS = [
     id: "westland-bone-meal",
     name: "Westland Bone Meal Root Builder",
     type: "granular_fertilizer",
+    applicationMethod: "direct_application",
     measurementType: "weight",
     defaultDosage: 100,
     defaultDosageUnit: "g",
@@ -577,6 +626,7 @@ const AREA_TREATMENT_PRODUCTS = [
     id: "westland-fish-blood-bone",
     name: "Westland Fish, Blood & Bone",
     type: "granular_fertilizer",
+    applicationMethod: "direct_application",
     measurementType: "weight",
     defaultDosage: 70,
     defaultDosageUnit: "g",
@@ -588,6 +638,7 @@ const AREA_TREATMENT_PRODUCTS = [
     id: "miracle-gro-slow-release",
     name: "Miracle-Gro Slow Release Plant Food",
     type: "granular_fertilizer",
+    applicationMethod: "direct_application",
     measurementType: "weight",
     defaultDosage: 30,
     defaultDosageUnit: "g",
@@ -599,6 +650,7 @@ const AREA_TREATMENT_PRODUCTS = [
     id: "chicken-manure-pellets",
     name: "Chicken Manure Pellets",
     type: "granular_fertilizer",
+    applicationMethod: "direct_application",
     measurementType: "weight",
     defaultDosage: 100,
     defaultDosageUnit: "g",
@@ -610,6 +662,7 @@ const AREA_TREATMENT_PRODUCTS = [
     id: "westland-rose-food-granular",
     name: "Westland Rose Food Granular",
     type: "granular_fertilizer",
+    applicationMethod: "direct_application",
     measurementType: "weight",
     defaultDosage: 100,
     defaultDosageUnit: "g",
@@ -621,6 +674,7 @@ const AREA_TREATMENT_PRODUCTS = [
     id: "westland-rose-food",
     name: "Westland Rose Food",
     type: "granular_fertilizer",
+    applicationMethod: "direct_application",
     measurementType: "weight",
     defaultDosage: 35,
     defaultDosageUnit: "g",
@@ -632,6 +686,7 @@ const AREA_TREATMENT_PRODUCTS = [
     id: "osmocote-controlled-release",
     name: "Osmocote Controlled Release Plant Food",
     type: "granular_fertilizer",
+    applicationMethod: "direct_application",
     measurementType: "weight",
     defaultDosage: 5,
     defaultDosageUnit: "g",
@@ -648,6 +703,7 @@ const WATER_TREATMENT_PRODUCTS = [
     id: "tetra-pond-algae",
     name: "TetraPond AlgoRem",
     type: "pond_treatment",
+    applicationMethod: "water_treatment",
     measurementType: "volume",
     defaultDosage: 50,
     defaultDosageUnit: "ml",
@@ -659,6 +715,7 @@ const WATER_TREATMENT_PRODUCTS = [
     id: "blagdon-clear-pond",
     name: "Blagdon Clear Pond Treatment",
     type: "pond_treatment",
+    applicationMethod: "water_treatment",
     measurementType: "volume",
     defaultDosage: 25,
     defaultDosageUnit: "ml",
@@ -670,6 +727,7 @@ const WATER_TREATMENT_PRODUCTS = [
     id: "interpet-pond-clear",
     name: "Interpet Pond Clear Solution",
     type: "pond_treatment",
+    applicationMethod: "water_treatment",
     measurementType: "volume",
     defaultDosage: 100,
     defaultDosageUnit: "ml",
@@ -681,6 +739,7 @@ const WATER_TREATMENT_PRODUCTS = [
     id: "pondxpert-sludge-away",
     name: "PondXpert Sludge Away",
     type: "pond_treatment",
+    applicationMethod: "water_treatment",
     measurementType: "volume",
     defaultDosage: 100,
     defaultDosageUnit: "ml",
@@ -693,6 +752,7 @@ const WATER_TREATMENT_PRODUCTS = [
     id: "oase-aquaactiv-phosless",
     name: "Oase AquaActiv PhosLess",
     type: "pond_treatment",
+    applicationMethod: "water_treatment",
     measurementType: "weight",
     defaultDosage: 500,
     defaultDosageUnit: "g",
@@ -704,6 +764,7 @@ const WATER_TREATMENT_PRODUCTS = [
     id: "nishikoi-pond-treatment",
     name: "Nishikoi Health Guard Pond Treatment",
     type: "pond_treatment",
+    applicationMethod: "water_treatment",
     measurementType: "volume",
     defaultDosage: 25,
     defaultDosageUnit: "ml",
@@ -715,6 +776,7 @@ const WATER_TREATMENT_PRODUCTS = [
     id: "tetra-pond-crystal-water",
     name: "TetraPond Crystal Water",
     type: "pond_treatment",
+    applicationMethod: "water_treatment",
     measurementType: "volume",
     defaultDosage: 50,
     defaultDosageUnit: "ml",
@@ -728,6 +790,7 @@ const WATER_TREATMENT_PRODUCTS = [
     id: "api-pond-algaefix",
     name: "API PondCare Algaefix",
     type: "pond_treatment",
+    applicationMethod: "water_treatment",
     measurementType: "volume",
     defaultDosage: 5,
     defaultDosageUnit: "ml",
@@ -739,6 +802,7 @@ const WATER_TREATMENT_PRODUCTS = [
     id: "tetrapond-algofin",
     name: "TetraPond AlgoFin",
     type: "pond_treatment",
+    applicationMethod: "water_treatment",
     measurementType: "volume",
     defaultDosage: 10,
     defaultDosageUnit: "ml",
@@ -750,6 +814,7 @@ const WATER_TREATMENT_PRODUCTS = [
     id: "blagdon-green-away",
     name: "Blagdon Green Away",
     type: "pond_treatment",
+    applicationMethod: "water_treatment",
     measurementType: "volume",
     defaultDosage: 25,
     defaultDosageUnit: "ml",
@@ -761,6 +826,7 @@ const WATER_TREATMENT_PRODUCTS = [
     id: "evolution-aqua-stop-blanketweed",
     name: "Evolution Aqua Stop Blanketweed",
     type: "pond_treatment",
+    applicationMethod: "water_treatment",
     measurementType: "weight",
     defaultDosage: 10,
     defaultDosageUnit: "g",
@@ -772,6 +838,7 @@ const WATER_TREATMENT_PRODUCTS = [
     id: "cloverleaf-blanket-answer",
     name: "Cloverleaf Blanket Answer",
     type: "pond_treatment",
+    applicationMethod: "water_treatment",
     measurementType: "volume",
     defaultDosage: 20,
     defaultDosageUnit: "ml",
@@ -783,6 +850,7 @@ const WATER_TREATMENT_PRODUCTS = [
     id: "nishikoi-clear-waters",
     name: "Nishikoi Clear Waters",
     type: "pond_treatment",
+    applicationMethod: "water_treatment",
     measurementType: "volume",
     defaultDosage: 25,
     defaultDosageUnit: "ml",
@@ -794,6 +862,7 @@ const WATER_TREATMENT_PRODUCTS = [
     id: "pondxpert-barley-straw-extract",
     name: "PondXpert Barley Straw Extract",
     type: "pond_treatment",
+    applicationMethod: "water_treatment",
     measurementType: "volume",
     defaultDosage: 50,
     defaultDosageUnit: "ml",
@@ -807,6 +876,7 @@ const WATER_TREATMENT_PRODUCTS = [
     id: "tetra-aquasafe",
     name: "Tetra AquaSafe Water Conditioner",
     type: "pond_treatment",
+    applicationMethod: "water_treatment",
     measurementType: "volume",
     defaultDosage: 5,
     defaultDosageUnit: "ml",
@@ -818,6 +888,7 @@ const WATER_TREATMENT_PRODUCTS = [
     id: "api-stress-coat",
     name: "API Stress Coat Water Conditioner",
     type: "pond_treatment",
+    applicationMethod: "water_treatment",
     measurementType: "volume",
     defaultDosage: 5,
     defaultDosageUnit: "ml",
@@ -829,6 +900,7 @@ const WATER_TREATMENT_PRODUCTS = [
     id: "interpet-fresh-start",
     name: "Interpet Fresh Start",
     type: "pond_treatment",
+    applicationMethod: "water_treatment",
     measurementType: "volume",
     defaultDosage: 10,
     defaultDosageUnit: "ml",
@@ -840,6 +912,7 @@ const WATER_TREATMENT_PRODUCTS = [
     id: "seachem-prime",
     name: "Seachem Prime Water Conditioner",
     type: "pond_treatment",
+    applicationMethod: "water_treatment",
     measurementType: "volume",
     defaultDosage: 5,
     defaultDosageUnit: "ml",
@@ -851,6 +924,7 @@ const WATER_TREATMENT_PRODUCTS = [
     id: "fluval-aquaplus",
     name: "Fluval Aquaplus Water Conditioner",
     type: "pond_treatment",
+    applicationMethod: "water_treatment",
     measurementType: "volume",
     defaultDosage: 5,
     defaultDosageUnit: "ml",
@@ -862,6 +936,7 @@ const WATER_TREATMENT_PRODUCTS = [
     id: "api-accu-clear",
     name: "API Accu-Clear Water Clarifier",
     type: "pond_treatment",
+    applicationMethod: "water_treatment",
     measurementType: "volume",
     defaultDosage: 5,
     defaultDosageUnit: "ml",
@@ -873,6 +948,7 @@ const WATER_TREATMENT_PRODUCTS = [
     id: "blagdon-pond-guardian",
     name: "Blagdon Pond Guardian",
     type: "pond_treatment",
+    applicationMethod: "water_treatment",
     measurementType: "volume",
     defaultDosage: 10,
     defaultDosageUnit: "ml",
@@ -881,6 +957,13 @@ const WATER_TREATMENT_PRODUCTS = [
     instructions: "Add 10ml per 100 litres of new water. Makes tap water safe for fish and plants.",
   },
 ]
+
+// Application method descriptions
+const APPLICATION_METHOD_DESCRIPTIONS = {
+  water_mixing: "Products that need to be mixed with water before application",
+  direct_application: "Products that are applied directly to soil or plants",
+  water_treatment: "Products that are added directly to water bodies like ponds",
+}
 
 // Product type hints
 const PRODUCT_TYPE_HINTS = {
@@ -896,8 +979,8 @@ const PRODUCT_TYPE_HINTS = {
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM fully loaded and parsed")
 
-  // Initialize product dropdown
-  initializeProductDropdown()
+  // Initialize application method dropdown
+  initializeApplicationMethodDropdown()
 
   // Initialize accordion functionality
   initializeAccordion()
@@ -906,90 +989,125 @@ document.addEventListener("DOMContentLoaded", () => {
   setupEventListeners()
 })
 
-// Function to initialize product dropdown
-function initializeProductDropdown() {
-  console.log("Initializing product dropdown")
+// Function to initialize application method dropdown
+function initializeApplicationMethodDropdown() {
+  console.log("Initializing application method dropdown")
 
+  const applicationMethodSelect = document.getElementById("application-method")
   const productTypeSelect = document.getElementById("product-type")
   const productNameSelect = document.getElementById("product-name-select")
-  const productTypeHint = document.getElementById("product-type-hint")
 
-  if (!productTypeSelect || !productNameSelect) {
-    console.error("Required product selection elements not found")
+  if (!applicationMethodSelect || !productTypeSelect || !productNameSelect) {
+    console.error("Required selection elements not found")
     return
   }
 
-  // Update product type hint
-  if (productTypeHint) {
-    productTypeHint.textContent = PRODUCT_TYPE_HINTS[productTypeSelect.value] || ""
+  // Function to update product type options based on selected application method
+  function updateProductTypeOptions() {
+    const selectedMethod = applicationMethodSelect.value
+    console.log("Updating product types for application method:", selectedMethod)
+
+    // Clear existing options
+    while (productTypeSelect.options.length > 0) {
+      productTypeSelect.remove(0)
+    }
+
+    // Get unique product types for the selected application method
+    const productTypes = new Set()
+
+    // Combine all product arrays
+    const allProducts = [...COMMON_PRODUCTS, ...AREA_TREATMENT_PRODUCTS, ...WATER_TREATMENT_PRODUCTS]
+
+    // Filter products by application method and collect unique types
+    allProducts
+      .filter((product) => product.applicationMethod === selectedMethod)
+      .forEach((product) => productTypes.add(product.type))
+
+    console.log(`Found ${productTypes.size} product types for application method ${selectedMethod}`)
+
+    // Add options for each product type
+    productTypes.forEach((type) => {
+      const option = document.createElement("option")
+      option.value = type
+
+      // Format the type name for display (convert snake_case to Title Case)
+      const displayName = type
+        .split("_")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ")
+
+      option.textContent = displayName
+      productTypeSelect.appendChild(option)
+    })
+
+    // Add custom option
+    const customOption = document.createElement("option")
+    customOption.value = "custom"
+    customOption.textContent = "Custom Product"
+    productTypeSelect.appendChild(customOption)
+
+    // Update product names based on the first product type
+    if (productTypeSelect.options.length > 0) {
+      productTypeSelect.selectedIndex = 0
+      updateProductNameOptions()
+    }
   }
 
-  // Function to populate product dropdown based on selected type
-  function populateProductDropdown() {
+  // Function to update product name options based on selected product type and application method
+  function updateProductNameOptions() {
+    const selectedMethod = applicationMethodSelect.value
     const selectedType = productTypeSelect.value
-    console.log("Populating products for type:", selectedType)
-
-    // Update hint text
-    if (productTypeHint) {
-      productTypeHint.textContent = PRODUCT_TYPE_HINTS[selectedType] || ""
-    }
+    console.log(`Updating product names for type: ${selectedType} and method: ${selectedMethod}`)
 
     // Clear existing options except the first one
     while (productNameSelect.options.length > 1) {
       productNameSelect.remove(1)
     }
 
-    // Get products for the selected type
-    let products = []
-
-    // Select products based on calculator type and product type
-    const calculatorType = document.getElementById("calculator-type").value
-
-    if (calculatorType === "product") {
-      // For product calculator, use COMMON_PRODUCTS
-      products = COMMON_PRODUCTS.filter((product) => product.type === selectedType)
-    } else if (calculatorType === "area") {
-      // For area calculator, use AREA_TREATMENT_PRODUCTS
-      products = AREA_TREATMENT_PRODUCTS.filter((product) => product.type === selectedType)
-    } else if (calculatorType === "water") {
-      // For water calculator, use WATER_TREATMENT_PRODUCTS
-      products = WATER_TREATMENT_PRODUCTS.filter((product) => product.type === selectedType)
+    // If custom type is selected, hide the dropdown
+    if (selectedType === "custom") {
+      document.getElementById("common-product-section").classList.add("hidden")
+      document.getElementById("custom-product-section").classList.remove("hidden")
+      document.getElementById("use-custom-product").checked = true
+      return
     }
 
-    console.log(`Found ${products.length} products for type ${selectedType} in calculator ${calculatorType}`)
+    // Show the dropdown for non-custom types
+    document.getElementById("common-product-section").classList.remove("hidden")
+    document.getElementById("custom-product-section").classList.add("hidden")
+    document.getElementById("use-custom-product").checked = false
 
-    // Add products to dropdown
-    products.forEach((product) => {
+    // Combine all product arrays
+    const allProducts = [...COMMON_PRODUCTS, ...AREA_TREATMENT_PRODUCTS, ...WATER_TREATMENT_PRODUCTS]
+
+    // Filter products by application method and type
+    const filteredProducts = allProducts.filter(
+      (product) => product.applicationMethod === selectedMethod && product.type === selectedType,
+    )
+
+    console.log(`Found ${filteredProducts.length} products for type ${selectedType} and method ${selectedMethod}`)
+
+    // Add filtered products to dropdown
+    filteredProducts.forEach((product) => {
       const option = document.createElement("option")
       option.value = product.id
       option.textContent = product.name
       productNameSelect.appendChild(option)
     })
 
-    // If custom type is selected, hide the dropdown
-    if (selectedType === "custom") {
-      document.getElementById("common-product-section").classList.add("hidden")
-      document.getElementById("custom-product-section").classList.remove("hidden")
-      document.getElementById("use-custom-product").checked = true
-    } else {
-      // Show the dropdown for non-custom types
-      document.getElementById("common-product-section").classList.remove("hidden")
-      document.getElementById("custom-product-section").classList.add("hidden")
-      document.getElementById("use-custom-product").checked = false
+    // Update product type hint
+    const productTypeHint = document.getElementById("product-type-hint")
+    if (productTypeHint) {
+      productTypeHint.textContent = PRODUCT_TYPE_HINTS[selectedType] || ""
     }
   }
 
-  // Add event listener to product type select
-  productTypeSelect.addEventListener("change", populateProductDropdown)
-
-  // Add event listener to calculator type select
-  const calculatorTypeSelect = document.getElementById("calculator-type")
-  if (calculatorTypeSelect) {
-    calculatorTypeSelect.addEventListener("change", populateProductDropdown)
-  }
+  // Add event listeners
+  applicationMethodSelect.addEventListener("change", updateProductTypeOptions)
+  productTypeSelect.addEventListener("change", updateProductNameOptions)
 
   // Initial population
-  populateProductDropdown()
+  updateProductTypeOptions()
 }
 
 // Function to initialize accordion functionality
@@ -1043,16 +1161,8 @@ function setupEventListeners() {
       if (!selectedId) return
 
       // Find the selected product
-      const calculatorType = document.getElementById("calculator-type").value
-      let selectedProduct = null
-
-      if (calculatorType === "product") {
-        selectedProduct = COMMON_PRODUCTS.find((p) => p.id === selectedId)
-      } else if (calculatorType === "area") {
-        selectedProduct = AREA_TREATMENT_PRODUCTS.find((p) => p.id === selectedId)
-      } else if (calculatorType === "water") {
-        selectedProduct = WATER_TREATMENT_PRODUCTS.find((p) => p.id === selectedId)
-      }
+      const allProducts = [...COMMON_PRODUCTS, ...AREA_TREATMENT_PRODUCTS, ...WATER_TREATMENT_PRODUCTS]
+      const selectedProduct = allProducts.find((p) => p.id === selectedId)
 
       if (selectedProduct) {
         // Display product instructions
@@ -1065,8 +1175,19 @@ function setupEventListeners() {
         }
 
         // Set default values based on product
-        // (This would be expanded in a full implementation)
+        updateCalculatorInputs(selectedProduct)
       }
+    })
+  }
+
+  // Application method change
+  const applicationMethodSelect = document.getElementById("application-method")
+  if (applicationMethodSelect) {
+    applicationMethodSelect.addEventListener("change", function () {
+      const selectedMethod = this.value
+
+      // Show the appropriate calculator inputs based on application method
+      showAppropriateCalculator(selectedMethod)
     })
   }
 
@@ -1082,5 +1203,135 @@ function setupEventListeners() {
         icon.textContent = debugContent.classList.contains("hidden") ? "▼" : "▲"
       }
     })
+  }
+}
+
+// Function to show the appropriate calculator based on application method
+function showAppropriateCalculator(applicationMethod) {
+  // Hide all calculator inputs
+  document.getElementById("water-mixing-calculator").classList.add("hidden")
+  document.getElementById("direct-application-calculator").classList.add("hidden")
+  document.getElementById("water-treatment-calculator").classList.add("hidden")
+
+  // Hide all calculator results
+  document.getElementById("water-mixing-results").classList.add("hidden")
+  document.getElementById("direct-application-results").classList.add("hidden")
+  document.getElementById("water-treatment-results").classList.add("hidden")
+
+  // Show the appropriate calculator inputs and results
+  if (applicationMethod === "water_mixing") {
+    document.getElementById("water-mixing-calculator").classList.remove("hidden")
+    document.getElementById("water-mixing-results").classList.remove("hidden")
+  } else if (applicationMethod === "direct_application") {
+    document.getElementById("direct-application-calculator").classList.remove("hidden")
+    document.getElementById("direct-application-results").classList.remove("hidden")
+  } else if (applicationMethod === "water_treatment") {
+    document.getElementById("water-treatment-calculator").classList.remove("hidden")
+    document.getElementById("water-treatment-results").classList.remove("hidden")
+  }
+}
+
+// Function to update calculator inputs based on selected product
+function updateCalculatorInputs(product) {
+  console.log("Updating calculator inputs for product:", product.name)
+
+  // Set measurement type
+  const measurementTypeRadios = document.querySelectorAll('input[name="measurement-type"]')
+  measurementTypeRadios.forEach((radio) => {
+    if (radio.value === product.measurementType) {
+      radio.checked = true
+    }
+  })
+
+  // Show/hide cap size input if needed
+  if (product.measurementType === "cap") {
+    document.getElementById("cap-size-group").classList.remove("hidden")
+    if (product.capSize && product.capSize.fullCapML) {
+      document.getElementById("cap-size").value = product.capSize.fullCapML
+    }
+  } else {
+    document.getElementById("cap-size-group").classList.add("hidden")
+  }
+
+  // Set scoop information if available
+  const hasScoopRadios = document.querySelectorAll('input[name="has-scoop"]')
+  if (product.hasScoop) {
+    hasScoopRadios[0].checked = true // Yes
+    document.getElementById("scoop-size-group").classList.remove("hidden")
+    document.getElementById("scoop-size").value = product.scoopSize || 5
+    const scoopUnitSelect = document.getElementById("scoop-unit")
+    if (scoopUnitSelect) {
+      for (let i = 0; i < scoopUnitSelect.options.length; i++) {
+        if (scoopUnitSelect.options[i].value === product.scoopUnit) {
+          scoopUnitSelect.selectedIndex = i
+          break
+        }
+      }
+    }
+  } else {
+    hasScoopRadios[1].checked = true // No
+    document.getElementById("scoop-size-group").classList.add("hidden")
+  }
+
+  // Set default dosage and water amount based on application method
+  if (product.applicationMethod === "water_mixing") {
+    // Set product amount
+    document.getElementById("product-amount").value = product.defaultDosage
+    const productUnitSelect = document.getElementById("product-unit")
+    if (productUnitSelect) {
+      for (let i = 0; i < productUnitSelect.options.length; i++) {
+        if (productUnitSelect.options[i].value === product.defaultDosageUnit) {
+          productUnitSelect.selectedIndex = i
+          break
+        }
+      }
+    }
+
+    // Set water amount
+    document.getElementById("water-amount").value = product.defaultWaterAmount
+    const waterUnitSelect = document.getElementById("water-unit")
+    if (waterUnitSelect) {
+      for (let i = 0; i < waterUnitSelect.options.length; i++) {
+        if (waterUnitSelect.options[i].value === product.defaultWaterUnit) {
+          waterUnitSelect.selectedIndex = i
+          break
+        }
+      }
+    }
+  } else if (product.applicationMethod === "direct_application") {
+    // Set application rate
+    document.getElementById("application-rate").value = product.defaultDosage
+    const rateUnitSelect = document.getElementById("rate-unit")
+    if (rateUnitSelect) {
+      for (let i = 0; i < rateUnitSelect.options.length; i++) {
+        if (rateUnitSelect.options[i].value === product.defaultDosageUnit) {
+          rateUnitSelect.selectedIndex = i
+          break
+        }
+      }
+    }
+
+    // Set area unit
+    const rateAreaUnitSelect = document.getElementById("rate-area-unit")
+    if (rateAreaUnitSelect) {
+      for (let i = 0; i < rateAreaUnitSelect.options.length; i++) {
+        if (rateAreaUnitSelect.options[i].value === product.defaultWaterUnit) {
+          rateAreaUnitSelect.selectedIndex = i
+          break
+        }
+      }
+    }
+  } else if (product.applicationMethod === "water_treatment") {
+    // Set dosage amount
+    document.getElementById("dosage-amount").value = product.defaultDosage
+    const dosageUnitSelect = document.getElementById("dosage-unit")
+    if (dosageUnitSelect) {
+      for (let i = 0; i < dosageUnitSelect.options.length; i++) {
+        if (dosageUnitSelect.options[i].value === product.defaultDosageUnit) {
+          dosageUnitSelect.selectedIndex = i
+          break
+        }
+      }
+    }
   }
 }
