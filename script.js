@@ -64,16 +64,12 @@ const COMMON_PRODUCTS = [
     id: "westland-liquid-seaweed",
     name: "Westland Liquid Seaweed Plant Food",
     type: "liquid_fertilizer",
-    measurementType: "cap",
-    defaultDosage: 2,
-    defaultDosageUnit: "cap",
+    measurementType: "volume",
+    defaultDosage: 20,
+    defaultDosageUnit: "ml",
     defaultWaterAmount: 4.5,
     defaultWaterUnit: "l",
     instructions: "Add 20ml to 4.5 litres (1 gallon) of water. Apply every 2 weeks.",
-    capSize: {
-      fullCapML: 10,
-      markings: { half: 5, full: 10 },
-    },
   },
   {
     id: "chilli-focus",
@@ -655,7 +651,7 @@ function initProductCalculator() {
   const savePresetBtn = document.getElementById("save-preset-btn")
   const calculateBtn = document.getElementById("calculate-btn")
   const myPresetsBtn = document.getElementById("my-presets-btn")
-  const presetsPanel = document.getElementById("presets-panel")
+  const presetsPanel = document.getElementById("presets-list")
   const presetsList = document.getElementById("presets-list")
 
   // Update product type hint
@@ -2240,4 +2236,143 @@ function initDebugCopyFunctionality() {
       }
     })
   }
+}
+
+// Modify the handleProductSelect function to ensure it sets the calculation mode to match the product instructions
+function handleProductSelect(product) {
+  if (!product) return
+
+  // Get DOM elements
+  const productNameInput = document.getElementById("product-name")
+  const productTypeSelect = document.getElementById("product-type")
+  const productTypeHint = document.getElementById("product-type-hint")
+  const measurementTypeRadios = document.querySelectorAll('input[name="measurement-type"]')
+  const capSizeGroup = document.getElementById("cap-size-group")
+  const capSizeInput = document.getElementById("cap-size")
+  const productAmountInput = document.getElementById("product-amount")
+  const productUnitSelect = document.getElementById("product-unit")
+  const waterAmountInput = document.getElementById("water-amount")
+  const waterUnitSelect = document.getElementById("water-unit")
+  const ratioInput = document.getElementById("ratio")
+  const waterAmount2Input = document.getElementById("water-amount-2")
+  const waterUnit2Select = document.getElementById("water-unit-2")
+  const instructionsText = document.getElementById("instructions-text")
+  const productInstructions = document.getElementById("product-instructions")
+  const customInstructionsInput = document.getElementById("custom-instructions")
+  const calculationModeRadios = document.querySelectorAll('input[name="calculation-mode"]')
+
+  // Set product name
+  if (productNameInput) productNameInput.value = product.name
+
+  // Set custom instructions if available
+  if (customInstructionsInput) customInstructionsInput.value = product.instructions || ""
+
+  // Set product type
+  if (productTypeSelect) {
+    productTypeSelect.value = product.type
+    if (productTypeHint) {
+      productTypeHint.textContent = PRODUCT_TYPE_HINTS[product.type] || ""
+    }
+  }
+
+  // Set measurement type
+  if (measurementTypeRadios && measurementTypeRadios.length > 0) {
+    const radio = Array.from(measurementTypeRadios).find((r) => r.value === product.measurementType)
+    if (radio) radio.checked = true
+
+    if (product.measurementType === "cap" && capSizeGroup && capSizeInput) {
+      capSizeGroup.classList.remove("hidden")
+      capSizeInput.value = product.capSize?.fullCapML || 10
+    } else if (capSizeGroup) {
+      capSizeGroup.classList.add("hidden")
+    }
+  }
+
+  // Set calculation mode to product_to_water to match manufacturer's instructions
+  if (calculationModeRadios && calculationModeRadios.length > 0) {
+    const productToWaterRadio = Array.from(calculationModeRadios).find((r) => r.value === "product_to_water")
+    if (productToWaterRadio) {
+      productToWaterRadio.checked = true
+      // Trigger change event to show the correct panel
+      const event = new Event("change")
+      productToWaterRadio.dispatchEvent(event)
+    }
+  }
+
+  // Set product amount and unit
+  if (productAmountInput) productAmountInput.value = product.defaultDosage
+  if (productUnitSelect) productUnitSelect.value = product.defaultDosageUnit
+
+  // Set water amount and unit
+  if (waterAmountInput) waterAmountInput.value = product.defaultWaterAmount
+  if (waterUnitSelect) waterUnitSelect.value = product.defaultWaterUnit
+
+  // Set ratio (for water_to_product mode, but we're defaulting to product_to_water)
+  if (ratioInput) {
+    // Calculate the ratio based on product dosage and water amount
+    const ratio = calculateRatio(
+      product.defaultDosage,
+      product.defaultDosageUnit,
+      product.defaultWaterAmount,
+      product.defaultWaterUnit,
+      product.measurementType,
+      product.capSize?.fullCapML || 10,
+    )
+    ratioInput.value = ratio
+  }
+
+  // Set water amount for water to product mode
+  if (waterAmount2Input) waterAmount2Input.value = product.defaultWaterAmount
+  if (waterUnit2Select) waterUnit2Select.value = product.defaultWaterUnit
+
+  // Show product instructions
+  if (instructionsText) instructionsText.textContent = product.instructions
+  if (productInstructions) productInstructions.classList.remove("hidden")
+
+  // Update ratio labels
+  updateRatioLabels()
+}
+
+// Add a helper function to calculate ratio
+function calculateRatio(productAmount, productUnit, waterAmount, waterUnit, measurementType, capSize) {
+  // Convert product amount to standard units (g or ml)
+  let standardProductAmount = 0
+
+  if (productUnit === "g" || productUnit === "ml") {
+    standardProductAmount = productAmount
+  } else if (productUnit === "kg") {
+    standardProductAmount = productAmount * 1000 // kg to g
+  } else if (productUnit === "l") {
+    standardProductAmount = productAmount * 1000 // l to ml
+  } else if (productUnit === "oz") {
+    standardProductAmount = productAmount * 28.35 // oz to g
+  } else if (productUnit === "lb") {
+    standardProductAmount = productAmount * 453.59 // lb to g
+  } else if (productUnit === "tsp") {
+    standardProductAmount = productAmount * 5 // tsp to ml (approximate)
+  } else if (productUnit === "tbsp") {
+    standardProductAmount = productAmount * 15 // tbsp to ml (approximate)
+  } else if (productUnit === "cap") {
+    standardProductAmount = productAmount * capSize // cap to ml
+  }
+
+  // Convert water amount to standard units (litres)
+  let standardWaterAmount = 0
+  if (waterUnit === "l") {
+    standardWaterAmount = waterAmount
+  } else if (waterUnit === "ml") {
+    standardWaterAmount = waterAmount / 1000 // ml to l
+  } else if (waterUnit === "gal_uk") {
+    standardWaterAmount = waterAmount * 4.546 // UK gallon to l
+  }
+
+  // Calculate ratio (product per water unit)
+  let ratio = standardProductAmount / standardWaterAmount
+
+  // If measurement type is cap, convert back to caps
+  if (measurementType === "cap") {
+    ratio = ratio / capSize
+  }
+
+  return ratio.toFixed(1)
 }
