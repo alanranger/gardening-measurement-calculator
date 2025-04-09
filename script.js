@@ -1139,6 +1139,18 @@ function initializeAccordion() {
 function setupEventListeners() {
   console.log("Setting up event listeners")
 
+  // Initialize product type dropdown based on application method
+  const productTypeSelect = document.getElementById("product-type")
+  let productNameSelect = document.getElementById("product-name-select")
+  const productTypeHint = document.getElementById("product-type-hint")
+
+  if (productTypeSelect && productNameSelect) {
+    console.log("Product selection elements found, initializing dropdowns")
+
+    // Initial population of product types based on default application method
+    updateProductTypeOptions(applicationMethodSelect.value)
+  }
+
   // Custom product toggle
   const useCustomProduct = document.getElementById("use-custom-product")
   if (useCustomProduct) {
@@ -1154,7 +1166,7 @@ function setupEventListeners() {
   }
 
   // Product selection change
-  const productNameSelect = document.getElementById("product-name-select")
+  productNameSelect = document.getElementById("product-name-select")
   if (productNameSelect) {
     productNameSelect.addEventListener("change", function () {
       const selectedId = this.value
@@ -1188,6 +1200,17 @@ function setupEventListeners() {
 
       // Show the appropriate calculator inputs based on application method
       showAppropriateCalculator(selectedMethod)
+
+      // Update product type options based on the selected application method
+      updateProductTypeOptions(selectedMethod)
+    })
+  }
+
+  // Product type change
+  const productTypeSelectEl = document.getElementById("product-type")
+  if (productTypeSelectEl) {
+    productTypeSelectEl.addEventListener("change", () => {
+      updateProductNameOptions()
     })
   }
 
@@ -1245,7 +1268,7 @@ function setupEventListeners() {
     })
   }
 
-  // Container shape change\
+  // Container shape change\\
   const containerShapeRadios = document.querySelectorAll('input[name="container-shape"]')
   containerShapeRadios.forEach((radio) => {
     radio.addEventListener("change", function () {
@@ -1299,6 +1322,111 @@ function setupEventListeners() {
 
   // Initial setup
   showAppropriateCalculator(applicationMethodSelect.value)
+}
+
+// Function to update product type options based on selected application method
+function updateProductTypeOptions(selectedMethod) {
+  const productTypeSelect = document.getElementById("product-type")
+  const productTypeHint = document.getElementById("product-type-hint")
+
+  console.log("Updating product types for application method:", selectedMethod)
+
+  // Clear existing options
+  while (productTypeSelect.options.length > 0) {
+    productTypeSelect.remove(0)
+  }
+
+  // Get unique product types for the selected application method
+  const productTypes = new Set()
+
+  // Combine all product arrays
+  const allProducts = [...COMMON_PRODUCTS, ...AREA_TREATMENT_PRODUCTS, ...WATER_TREATMENT_PRODUCTS]
+
+  // Filter products by application method and collect unique types
+  allProducts
+    .filter((product) => product.applicationMethod === selectedMethod)
+    .forEach((product) => productTypes.add(product.type))
+
+  console.log(`Found ${productTypes.size} product types for application method ${selectedMethod}`)
+
+  // Add options for each product type
+  productTypes.forEach((type) => {
+    const option = document.createElement("option")
+    option.value = type
+
+    // Format the type name for display (convert snake_case to Title Case)
+    const displayName = type
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ")
+
+    option.textContent = displayName
+    productTypeSelect.appendChild(option)
+  })
+
+  // Add custom option
+  const customOption = document.createElement("option")
+  customOption.value = "custom"
+  customOption.textContent = "Custom Product"
+  productTypeSelect.appendChild(customOption)
+
+  // Update product names based on the first product type
+  if (productTypeSelect.options.length > 0) {
+    productTypeSelect.selectedIndex = 0
+    updateProductNameOptions()
+  }
+
+  // Update product type hint
+  if (productTypeHint && productTypeSelect.value) {
+    productTypeHint.textContent = PRODUCT_TYPE_HINTS[productTypeSelect.value] || ""
+  }
+}
+
+// Function to update product name options based on selected product type and application method
+function updateProductNameOptions() {
+  const applicationMethodSelect = document.getElementById("application-method")
+  const productTypeSelect = document.getElementById("product-type")
+  const productNameSelect = document.getElementById("product-name-select")
+
+  const selectedMethod = applicationMethodSelect.value
+  const selectedType = productTypeSelect.value
+  console.log(`Updating product names for type: ${selectedType} and method: ${selectedMethod}`)
+
+  // Clear existing options except the first one
+  while (productNameSelect.options.length > 1) {
+    productNameSelect.remove(1)
+  }
+
+  // If custom type is selected, hide the dropdown
+  if (selectedType === "custom") {
+    document.getElementById("common-product-section").classList.add("hidden")
+    document.getElementById("custom-product-section").classList.remove("hidden")
+    document.getElementById("use-custom-product").checked = true
+    return
+  }
+
+  // Show the dropdown for non-custom types
+  document.getElementById("common-product-section").classList.remove("hidden")
+  document.getElementById("custom-product-section").classList.add("hidden")
+  document.getElementById("use-custom-product").checked = false
+
+  // Combine all product arrays
+  const allProducts = [...COMMON_PRODUCTS, ...AREA_TREATMENT_PRODUCTS, ...WATER_TREATMENT_PRODUCTS]
+
+  // Filter products by application method and type
+  const filteredProducts = allProducts.filter(
+    (product) => product.applicationMethod === selectedMethod && product.type === selectedType,
+  )
+
+  console.log(`Found ${filteredProducts.length} products for type ${selectedType} and method ${selectedMethod}`)
+
+  // Add filtered products to dropdown
+  filteredProducts.forEach((product) => {
+    const option = document.createElement("option")
+    option.value = product.id
+    option.textContent = product.name
+    productNameSelect.appendChild(option)
+  })
 }
 
 // Function to show the appropriate calculator based on application method
