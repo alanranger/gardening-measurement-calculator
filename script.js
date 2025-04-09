@@ -881,3 +881,53 @@ const WATER_TREATMENT_PRODUCTS = [
     instructions: "Add 10ml per 100 litres of new water. Makes tap water safe for fish and plants.",
   },
 ]
+
+// Update the updateProductNameDropdown function to correctly handle the product arrays
+function updateProductNameDropdown(selectedType) {
+  const productNameSelect = document.getElementById("product-name-select")
+  if (!productNameSelect) return
+
+  // Clear existing options except the first one
+  while (productNameSelect.options.length > 1) {
+    productNameSelect.remove(1)
+  }
+
+  // Get the current calculator type
+  const calculatorType = document.getElementById("calculator-type")?.value || "product"
+
+  // Choose the appropriate product list based on calculator type
+  let productList = []
+  if (calculatorType === "product") {
+    productList = COMMON_PRODUCTS
+  } else if (calculatorType === "area") {
+    productList = AREA_TREATMENT_PRODUCTS
+  } else if (calculatorType === "water") {
+    productList = WATER_TREATMENT_PRODUCTS
+  }
+
+  // Filter products by selected type
+  const filteredProducts = productList.filter((product) => product.type === selectedType)
+
+  // Add filtered products to dropdown
+  filteredProducts.forEach((product) => {
+    const option = document.createElement("option")
+    option.value = product.id
+    option.textContent = product.name
+    productNameSelect.appendChild(option)
+  })
+
+  // Show/hide the dropdown based on whether there are products
+  const commonProductSection = document.getElementById("common-product-section")
+  if (commonProductSection) {
+    if (filteredProducts.length === 0 && selectedType !== "custom") {
+      commonProductSection.classList.add("hidden")
+      // Show the custom product section if no products are available
+      const customProductSection = document.getElementById("custom-product-section")
+      const useCustomProductCheckbox = document.getElementById("use-custom-product")
+      if (customProductSection) customProductSection.classList.remove("hidden")
+      if (useCustomProductCheckbox) useCustomProductCheckbox.checked = true
+    } else if (selectedType !== "custom") {
+      commonProductSection.classList.remove("hidden")
+    }
+  }
+}
