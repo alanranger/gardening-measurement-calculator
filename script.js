@@ -295,7 +295,6 @@ function initCalculatorTypeSelector() {
       hideElement("product-calculator-results")
       hideElement("area-calculator-results")
       hideElement("water-calculator-results")
-      hideElement("conversion-guide")
 
       // Show the selected calculator sections
       if (selectedType === "product") {
@@ -307,8 +306,6 @@ function initCalculatorTypeSelector() {
       } else if (selectedType === "water") {
         showElement("water-calculator-inputs")
         showElement("water-calculator-results")
-      } else if (selectedType === "conversion") {
-        showElement("conversion-guide")
       }
 
       // Update product type options based on calculator type
@@ -802,7 +799,9 @@ function handleProductSelect(product) {
   // Get DOM elements
   const productNameInput = document.getElementById("product-name")
   const productTypeSelect = document.getElementById("product-type")
-  const productTypeHint = document.getElementById("product-type-hint")
+  const productTypeHint = document.getElementById(
+    'product-type-hint")eHint = document.getElementById("product-type-hint',
+  )
   const measurementTypeRadios = document.querySelectorAll('input[name="measurement-type"]')
   const capSizeGroup = document.getElementById("cap-size-group")
   const capSizeInput = document.getElementById("cap-size")
@@ -1200,184 +1199,139 @@ function calculateProductDosage() {
     // Calculate product amount based on ratio
     if (measurementType === "cap") {
       // If using cap measurement, convert ratio to ml first
-      standardProductAmount = (ratio * capSize * standardWaterAmount) / (targetUnit === "gal_uk" ? 4.546 : 1)
+      standardProductAmount = ratio * capSize * standardWaterAmount
     } else {
-      standardProductAmount = (ratio * standardWaterAmount) / (targetUnit === "gal_uk" ? 4.546 : 1)
+      standardProductAmount = ratio * standardWaterAmount
     }
   }
 
   // Format results
-  let metricResult, imperialResult, capResult, scoopResult, alternativeResult
+  let metricResult, imperialResult, capResult, scoopResult, alternativeResult, totalAmountResult
+
+  // Calculate per unit rates (for display in results)
+  let productPerLitre = 0
+  let productPerGallon = 0
+
+  if (measurementType === "weight" || measurementType === "volume") {
+    productPerLitre = standardProductAmount / standardWaterAmount
+    productPerGallon = productPerLitre * 4.546 // Convert to per gallon
+  } else if (measurementType === "cap") {
+    // For cap measurement, calculate ml per litre first
+    const mlPerLitre = standardProductAmount / standardWaterAmount
+    productPerLitre = mlPerLitre / capSize // Convert to caps per litre
+    productPerGallon = (mlPerLitre * 4.546) / capSize // Convert to caps per gallon
+  }
 
   // Display results in the user's selected unit
   if (measurementType === "weight") {
-    // Metric result (g or kg)
-    if (waterUnit === "gal_uk") {
-      // For UK gallons, show per gallon
-      const productPerGallon = standardProductAmount / waterAmount / 4.546
-      if (productPerGallon < 1000) {
-        metricResult = `${productPerGallon.toFixed(1)}g per gallon`
-      } else {
-        metricResult = `${(productPerGallon / 1000).toFixed(2)}kg per gallon`
-      }
+    // Metric result (g or kg per litre)
+    if (productPerLitre < 1000) {
+      metricResult = `${productPerLitre.toFixed(1)}g per litre`
     } else {
-      // For litres, show per litre
-      const productPerLitre = standardProductAmount / standardWaterAmount
-      if (productPerLitre < 1000) {
-        metricResult = `${productPerLitre.toFixed(1)}g per litre`
-      } else {
-        metricResult = `${(productPerLitre / 1000).toFixed(2)}kg per litre`
-      }
+      metricResult = `${(productPerLitre / 1000).toFixed(2)}kg per litre`
     }
 
-    // Imperial result (oz or lb)
-    const ozAmount = standardProductAmount / 28.35
-    if (waterUnit === "gal_uk") {
-      // For UK gallons, show per gallon
-      if (ozAmount / waterAmount < 16) {
-        imperialResult = `${(ozAmount / waterAmount).toFixed(1)}oz per gallon`
-      } else {
-        imperialResult = `${(ozAmount / waterAmount / 16).toFixed(2)}lb per gallon`
-      }
+    // Imperial result (oz or lb per gallon)
+    const ozPerGallon = productPerGallon / 28.35
+    if (ozPerGallon < 16) {
+      imperialResult = `${ozPerGallon.toFixed(1)}oz per gallon`
     } else {
-      // For litres, convert to gallons
-      if (ozAmount / (standardWaterAmount / 4.546) < 16) {
-        imperialResult = `${(ozAmount / (standardWaterAmount / 4.546)).toFixed(1)}oz per gallon`
-      } else {
-        imperialResult = `${(ozAmount / (standardWaterAmount / 4.546) / 16).toFixed(2)}lb per gallon`
-      }
+      imperialResult = `${(ozPerGallon / 16).toFixed(2)}lb per gallon`
     }
 
-    // Alternative result (teaspoons/tablespoons)
-    if (waterUnit === "gal_uk") {
-      // For UK gallons, show per gallon
-      const productPerGallon = standardProductAmount / waterAmount / 4.546
-      if (productPerGallon < 15) {
-        alternativeResult = `${(productPerGallon / 5).toFixed(1)} teaspoons per gallon`
-      } else {
-        alternativeResult = `${(productPerGallon / 15).toFixed(1)} tablespoons per gallon`
-      }
+    // Alternative result (teaspoons/tablespoons per litre)
+    if (productPerLitre < 15) {
+      alternativeResult = `${(productPerLitre / 5).toFixed(1)} teaspoons per litre`
     } else {
-      // For litres, show per litre
-      const productPerLitre = standardProductAmount / standardWaterAmount
-      if (productPerLitre < 15) {
-        alternativeResult = `${(productPerLitre / 5).toFixed(1)} teaspoons per litre`
-      } else {
-        alternativeResult = `${(productPerLitre / 15).toFixed(1)} tablespoons per litre`
-      }
+      alternativeResult = `${(productPerLitre / 15).toFixed(1)} tablespoons per litre`
+    }
+
+    // Total amount needed for the specified water volume
+    if (standardProductAmount < 1000) {
+      totalAmountResult = `${standardProductAmount.toFixed(1)}g for ${waterAmount} ${waterUnit === "l" ? "litres" : waterUnit === "ml" ? "ml" : "gallons"}`
+    } else {
+      totalAmountResult = `${(standardProductAmount / 1000).toFixed(2)}kg for ${waterAmount} ${waterUnit === "l" ? "litres" : waterUnit === "ml" ? "ml" : "gallons"}`
     }
   } else if (measurementType === "volume") {
-    // Metric result (ml or l)
-    if (waterUnit === "gal_uk") {
-      // For UK gallons, show per gallon
-      const productPerGallon = standardProductAmount / waterAmount / 4.546
-      if (productPerGallon < 1000) {
-        metricResult = `${productPerGallon.toFixed(1)}ml per gallon`
-      } else {
-        metricResult = `${(productPerGallon / 1000).toFixed(2)}l per gallon`
-      }
+    // Metric result (ml or l per litre)
+    if (productPerLitre < 1000) {
+      metricResult = `${productPerLitre.toFixed(1)}ml per litre`
     } else {
-      // For litres, show per litre
-      const productPerLitre = standardProductAmount / standardWaterAmount
-      if (productPerLitre < 1000) {
-        metricResult = `${productPerLitre.toFixed(1)}ml per litre`
-      } else {
-        metricResult = `${(productPerLitre / 1000).toFixed(2)}l per litre`
-      }
+      metricResult = `${(productPerLitre / 1000).toFixed(2)}l per litre`
     }
 
-    // Imperial result (fl oz)
-    const flOzAmount = standardProductAmount / 28.41
-    if (waterUnit === "gal_uk") {
-      // For UK gallons, show per gallon
-      imperialResult = `${(flOzAmount / waterAmount).toFixed(1)}fl oz per gallon`
+    // Imperial result (fl oz per gallon)
+    const flOzPerGallon = productPerGallon / 28.41
+    imperialResult = `${flOzPerGallon.toFixed(1)}fl oz per gallon`
+
+    // Alternative result (teaspoons/tablespoons per litre)
+    if (productPerLitre < 15) {
+      alternativeResult = `${(productPerLitre / 5).toFixed(1)} teaspoons per litre`
     } else {
-      // For litres, convert to gallons
-      imperialResult = `${(flOzAmount / (standardWaterAmount / 4.546)).toFixed(1)}fl oz per gallon`
+      alternativeResult = `${(productPerLitre / 15).toFixed(1)} tablespoons per litre`
     }
 
-    // Alternative result (teaspoons/tablespoons)
-    if (waterUnit === "gal_uk") {
-      // For UK gallons, show per gallon
-      const productPerGallon = standardProductAmount / waterAmount / 4.546
-      if (productPerGallon < 15) {
-        alternativeResult = `${(productPerGallon / 5).toFixed(1)} teaspoons per gallon`
-      } else {
-        alternativeResult = `${(productPerGallon / 15).toFixed(1)} tablespoons per gallon`
-      }
+    // Total amount needed for the specified water volume
+    if (standardProductAmount < 1000) {
+      totalAmountResult = `${standardProductAmount.toFixed(1)}ml for ${waterAmount} ${waterUnit === "l" ? "litres" : waterUnit === "ml" ? "ml" : "gallons"}`
     } else {
-      // For litres, show per litre
-      const productPerLitre = standardProductAmount / standardWaterAmount
-      if (productPerLitre < 15) {
-        alternativeResult = `${(productPerLitre / 5).toFixed(1)} teaspoons per litre`
-      } else {
-        alternativeResult = `${(productPerLitre / 15).toFixed(1)} tablespoons per litre`
-      }
+      totalAmountResult = `${(standardProductAmount / 1000).toFixed(2)}L for ${waterAmount} ${waterUnit === "l" ? "litres" : waterUnit === "ml" ? "ml" : "gallons"}`
     }
   } else if (measurementType === "cap") {
-    // Metric result (ml)
-    if (waterUnit === "gal_uk") {
-      // For UK gallons, show per gallon
-      const mlPerGallon = standardProductAmount / waterAmount / 4.546
-      metricResult = `${mlPerGallon.toFixed(1)}ml per gallon`
-    } else {
-      // For litres, show per litre
-      const mlPerLitre = standardProductAmount / standardWaterAmount
-      metricResult = `${mlPerLitre.toFixed(1)}ml per litre`
-    }
+    // Metric result (ml per litre)
+    const mlPerLitre = productPerLitre * capSize
+    metricResult = `${mlPerLitre.toFixed(1)}ml per litre`
 
-    // Imperial result (fl oz)
-    const flOzAmount = standardProductAmount / 28.41
-    if (waterUnit === "gal_uk") {
-      // For UK gallons, show per gallon
-      imperialResult = `${(flOzAmount / waterAmount).toFixed(1)}fl oz per gallon`
-    } else {
-      // For litres, convert to gallons
-      imperialResult = `${(flOzAmount / (standardWaterAmount / 4.546)).toFixed(1)}fl oz per gallon`
-    }
+    // Imperial result (fl oz per gallon)
+    const flOzPerGallon = (productPerGallon * capSize) / 28.41
+    imperialResult = `${flOzPerGallon.toFixed(1)}fl oz per gallon`
 
     // Cap result
-    if (waterUnit === "gal_uk") {
-      // For UK gallons, show per gallon
-      const capsPerGallon = standardProductAmount / capSize / waterAmount / 4.546
-      capResult = `${capsPerGallon.toFixed(1)} caps per gallon`
+    capResult = `${productPerLitre.toFixed(1)} caps per litre (${productPerGallon.toFixed(1)} caps per gallon)`
+
+    // Alternative result (teaspoons/tablespoons per litre)
+    if (mlPerLitre < 15) {
+      alternativeResult = `${(mlPerLitre / 5).toFixed(1)} teaspoons per litre`
     } else {
-      // For litres, show per litre
-      const capsPerLitre = standardProductAmount / capSize / standardWaterAmount
-      capResult = `${capsPerLitre.toFixed(1)} caps per litre`
+      alternativeResult = `${(mlPerLitre / 15).toFixed(1)} tablespoons per litre`
     }
 
-    // Alternative result (teaspoons/tablespoons)
-    if (waterUnit === "gal_uk") {
-      // For UK gallons, show per gallon
-      const mlPerGallon = standardProductAmount / waterAmount / 4.546
-      if (mlPerGallon < 15) {
-        alternativeResult = `${(mlPerGallon / 5).toFixed(1)} teaspoons per gallon`
-      } else {
-        alternativeResult = `${(mlPerGallon / 15).toFixed(1)} tablespoons per gallon`
-      }
+    // Total amount needed for the specified water volume
+    const totalCaps = standardProductAmount / capSize
+    const wholeCaps = Math.floor(totalCaps)
+    const partialCap = totalCaps - wholeCaps
+
+    if (partialCap === 0) {
+      totalAmountResult = `${wholeCaps} caps for ${waterAmount} ${waterUnit === "l" ? "litres" : waterUnit === "ml" ? "ml" : "gallons"}`
+    } else if (partialCap === 0.5) {
+      totalAmountResult = `${wholeCaps} and a half caps for ${waterAmount} ${waterUnit === "l" ? "litres" : waterUnit === "ml" ? "ml" : "gallons"}`
+    } else if (partialCap === 0.25) {
+      totalAmountResult = `${wholeCaps} and a quarter caps for ${waterAmount} ${waterUnit === "l" ? "litres" : waterUnit === "ml" ? "ml" : "gallons"}`
+    } else if (partialCap === 0.75) {
+      totalAmountResult = `${wholeCaps} and three quarters caps for ${waterAmount} ${waterUnit === "l" ? "litres" : waterUnit === "ml" ? "ml" : "gallons"}`
     } else {
-      // For litres, show per litre
-      const mlPerLitre = standardProductAmount / standardWaterAmount
-      if (mlPerLitre < 15) {
-        alternativeResult = `${(mlPerLitre / 5).toFixed(1)} teaspoons per litre`
-      } else {
-        alternativeResult = `${(mlPerLitre / 15).toFixed(1)} tablespoons per litre`
-      }
+      totalAmountResult = `${totalCaps.toFixed(1)} caps for ${waterAmount} ${waterUnit === "l" ? "litres" : waterUnit === "ml" ? "ml" : "gallons"}`
     }
   }
 
   // Scoop result if using scoop
   if (hasScoop) {
     const scoopConversionFactor = scoopUnit === "g" ? 1 : scoopUnit === "ml" ? 1 : 1
-    if (waterUnit === "gal_uk") {
-      // For UK gallons, show per gallon
-      const scoopsPerGallon = standardProductAmount / (scoopSize * scoopConversionFactor) / waterAmount / 4.546
-      scoopResult = `${scoopsPerGallon.toFixed(1)} scoops per gallon`
+    const scoopsPerLitre = productPerLitre / (scoopSize * scoopConversionFactor)
+    const scoopsPerGallon = productPerGallon / (scoopSize * scoopConversionFactor)
+    scoopResult = `${scoopsPerLitre.toFixed(1)} scoops per litre (${scoopsPerGallon.toFixed(1)} scoops per gallon)`
+
+    // Total scoops needed
+    const totalScoops = standardProductAmount / (scoopSize * scoopConversionFactor)
+    const wholeScoops = Math.floor(totalScoops)
+    const partialScoop = totalScoops - wholeScoops
+
+    if (partialScoop === 0) {
+      scoopResult += `\n${wholeScoops} scoops for ${waterAmount} ${waterUnit === "l" ? "litres" : waterUnit === "ml" ? "ml" : "gallons"}`
+    } else if (partialScoop === 0.5) {
+      scoopResult += `\n${wholeScoops} and a half scoops for ${waterAmount} ${waterUnit === "l" ? "litres" : waterUnit === "ml" ? "ml" : "gallons"}`
     } else {
-      // For litres, show per litre
-      const scoopsPerLitre = standardProductAmount / (scoopSize * scoopConversionFactor) / standardWaterAmount
-      scoopResult = `${scoopsPerLitre.toFixed(1)} scoops per litre`
+      scoopResult += `\n${totalScoops.toFixed(1)} scoops for ${waterAmount} ${waterUnit === "l" ? "litres" : waterUnit === "ml" ? "ml" : "gallons"}`
     }
   }
 
@@ -1387,43 +1341,65 @@ function calculateProductDosage() {
   if (waterUnit === "gal_uk") {
     // For UK gallons, show the result for the exact amount the user entered
     if (measurementType === "cap") {
-      // Calculate caps directly: ratio * water amount
-      const capsNeeded = ratio * waterAmount
-      wateringCanResultText = `${capsNeeded.toFixed(1)} caps per ${waterAmount} gallon watering can`
-    } else if (measurementType === "weight") {
-      const productAmountForCan = ratio * waterAmount
-      if (productAmountForCan < 1000) {
-        wateringCanResultText = `${productAmountForCan.toFixed(1)}g per ${waterAmount} gallon watering can`
+      // Calculate total caps needed
+      const totalCaps = standardProductAmount / capSize
+      const wholeCaps = Math.floor(totalCaps)
+      const partialCap = totalCaps - wholeCaps
+
+      if (partialCap === 0) {
+        wateringCanResultText = `${wholeCaps} caps for your ${waterAmount} gallon watering can`
+      } else if (partialCap === 0.5) {
+        wateringCanResultText = `${wholeCaps} and a half caps for your ${waterAmount} gallon watering can`
+      } else if (partialCap === 0.25) {
+        wateringCanResultText = `${wholeCaps} and a quarter caps for your ${waterAmount} gallon watering can`
+      } else if (partialCap === 0.75) {
+        wateringCanResultText = `${wholeCaps} and three quarters caps for your ${waterAmount} gallon watering can`
       } else {
-        wateringCanResultText = `${(productAmountForCan / 1000).toFixed(2)}kg per ${waterAmount} gallon watering can`
+        wateringCanResultText = `${totalCaps.toFixed(1)} caps for your ${waterAmount} gallon watering can`
+      }
+    } else if (measurementType === "weight") {
+      if (standardProductAmount < 1000) {
+        wateringCanResultText = `${standardProductAmount.toFixed(1)}g for your ${waterAmount} gallon watering can`
+      } else {
+        wateringCanResultText = `${(standardProductAmount / 1000).toFixed(2)}kg for your ${waterAmount} gallon watering can`
       }
     } else if (measurementType === "volume") {
-      const productAmountForCan = ratio * waterAmount
-      if (productAmountForCan < 1000) {
-        wateringCanResultText = `${productAmountForCan.toFixed(1)}ml per ${waterAmount} gallon watering can`
+      if (standardProductAmount < 1000) {
+        wateringCanResultText = `${standardProductAmount.toFixed(1)}ml for your ${waterAmount} gallon watering can`
       } else {
-        wateringCanResultText = `${(productAmountForCan / 1000).toFixed(2)}L per ${waterAmount} gallon watering can`
+        wateringCanResultText = `${(standardProductAmount / 1000).toFixed(2)}L for your ${waterAmount} gallon watering can`
       }
     }
   } else {
-    // For litres or ml, calculate based on the ratio
+    // For litres or ml
     if (measurementType === "cap") {
-      // Calculate caps directly: ratio * water amount
-      const capsNeeded = ratio * waterAmount
-      wateringCanResultText = `${capsNeeded.toFixed(1)} caps per ${waterAmount}${waterUnit === "l" ? "L" : "ml"} watering can`
-    } else if (measurementType === "weight") {
-      const productAmountForCan = ratio * waterAmount
-      if (productAmountForCan < 1000) {
-        wateringCanResultText = `${productAmountForCan.toFixed(1)}g per ${waterAmount}${waterUnit === "l" ? "L" : "ml"} watering can`
+      // Calculate total caps needed
+      const totalCaps = standardProductAmount / capSize
+      const wholeCaps = Math.floor(totalCaps)
+      const partialCap = totalCaps - wholeCaps
+
+      if (partialCap === 0) {
+        wateringCanResultText = `${wholeCaps} caps for your ${waterAmount}${waterUnit === "l" ? "L" : "ml"} watering can`
+      } else if (partialCap === 0.5) {
+        wateringCanResultText = `${wholeCaps} and a half caps for your ${waterAmount}${waterUnit === "l" ? "L" : "ml"} watering can`
+      } else if (partialCap === 0.25) {
+        wateringCanResultText = `${wholeCaps} and a quarter caps for your ${waterAmount}${waterUnit === "l" ? "L" : "ml"} watering can`
+      } else if (partialCap === 0.75) {
+        wateringCanResultText = `${wholeCaps} and three quarters caps for your ${waterAmount}${waterUnit === "l" ? "L" : "ml"} watering can`
       } else {
-        wateringCanResultText = `${(productAmountForCan / 1000).toFixed(2)}kg per ${waterAmount}${waterUnit === "l" ? "L" : "ml"} watering can`
+        wateringCanResultText = `${totalCaps.toFixed(1)} caps for your ${waterAmount}${waterUnit === "l" ? "L" : "ml"} watering can`
+      }
+    } else if (measurementType === "weight") {
+      if (standardProductAmount < 1000) {
+        wateringCanResultText = `${standardProductAmount.toFixed(1)}g for your ${waterAmount}${waterUnit === "l" ? "L" : "ml"} watering can`
+      } else {
+        wateringCanResultText = `${(standardProductAmount / 1000).toFixed(2)}kg for your ${waterAmount}${waterUnit === "l" ? "L" : "ml"} watering can`
       }
     } else if (measurementType === "volume") {
-      const productAmountForCan = ratio * waterAmount
-      if (productAmountForCan < 1000) {
-        wateringCanResultText = `${productAmountForCan.toFixed(1)}ml per ${waterAmount}${waterUnit === "l" ? "L" : "ml"} watering can`
+      if (standardProductAmount < 1000) {
+        wateringCanResultText = `${standardProductAmount.toFixed(1)}ml for your ${waterAmount}${waterUnit === "l" ? "L" : "ml"} watering can`
       } else {
-        wateringCanResultText = `${(productAmountForCan / 1000).toFixed(2)}L per ${waterAmount}${waterUnit === "l" ? "L" : "ml"} watering can`
+        wateringCanResultText = `${(standardProductAmount / 1000).toFixed(2)}L for your ${waterAmount}${waterUnit === "l" ? "L" : "ml"} watering can`
       }
     }
   }
@@ -1431,6 +1407,7 @@ function calculateProductDosage() {
   // Update result elements
   if (metricResultElement) metricResultElement.textContent = metricResult || "-"
   if (imperialResultElement) imperialResultElement.textContent = imperialResult || "-"
+  if (alternativeResultElement) alternativeResultElement.textContent = totalAmountResult || alternativeResult || "-"
 
   if (measurementType === "cap" && capResultElement && capResultCard) {
     capResultElement.textContent = capResult || "-"
@@ -1445,8 +1422,6 @@ function calculateProductDosage() {
   } else if (scoopResultCard) {
     scoopResultCard.classList.add("hidden")
   }
-
-  if (alternativeResultElement) alternativeResultElement.textContent = alternativeResult || "-"
 
   // Show watering can section
   if (wateringCanSection && wateringCanResult) {
@@ -1504,10 +1479,16 @@ function calculateArea() {
   }
 
   // Convert area to selected unit
-  const calculatedArea = areaSqMeters / AREA_CONVERSIONS[areaUnit]
+  const calculatedArea = areaSqMeters / AREA_CONVERSIONS.sq_m
 
   // Format result
-  const areaResult = `${calculatedArea.toFixed(2)} ${areaUnit}`
+  let areaResult = ""
+
+  if (areaShape === "rectangle") {
+    areaResult = `${calculatedArea.toFixed(2)} sq ${areaUnit}`
+  } else if (areaShape === "circle") {
+    areaResult = `${calculatedArea.toFixed(2)} sq ${circleUnit}`
+  }
 
   // Update result elements
   if (calculatedAreaDiv && areaResultText) {
@@ -1530,7 +1511,7 @@ function calculateAreaApplication() {
   // Parse area value
   const areaParts = areaResultText.split(" ")
   const areaValue = Number.parseFloat(areaParts[0])
-  const areaUnit = areaParts[1]
+  const areaUnit = areaParts[2] // Now "sq m" format
 
   // Get application rate
   const applicationRate = Number.parseFloat(document.getElementById("application-rate")?.value || "0")
@@ -1823,6 +1804,7 @@ function formatDebugInfo(calculatorType) {
     const capResult = document.getElementById("cap-result")?.textContent || "N/A"
     const scoopResult = document.getElementById("scoop-result")?.textContent || "N/A"
     const alternativeResult = document.getElementById("alternative-result")?.textContent || "N/A"
+    const wateringCanResult = document.getElementById("watering-can-result")?.textContent || "N/A"
 
     debugInfo += "\nRESULTS:\n"
     debugInfo += "Metric Result: " + metricResult + "\n"
@@ -1837,6 +1819,10 @@ function formatDebugInfo(calculatorType) {
     }
 
     debugInfo += "Alternative Measurement: " + alternativeResult + "\n"
+
+    if (!document.getElementById("watering-can-section")?.classList.contains("hidden")) {
+      debugInfo += "Watering Can: " + wateringCanResult + "\n"
+    }
   } else if (selectedCalculatorType === "area") {
     // Area Calculator Debug Info
     debugInfo += "AREA CALCULATOR SELECTIONS:\n\n"
