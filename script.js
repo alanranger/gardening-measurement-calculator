@@ -1611,7 +1611,17 @@ function calculateWaterMixing() {
     ratio = Number.parseFloat(document.getElementById("ratio").value)
 
     // Calculate product amount based on ratio and water amount
-    productAmount = ratio * waterAmount
+    // The ratio is in product per liter, so we need to convert if waterUnit is not liter
+    if (waterUnit === "gal_uk") {
+      // 1 UK gallon = 4.55 liters
+      productAmount = ratio * waterAmount * 4.55
+    } else if (waterUnit === "ml") {
+      // 1000 ml = 1 liter
+      productAmount = (ratio * waterAmount) / 1000
+    } else {
+      productAmount = ratio * waterAmount
+    }
+
     productUnit = measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"
   } else if (calculationMode === "ratio_based") {
     ratio = Number.parseFloat(document.getElementById("ratio-2").value)
@@ -1898,7 +1908,15 @@ function updateDebugInfo() {
       waterAmount = document.getElementById("water-amount-2").value
       waterUnit = document.getElementById("water-unit-2").value
       ratio = document.getElementById("ratio").value
-      productAmount = ratio * waterAmount
+
+      if (waterUnit === "gal_uk") {
+        productAmount = ratio * waterAmount * 4.55
+      } else if (waterUnit === "ml") {
+        productAmount = (ratio * waterAmount) / 1000
+      } else {
+        productAmount = ratio * waterAmount
+      }
+
       productUnit = measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"
     } else if (calculationMode === "ratio_based") {
       ratio = document.getElementById("ratio-2").value
