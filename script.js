@@ -882,39 +882,41 @@ const WATER_TREATMENT_PRODUCTS = [
   },
 ]
 
-// Update the updateProductNameDropdown function to correctly handle the product arrays
-function updateProductNameDropdown(selectedType) {
-  console.log("Updating product dropdown for type:", selectedType)
+// Product type hints
+const PRODUCT_TYPE_HINTS = {
+  liquid_fertilizer: "Typical usage: 5-10ml per litre of water",
+  granular_fertilizer: "Typical usage: 1-2g per litre of water or 30-60g per sq metre",
+  lawn_fertilizer: "Typical usage: 35g per square metre",
+  weed_killer: "Typical usage: 10ml per litre of water",
+  pond_treatment: "Typical usage: 50ml per 1000 litres of water",
+  algaecide: "Typical usage: 5ml per 100 litres of water",
+  water_clarifier: "Typical usage: 5ml per 10 litres of water",
+  custom: "Enter your own measurements for a custom product",
+}
 
+// Direct function to populate product dropdown
+function populateProductDropdown() {
+  console.log("Directly populating product dropdown")
+
+  const productTypeSelect = document.getElementById("product-type")
   const productNameSelect = document.getElementById("product-name-select")
-  if (!productNameSelect) {
-    console.error("Product name select element not found")
+
+  if (!productTypeSelect || !productNameSelect) {
+    console.error("Required elements not found")
     return
   }
+
+  // Get selected product type
+  const selectedType = productTypeSelect.value
+  console.log("Selected product type:", selectedType)
 
   // Clear existing options except the first one
   while (productNameSelect.options.length > 1) {
     productNameSelect.remove(1)
   }
 
-  // Get the current calculator type
-  const calculatorType = document.getElementById("calculator-type")?.value || "product"
-  console.log("Current calculator type:", calculatorType)
-
-  // Choose the appropriate product list based on calculator type
-  let productList = []
-  if (calculatorType === "product") {
-    productList = COMMON_PRODUCTS
-  } else if (calculatorType === "area") {
-    productList = AREA_TREATMENT_PRODUCTS
-  } else if (calculatorType === "water") {
-    productList = WATER_TREATMENT_PRODUCTS
-  }
-
-  console.log("Total products in list:", productList.length)
-
-  // Filter products by selected type
-  const filteredProducts = productList.filter((product) => product.type === selectedType)
+  // Filter products by type
+  const filteredProducts = COMMON_PRODUCTS.filter((product) => product.type === selectedType)
   console.log("Filtered products:", filteredProducts.length)
 
   // Add filtered products to dropdown
@@ -925,116 +927,41 @@ function updateProductNameDropdown(selectedType) {
     productNameSelect.appendChild(option)
   })
 
-  // Show/hide the dropdown based on whether there are products
-  const commonProductSection = document.getElementById("common-product-section")
-  if (commonProductSection) {
-    if (filteredProducts.length === 0 && selectedType !== "custom") {
-      commonProductSection.classList.add("hidden")
-      // Show the custom product section if no products are available
-      const customProductSection = document.getElementById("custom-product-section")
-      const useCustomProductCheckbox = document.getElementById("use-custom-product")
-      if (customProductSection) customProductSection.classList.remove("hidden")
-      if (useCustomProductCheckbox) useCustomProductCheckbox.checked = true
-    } else if (selectedType !== "custom") {
-      commonProductSection.classList.remove("hidden")
-    }
-  }
+  console.log("Product dropdown populated with", filteredProducts.length, "products")
 }
 
-function initProductCalculator() {
-  const calculatorTypeSelect = document.getElementById("calculator-type")
+// Initialize the application
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOM fully loaded and parsed")
+
+  // Add direct event listener to product type select
   const productTypeSelect = document.getElementById("product-type")
-  const productNameSelect = document.getElementById("product-name-select")
-  const useCustomProductCheckbox = document.getElementById("use-custom-product")
-  const customProductSection = document.getElementById("custom-product-section")
-  const commonProductSection = document.getElementById("common-product-section")
-  const productTypeHint = document.getElementById("product-type-hint")
-
-  // Initialize product type select
   if (productTypeSelect) {
-    productTypeSelect.addEventListener("change", () => {
-      const selectedType = productTypeSelect.value
-      // Show/hide custom product section based on selection
-      if (selectedType === "custom") {
-        if (useCustomProductCheckbox) useCustomProductCheckbox.checked = true
-        if (customProductSection) customProductSection.classList.remove("hidden")
-        if (commonProductSection) commonProductSection.classList.add("hidden")
-      } else {
-        if (useCustomProductCheckbox) useCustomProductCheckbox.checked = false
-        if (customProductSection) customProductSection.classList.add("hidden")
-        if (commonProductSection) commonProductSection.classList.remove("hidden")
-      }
-    })
-  }
-
-  // Update product type hint
-  if (productTypeSelect && productTypeHint) {
-    productTypeSelect.addEventListener("change", () => {
-      const selectedType = productTypeSelect.value
-      productTypeHint.textContent = PRODUCT_TYPE_HINTS[selectedType] || ""
-
-      // Update product name dropdown based on selected type
-      updateProductNameDropdown(selectedType)
-
-      // Show/hide custom product section based on selection
-      if (selectedType === "custom") {
-        if (useCustomProductCheckbox) useCustomProductCheckbox.checked = true
-        if (customProductSection) customProductSection.classList.remove("hidden")
-        if (commonProductSection) commonProductSection.classList.add("hidden")
-      } else {
-        if (useCustomProductCheckbox) useCustomProductCheckbox.checked = false
-        if (customProductSection) customProductSection.classList.add("hidden")
-        if (commonProductSection) commonProductSection.classList.remove("hidden")
-      }
+    productTypeSelect.addEventListener("change", function () {
+      console.log("Product type changed to:", this.value)
+      populateProductDropdown()
     })
 
-    // Initial update of product name dropdown
-    updateProductNameDropdown(productTypeSelect.value)
+    // Populate dropdown on initial load
+    console.log("Initial population of product dropdown")
+    populateProductDropdown()
+  } else {
+    console.error("Product type select element not found")
   }
-}
 
-function initCalculatorTypeSelector() {
+  // Add direct event listener to calculator type select
   const calculatorTypeSelect = document.getElementById("calculator-type")
-  const productSection = document.getElementById("product-section")
-  const areaSection = document.getElementById("area-section")
-  const waterSection = document.getElementById("water-section")
-
   if (calculatorTypeSelect) {
-    calculatorTypeSelect.addEventListener("change", () => {
-      const selectedType = calculatorTypeSelect.value
+    calculatorTypeSelect.addEventListener("change", function () {
+      console.log("Calculator type changed to:", this.value)
 
-      productSection.classList.add("hidden")
-      areaSection.classList.add("hidden")
-      waterSection.classList.add("hidden")
-
-      if (selectedType === "product") {
-        productSection.classList.remove("hidden")
-      } else if (selectedType === "area") {
-        areaSection.classList.remove("hidden")
-      } else if (selectedType === "water") {
-        waterSection.classList.remove("hidden")
+      // Trigger product type change to update dropdown
+      if (productTypeSelect) {
+        const event = new Event("change")
+        productTypeSelect.dispatchEvent(event)
       }
     })
+  } else {
+    console.error("Calculator type select element not found")
   }
-
-  // Add event listener to update product dropdown when calculator type changes
-  calculatorTypeSelect.addEventListener("change", () => {
-    const productTypeSelect = document.getElementById("product-type")
-    if (productTypeSelect) {
-      updateProductNameDropdown(productTypeSelect.value)
-    }
-  })
-}
-
-// Declare PRODUCT_TYPE_HINTS
-const PRODUCT_TYPE_HINTS = {
-  liquid_fertilizer:
-    "Liquid fertilizers are concentrated solutions that need to be diluted with water before application.",
-  granular_fertilizer:
-    "Granular fertilizers can be water-soluble (dissolved in water) or slow-release (applied directly to the soil).",
-  weed_killer: "Weed killers are designed to control or eliminate unwanted plants.",
-  lawn_fertilizer: "Lawn fertilizers are specifically formulated to promote healthy grass growth.",
-  pond_treatment: "Pond treatments help maintain water quality and control algae growth in ponds.",
-  algaecide: "Algaecides are chemicals used to kill or inhibit the growth of algae.",
-  water_clarifier: "Water clarifiers help to remove cloudiness and improve the clarity of water.",
-}
+})
