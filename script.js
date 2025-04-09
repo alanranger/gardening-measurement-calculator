@@ -1161,6 +1161,84 @@ function setupEventListeners() {
     })
   })
 
+  // Also add event listeners to update the ratio when water units change
+  // Add this to the setupEventListeners function:
+
+  // Add water unit change listeners to update ratios
+  const waterUnit2Select = document.getElementById("water-unit-2")
+  if (waterUnit2Select) {
+    waterUnit2Select.addEventListener("change", function () {
+      // Get the current product
+      const productNameSelect = document.getElementById("product-name-select")
+      const selectedId = productNameSelect.value
+      if (!selectedId) return
+
+      // Find the selected product
+      const allProducts = [...COMMON_PRODUCTS, ...AREA_TREATMENT_PRODUCTS, ...WATER_TREATMENT_PRODUCTS]
+      const selectedProduct = allProducts.find((p) => p.id === selectedId)
+
+      if (selectedProduct) {
+        // Calculate the ratio based on product's default values
+        const defaultRatio = selectedProduct.defaultDosage / selectedProduct.defaultWaterAmount
+
+        // Convert ratio to match the selected water unit
+        let convertedRatio = defaultRatio
+        const waterUnit2 = this.value
+
+        if (waterUnit2 === "gal_uk" && selectedProduct.defaultWaterUnit === "l") {
+          convertedRatio = defaultRatio * 4.55 // Convert from per liter to per gallon
+        } else if (waterUnit2 === "l" && selectedProduct.defaultWaterUnit === "gal_uk") {
+          convertedRatio = defaultRatio / 4.55 // Convert from per gallon to per liter
+        } else if (waterUnit2 === "ml" && selectedProduct.defaultWaterUnit === "l") {
+          convertedRatio = defaultRatio / 1000 // Convert from per liter to per ml
+        }
+
+        // Update the ratio field
+        const ratioField = document.getElementById("ratio")
+        if (ratioField) {
+          ratioField.value = convertedRatio.toFixed(2)
+        }
+      }
+    })
+  }
+
+  const targetUnitSelect = document.getElementById("target-unit")
+  if (targetUnitSelect) {
+    targetUnitSelect.addEventListener("change", function () {
+      // Get the current product
+      const productNameSelect = document.getElementById("product-name-select")
+      const selectedId = productNameSelect.value
+      if (!selectedId) return
+
+      // Find the selected product
+      const allProducts = [...COMMON_PRODUCTS, ...AREA_TREATMENT_PRODUCTS, ...WATER_TREATMENT_PRODUCTS]
+      const selectedProduct = allProducts.find((p) => p.id === selectedId)
+
+      if (selectedProduct) {
+        // Calculate the ratio based on product's default values
+        const defaultRatio = selectedProduct.defaultDosage / selectedProduct.defaultWaterAmount
+
+        // Convert ratio to match the selected water unit
+        let convertedRatio = defaultRatio
+        const targetUnit = this.value
+
+        if (targetUnit === "gal_uk" && selectedProduct.defaultWaterUnit === "l") {
+          convertedRatio = defaultRatio * 4.55 // Convert from per liter to per gallon
+        } else if (targetUnit === "l" && selectedProduct.defaultWaterUnit === "gal_uk") {
+          convertedRatio = defaultRatio / 4.55 // Convert from per gallon to per liter
+        } else if (targetUnit === "ml" && selectedProduct.defaultWaterUnit === "l") {
+          convertedRatio = defaultRatio / 1000 // Convert from per liter to per ml
+        }
+
+        // Update the ratio field
+        const ratioField2 = document.getElementById("ratio-2")
+        if (ratioField2) {
+          ratioField2.value = convertedRatio.toFixed(2)
+        }
+      }
+    })
+  }
+
   // Initial setup
   showAppropriateCalculator(applicationMethodSelect.value)
 }
@@ -1360,6 +1438,48 @@ function updateCalculatorInputs(product) {
           waterUnitSelect.selectedIndex = i
           break
         }
+      }
+    }
+
+    // Set ratio fields based on product's default dosage and water amount
+    if (product.applicationMethod === "water_mixing") {
+      // Calculate the ratio based on product's default values
+      const defaultRatio = product.defaultDosage / product.defaultWaterAmount
+
+      // Set ratio for water_to_product mode
+      const ratioField = document.getElementById("ratio")
+      if (ratioField) {
+        // Convert ratio to match the selected water unit
+        let convertedRatio = defaultRatio
+        const waterUnit2 = document.getElementById("water-unit-2").value
+
+        if (waterUnit2 === "gal_uk" && product.defaultWaterUnit === "l") {
+          convertedRatio = defaultRatio * 4.55 // Convert from per liter to per gallon
+        } else if (waterUnit2 === "l" && product.defaultWaterUnit === "gal_uk") {
+          convertedRatio = defaultRatio / 4.55 // Convert from per gallon to per liter
+        } else if (waterUnit2 === "ml" && product.defaultWaterUnit === "l") {
+          convertedRatio = defaultRatio / 1000 // Convert from per liter to per ml
+        }
+
+        ratioField.value = convertedRatio.toFixed(2)
+      }
+
+      // Set ratio for ratio_based mode
+      const ratioField2 = document.getElementById("ratio-2")
+      if (ratioField2) {
+        // Convert ratio to match the selected water unit
+        let convertedRatio = defaultRatio
+        const targetUnit = document.getElementById("target-unit").value
+
+        if (targetUnit === "gal_uk" && product.defaultWaterUnit === "l") {
+          convertedRatio = defaultRatio * 4.55 // Convert from per liter to per gallon
+        } else if (targetUnit === "l" && product.defaultWaterUnit === "gal_uk") {
+          convertedRatio = defaultRatio / 4.55 // Convert from per gallon to per liter
+        } else if (targetUnit === "ml" && product.defaultWaterUnit === "l") {
+          convertedRatio = defaultRatio / 1000 // Convert from per liter to per ml
+        }
+
+        ratioField2.value = convertedRatio.toFixed(2)
       }
     }
   } else if (product.applicationMethod === "direct_application") {
@@ -1570,6 +1690,60 @@ function calculateWaterMixing() {
   document.getElementById("watering-can-info").textContent =
     `Based on the ratio of ${ratioPerLiter.toFixed(2)} ${productUnit} per litre`
   document.getElementById("watering-can-section").classList.remove("hidden")
+
+  // Add a warning if the ratio significantly differs from the product's recommended ratio
+  if (calculationMode === "water_to_product" || calculationMode === "ratio_based") {
+    // Get the current product
+    const productNameSelect = document.getElementById("product-name-select")
+    const selectedId = productNameSelect.value
+
+    if (selectedId) {
+      // Find the selected product
+      const allProducts = [...COMMON_PRODUCTS, ...AREA_TREATMENT_PRODUCTS, ...WATER_TREATMENT_PRODUCTS]
+      const selectedProduct = allProducts.find((p) => p.id === selectedId)
+
+      if (selectedProduct) {
+        // Calculate the recommended ratio based on product's default values
+        const recommendedRatio = selectedProduct.defaultDosage / selectedProduct.defaultWaterAmount
+
+        // Convert to the same unit for comparison
+        let recommendedRatioPerLiter = recommendedRatio
+        if (selectedProduct.defaultWaterUnit === "gal_uk") {
+          recommendedRatioPerLiter = recommendedRatio / 4.55 // Convert from per gallon to per liter
+        } else if (selectedProduct.defaultWaterUnit === "ml") {
+          recommendedRatioPerLiter = recommendedRatio * 1000 // Convert from per ml to per liter
+        }
+
+        // Compare with the current ratio
+        const difference = Math.abs(ratioPerLiter - recommendedRatioPerLiter) / recommendedRatioPerLiter
+
+        if (difference > 0.2) {
+          // If more than 20% difference
+          // Create or update warning message
+          let warningElement = document.getElementById("ratio-warning")
+          if (!warningElement) {
+            warningElement = document.createElement("div")
+            warningElement.id = "ratio-warning"
+            warningElement.className = "beta-warning"
+            const resultsContainer = document.querySelector("#water-mixing-results .results")
+            resultsContainer.insertBefore(warningElement, resultsContainer.firstChild)
+          }
+
+          warningElement.innerHTML = `
+            <p><strong>Warning:</strong> The ratio you entered (${ratioPerLiter.toFixed(2)} ${productUnit} per liter) 
+            differs significantly from the recommended ratio (${recommendedRatioPerLiter.toFixed(2)} ${productUnit} per liter) 
+            for this product. Please check the product instructions.</p>
+          `
+        } else {
+          // Remove warning if it exists
+          const warningElement = document.getElementById("ratio-warning")
+          if (warningElement) {
+            warningElement.remove()
+          }
+        }
+      }
+    }
+  }
 
   // Update results
   document.getElementById("metric-result").textContent = metricResult
