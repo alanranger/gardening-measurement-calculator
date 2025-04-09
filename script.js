@@ -788,153 +788,7 @@ const WATER_TREATMENT_PRODUCTS = [
   // Algaecides
   {
     id: "api-pond-algaefix",
-    name: "API PondCare Algaefix",
-    type: "pond_treatment",
-    applicationMethod: "water_treatment",
-    measurementType: "volume",
-    defaultDosage: 5,
-    defaultDosageUnit: "ml",
-    defaultWaterAmount: 100,
-    defaultWaterUnit: "l",
-    instructions: "Add 5ml per 100 litres of pond water. Repeat every 3 days until algae is gone.",
-  },
-  {
-    id: "tetrapond-algofin",
-    name: "TetraPond AlgoFin",
-    type: "pond_treatment",
-    applicationMethod: "water_treatment",
-    measurementType: "volume",
-    defaultDosage: 10,
-    defaultDosageUnit: "ml",
-    defaultWaterAmount: 100,
-    defaultWaterUnit: "l",
-    instructions: "Add 10ml per 100 litres of pond water. Repeat after 7 days if necessary.",
-  },
-  {
-    id: "blagdon-green-away",
-    name: "Blagdon Green Away",
-    type: "pond_treatment",
-    applicationMethod: "water_treatment",
-    measurementType: "volume",
-    defaultDosage: 25,
-    defaultDosageUnit: "ml",
-    defaultWaterAmount: 1000,
-    defaultWaterUnit: "l",
-    instructions: "Add 25ml per 1000 litres of pond water. Repeat after 14 days if necessary.",
-  },
-  {
-    id: "evolution-aqua-stop-blanketweed",
-    name: "Evolution Aqua Stop Blanketweed",
-    type: "pond_treatment",
-    applicationMethod: "water_treatment",
-    measurementType: "weight",
-    defaultDosage: 10,
-    defaultDosageUnit: "g",
-    defaultWaterAmount: 1000,
-    defaultWaterUnit: "l",
-    instructions: "Add 10g per 1000 litres of pond water. Repeat weekly as necessary.",
-  },
-  {
-    id: "cloverleaf-blanket-answer",
-    name: "Cloverleaf Blanket Answer",
-    type: "pond_treatment",
-    applicationMethod: "water_treatment",
-    measurementType: "volume",
-    defaultDosage: 20,
-    defaultDosageUnit: "ml",
-    defaultWaterAmount: 1000,
-    defaultWaterUnit: "l",
-    instructions: "Add 20ml per 1000 litres of pond water. Specifically targets blanketweed.",
-  },
-  {
-    id: "nishikoi-clear-waters",
-    name: "Nishikoi Clear Waters",
-    type: "pond_treatment",
-    applicationMethod: "water_treatment",
-    measurementType: "volume",
-    defaultDosage: 25,
-    defaultDosageUnit: "ml",
-    defaultWaterAmount: 1000,
-    defaultWaterUnit: "l",
-    instructions: "Add 25ml per 1000 litres of pond water. Controls green water and string algae.",
-  },
-  {
-    id: "pondxpert-barley-straw-extract",
-    name: "PondXpert Barley Straw Extract",
-    type: "pond_treatment",
-    applicationMethod: "water_treatment",
-    measurementType: "volume",
-    defaultDosage: 50,
-    defaultDosageUnit: "ml",
-    defaultWaterAmount: 1000,
-    defaultWaterUnit: "l",
-    instructions: "Add 50ml per 1000 litres of pond water. Natural algae control, safe for all pond life.",
-  },
-
-  // Water Clarifiers
-  {
-    id: "tetra-aquasafe",
-    name: "Tetra AquaSafe Water Conditioner",
-    type: "pond_treatment",
-    applicationMethod: "water_treatment",
-    measurementType: "volume",
-    defaultDosage: 5,
-    defaultDosageUnit: "ml",
-    defaultWaterAmount: 10,
-    defaultWaterUnit: "l",
-    instructions: "Add 5ml per 10 litres of water when adding new water to the pond.",
-  },
-  {
-    id: "api-stress-coat",
-    name: "API Stress Coat Water Conditioner",
-    type: "pond_treatment",
-    applicationMethod: "water_treatment",
-    measurementType: "volume",
-    defaultDosage: 5,
-    defaultDosageUnit: "ml",
-    defaultWaterAmount: 10,
-    defaultWaterUnit: "l",
-    instructions: "Add 5ml per 10 litres of new water. Double dose when treating injured fish.",
-  },
-  {
-    id: "interpet-fresh-start",
-    name: "Interpet Fresh Start",
-    type: "pond_treatment",
-    applicationMethod: "water_treatment",
-    measurementType: "volume",
-    defaultDosage: 10,
-    defaultDosageUnit: "ml",
-    defaultWaterAmount: 100,
-    defaultWaterUnit: "l",
-    instructions: "Add 10ml per 100 litres when setting up a new pond or adding new water.",
-  },
-  {
-    id: "seachem-prime",
-    name: "Seachem Prime Water Conditioner",
-    type: "pond_treatment",
-    applicationMethod: "water_treatment",
-    measurementType: "volume",
-    defaultDosage: 5,
-    defaultDosageUnit: "ml",
-    defaultWaterAmount: 200,
-    defaultWaterUnit: "l",
-    instructions: "Add 5ml per 200 litres of new water. Detoxifies ammonia, nitrite, and nitrate.",
-  },
-  {
-    id: "fluval-aquaplus",
-    name: "Fluval Aquaplus Water Conditioner",
-    type: "pond_treatment",
-    applicationMethod: "water_treatment",
-    measurementType: "volume",
-    defaultDosage: 5,
-    defaultDosageUnit: "ml",
-    defaultWaterAmount: 10,
-    defaultWaterUnit: "l",
-    instructions: "Add 5ml per 10 litres of new water. Neutralizes chlorine and chloramine.",
-  },
-  {
-    id: "api-accu-clear",
-    name: "API Accu-Clear Water Clarifier",
+    name: "API Pond Algaefix",
     type: "pond_treatment",
     applicationMethod: "water_treatment",
     measurementType: "volume",
@@ -942,19 +796,7 @@ const WATER_TREATMENT_PRODUCTS = [
     defaultDosageUnit: "ml",
     defaultWaterAmount: 40,
     defaultWaterUnit: "l",
-    instructions: "Add 5ml per 40 litres of pond water. Clumps floating particles for easy filter removal.",
-  },
-  {
-    id: "blagdon-pond-guardian",
-    name: "Blagdon Pond Guardian",
-    type: "pond_treatment",
-    applicationMethod: "water_treatment",
-    measurementType: "volume",
-    defaultDosage: 10,
-    defaultDosageUnit: "ml",
-    defaultWaterAmount: 100,
-    defaultWaterUnit: "l",
-    instructions: "Add 10ml per 100 litres of new water. Makes tap water safe for fish and plants.",
+    instructions: "Add 5ml per 40 litres of pond water. Control algae growth in ponds and fountains.",
   },
 ]
 
@@ -1612,7 +1454,24 @@ function calculateWaterMixing() {
 
     // Calculate product amount based on ratio and water amount
     // The ratio is specified in the units selected (per liter or per gallon)
-    productAmount = ratio * waterAmount
+    // Convert water amount to the base unit (liters) for calculation
+    let waterAmountInLiters = waterAmount
+    if (waterUnit === "gal_uk") {
+      waterAmountInLiters = waterAmount * 4.55 // Convert UK gallons to liters
+    } else if (waterUnit === "ml") {
+      waterAmountInLiters = waterAmount / 1000 // Convert ml to liters
+    }
+
+    // If ratio is specified per gallon, convert it to per liter
+    let ratioPerLiter = ratio
+    if (waterUnit === "gal_uk") {
+      ratioPerLiter = ratio / 4.55 // Convert ratio from per gallon to per liter
+    } else if (waterUnit === "ml") {
+      ratioPerLiter = ratio * 1000 // Convert ratio from per ml to per liter
+    }
+
+    // Calculate product amount based on ratio per liter and water amount in liters
+    productAmount = ratioPerLiter * waterAmountInLiters
     productUnit = measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"
   } else if (calculationMode === "ratio_based") {
     ratio = Number.parseFloat(document.getElementById("ratio-2").value)
@@ -1620,7 +1479,24 @@ function calculateWaterMixing() {
     waterUnit = document.getElementById("target-unit").value
 
     // Calculate product amount based on ratio and water amount
-    productAmount = ratio * waterAmount
+    // Convert water amount to the base unit (liters) for calculation
+    let waterAmountInLiters = waterAmount
+    if (waterUnit === "gal_uk") {
+      waterAmountInLiters = waterAmount * 4.55 // Convert UK gallons to liters
+    } else if (waterUnit === "ml") {
+      waterAmountInLiters = waterAmount / 1000 // Convert ml to liters
+    }
+
+    // If ratio is specified per gallon, convert it to per liter
+    let ratioPerLiter = ratio
+    if (waterUnit === "gal_uk") {
+      ratioPerLiter = ratio / 4.55 // Convert ratio from per gallon to per liter
+    } else if (waterUnit === "ml") {
+      ratioPerLiter = ratio * 1000 // Convert ratio from per ml to per liter
+    }
+
+    // Calculate product amount based on ratio per liter and water amount in liters
+    productAmount = ratioPerLiter * waterAmountInLiters
     productUnit = measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"
   }
 
@@ -1669,18 +1545,22 @@ function calculateWaterMixing() {
   let wateringCanAmount
 
   // Calculate the amount needed for a watering can based on the ratio
+  // Convert to a consistent unit (liters) for calculation
+  let ratioPerLiter
   if (waterUnit === "l") {
-    wateringCanAmount = ratio * wateringCanSize
+    ratioPerLiter = ratio
   } else if (waterUnit === "ml") {
-    wateringCanAmount = ratio * (wateringCanSize * 1000)
+    ratioPerLiter = ratio * 1000 // Convert from per ml to per liter
   } else if (waterUnit === "gal_uk") {
-    wateringCanAmount = ratio * (wateringCanSize / 4.55)
+    ratioPerLiter = ratio / 4.55 // Convert from per gallon to per liter
   }
+
+  wateringCanAmount = ratioPerLiter * wateringCanSize
 
   // Format the watering can result based on measurement type
   let wateringCanResult
   if (measurementType === "cap") {
-    wateringCanResult = `${((ratio * wateringCanSize) / capSize).toFixed(2)} caps (${(ratio * wateringCanSize).toFixed(2)} ml)`
+    wateringCanResult = `${wateringCanAmount.toFixed(2)} caps (${(wateringCanAmount * capSize).toFixed(2)} ml)`
   } else {
     wateringCanResult = `${wateringCanAmount.toFixed(2)} ${productUnit}`
   }
@@ -1688,7 +1568,7 @@ function calculateWaterMixing() {
   document.getElementById("watering-can-title").textContent = `For a ${wateringCanSize} litre watering can:`
   document.getElementById("watering-can-result").textContent = wateringCanResult
   document.getElementById("watering-can-info").textContent =
-    `Based on the ratio of ${ratio.toFixed(2)} ${productUnit} per ${waterUnit === "l" ? "litre" : waterUnit === "ml" ? "ml" : "gallon"}`
+    `Based on the ratio of ${ratioPerLiter.toFixed(2)} ${productUnit} per litre`
   document.getElementById("watering-can-section").classList.remove("hidden")
 
   // Update results
@@ -1907,7 +1787,7 @@ function updateDebugInfo() {
     const productName = document.getElementById("product-name-select").value
 
     // Get values based on calculation mode
-    let productAmount, productUnit, waterAmount, waterUnit, ratio
+    let productAmount, productUnit, waterAmount, waterUnit, ratio, ratioPerLiter
 
     if (calculationMode === "product_to_water") {
       productAmount = document.getElementById("product-amount").value
@@ -1915,17 +1795,62 @@ function updateDebugInfo() {
       waterAmount = document.getElementById("water-amount").value
       waterUnit = document.getElementById("water-unit").value
       ratio = productAmount / waterAmount
+
+      // Calculate ratio per liter for consistent reporting
+      if (waterUnit === "l") {
+        ratioPerLiter = ratio
+      } else if (waterUnit === "ml") {
+        ratioPerLiter = ratio * 1000 // Convert from per ml to per liter
+      } else if (waterUnit === "gal_uk") {
+        ratioPerLiter = ratio / 4.55 // Convert from per gallon to per liter
+      }
     } else if (calculationMode === "water_to_product") {
       waterAmount = document.getElementById("water-amount-2").value
       waterUnit = document.getElementById("water-unit-2").value
       ratio = document.getElementById("ratio").value
-      productAmount = ratio * waterAmount
+
+      // Calculate ratio per liter for consistent reporting
+      if (waterUnit === "l") {
+        ratioPerLiter = ratio
+      } else if (waterUnit === "ml") {
+        ratioPerLiter = ratio * 1000 // Convert from per ml to per liter
+      } else if (waterUnit === "gal_uk") {
+        ratioPerLiter = ratio / 4.55 // Convert from per gallon to per liter
+      }
+
+      // Convert water amount to liters for calculation
+      let waterAmountInLiters = waterAmount
+      if (waterUnit === "gal_uk") {
+        waterAmountInLiters = waterAmount * 4.55 // Convert UK gallons to liters
+      } else if (waterUnit === "ml") {
+        waterAmountInLiters = waterAmount / 1000 // Convert ml to liters
+      }
+
+      productAmount = ratioPerLiter * waterAmountInLiters
       productUnit = measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"
     } else if (calculationMode === "ratio_based") {
       ratio = document.getElementById("ratio-2").value
       waterAmount = document.getElementById("target-amount").value
       waterUnit = document.getElementById("target-unit").value
-      productAmount = ratio * waterAmount
+
+      // Calculate ratio per liter for consistent reporting
+      if (waterUnit === "l") {
+        ratioPerLiter = ratio
+      } else if (waterUnit === "ml") {
+        ratioPerLiter = ratio * 1000 // Convert from per ml to per liter
+      } else if (waterUnit === "gal_uk") {
+        ratioPerLiter = ratio / 4.55 // Convert from per gallon to per liter
+      }
+
+      // Convert water amount to liters for calculation
+      let waterAmountInLiters = waterAmount
+      if (waterUnit === "gal_uk") {
+        waterAmountInLiters = waterAmount * 4.55 // Convert UK gallons to liters
+      } else if (waterUnit === "ml") {
+        waterAmountInLiters = waterAmount / 1000 // Convert ml to liters
+      }
+
+      productAmount = ratioPerLiter * waterAmountInLiters
       productUnit = measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"
     }
 
@@ -1940,6 +1865,7 @@ function updateDebugInfo() {
       Product Amount: ${productAmount} ${productUnit}
       Water Amount: ${waterAmount} ${waterUnit}
       Ratio: ${ratio} ${productUnit} per ${waterUnit}
+      Ratio (standardized): ${ratioPerLiter?.toFixed(4)} ${productUnit} per liter
     `
 
     // Add measurement-specific debug info
@@ -1956,11 +1882,18 @@ function updateDebugInfo() {
       debugString += `\n    Scoop Size: ${scoopSize} ${scoopUnit}`
     }
 
-    // Add calculation summary
+    // Add calculation summary with unit conversions
+    let waterAmountInLiters = waterAmount
+    if (waterUnit === "gal_uk") {
+      waterAmountInLiters = waterAmount * 4.55 // Convert UK gallons to liters
+    } else if (waterUnit === "ml") {
+      waterAmountInLiters = waterAmount / 1000 // Convert ml to liters
+    }
+
     debugString += `\n\nCalculation Summary:
-      - User requested: ${waterAmount} ${waterUnit}
-      - Using ratio: ${ratio} ${productUnit} per ${waterUnit}
-      - Calculation: ${ratio} × ${waterAmount} = ${productAmount} ${productUnit}`
+      - User requested: ${waterAmount} ${waterUnit} (${waterAmountInLiters.toFixed(2)} liters)
+      - Using ratio: ${ratio} ${productUnit} per ${waterUnit} (${ratioPerLiter?.toFixed(4)} ${productUnit} per liter)
+      - Calculation: ${ratioPerLiter?.toFixed(4)} × ${waterAmountInLiters.toFixed(2)} = ${productAmount} ${productUnit}`
 
     debugInfo.textContent = debugString
   }
