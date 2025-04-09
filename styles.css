@@ -435,6 +435,58 @@ button {
   color: white;
 }
 
+/* Test Panel Styles */
+.test-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+#quick-test-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+#full-test-btn {
+  background-color: #673ab7;
+  color: white;
+}
+
+.test-progress {
+  margin-bottom: 15px;
+  background-color: #f1f1f1;
+  border-radius: 4px;
+  height: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.test-progress-bar {
+  height: 100%;
+  background-color: #4caf50;
+  width: 0%;
+  transition: width 0.3s;
+}
+
+.test-progress-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  line-height: 20px;
+  color: #333;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+#test-results {
+  max-height: 400px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  font-family: monospace;
+}
+
 .test-progress {
   margin-bottom: 15px;
   background-color: #f1f1f1;

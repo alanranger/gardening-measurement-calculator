@@ -1112,17 +1112,51 @@ function setupEventListeners() {
     })
   }
 
-  // Debug panel toggle
-  const debugTrigger = document.getElementById("debug-trigger")
-  const debugContent = document.getElementById("debug-content")
+  // Test panel toggle
+  const testTrigger = document.getElementById("test-trigger")
+  const testContent = document.getElementById("test-content")
 
-  if (debugTrigger && debugContent) {
-    debugTrigger.addEventListener("click", function () {
-      debugContent.classList.toggle("hidden")
+  if (testTrigger && testContent) {
+    testTrigger.addEventListener("click", function () {
+      testContent.classList.toggle("hidden")
       const icon = this.querySelector(".icon")
       if (icon) {
-        icon.textContent = debugContent.classList.contains("hidden") ? "▼" : "▲"
+        icon.textContent = testContent.classList.contains("hidden") ? "▼" : "▲"
       }
+    })
+  }
+
+  // Add event listeners for quick test and full test buttons
+  const quickTestBtn = document.getElementById("quick-test-btn")
+  const fullTestBtn = document.getElementById("full-test-btn")
+
+  if (quickTestBtn) {
+    quickTestBtn.addEventListener("click", () => {
+      // Reset progress bar
+      const progressBar = document.getElementById("test-progress-bar")
+      const progressText = document.getElementById("test-progress-text")
+      if (progressBar && progressText) {
+        progressBar.style.width = "0%"
+        progressText.textContent = "0%"
+      }
+
+      // Run quick test (sample of products)
+      TestRunner.runAllTests(false)
+    })
+  }
+
+  if (fullTestBtn) {
+    fullTestBtn.addEventListener("click", () => {
+      // Reset progress bar
+      const progressBar = document.getElementById("test-progress-bar")
+      const progressText = document.getElementById("test-progress-text")
+      if (progressBar && progressText) {
+        progressBar.style.width = "0%"
+        progressText.textContent = "0%"
+      }
+
+      // Run full test (all products)
+      TestRunner.runAllTests(true)
     })
   }
 
@@ -1499,17 +1533,6 @@ function setupEventListeners() {
 
   // Test panel toggle
   const testTrigger = document.getElementById("test-trigger")
-  const testContent = document.getElementById("test-content")
-
-  if (testTrigger && testContent) {
-    testTrigger.addEventListener("click", function () {
-      testContent.classList.toggle("hidden")
-      const icon = this.querySelector(".icon")
-      if (icon) {
-        icon.textContent = testContent.classList.contains("hidden") ? "▼" : "▲"
-      }
-    })
-  }
 
   // Copy test results button
   const copyTestBtn = document.getElementById("copy-test-btn")
@@ -1692,171 +1715,59 @@ function updateCalculatorInputs(product) {
   // Show/hide cap size input if needed
   if (product.measurementType === "cap") {
     document.getElementById("cap-size-group").classList.remove("hidden")
-    if (product.capSize && product.capSize.fullCapML) {
-      document.getElementById("cap-size").value = product.capSize.fullCapML
-    }
   } else {
     document.getElementById("cap-size-group").classList.add("hidden")
   }
 
-  // Set scoop information if available
+  // Set has scoop
   const hasScoopRadios = document.querySelectorAll('input[name="has-scoop"]')
-  if (product.hasScoop) {
-    hasScoopRadios[0].checked = true // Yes
-    document.getElementById("scoop-size-group").classList.remove("hidden")
-    document.getElementById("scoop-size").value = product.scoopSize || 5
-    const scoopUnitSelect = document.getElementById("scoop-unit")
-    if (scoopUnitSelect) {
-      for (let i = 0; i < scoopUnitSelect.options.length; i++) {
-        if (scoopUnitSelect.options[i].value === product.scoopUnit) {
-          scoopUnitSelect.selectedIndex = i
-          break
-        }
-      }
+  if (hasScoopRadios.length > 0) {
+    if (product.hasScoop) {
+      document.getElementById("has-scoop-yes").checked = true
+      document.getElementById("has-scoop-no").checked = false
+      document.getElementById("scoop-size-group").classList.remove("hidden")
+    } else {
+      document.getElementById("has-scoop-yes").checked = false
+      document.getElementById("has-scoop-no").checked = true
+      document.getElementById("scoop-size-group").classList.add("hidden")
     }
-  } else {
-    hasScoopRadios[1].checked = true // No
-    document.getElementById("scoop-size-group").classList.add("hidden")
   }
 
-  // Set default dosage and water amount based on application method
-  if (product.applicationMethod === "water_mixing") {
-    // Set product amount
-    document.getElementById("product-amount").value = product.defaultDosage
-    const productUnitSelect = document.getElementById("product-unit")
-    if (productUnitSelect) {
-      for (let i = 0; i < productUnitSelect.options.length; i++) {
-        if (productUnitSelect.options[i].value === product.defaultDosageUnit) {
-          productUnitSelect.selectedIndex = i
-          break
-        }
-      }
-    }
+  // Set default dosage and water amount
+  document.getElementById("product-amount").value = product.defaultDosage
+  document.getElementById("water-amount").value = product.defaultWaterAmount
 
-    // Set water amount
-    document.getElementById("water-amount").value = product.defaultWaterAmount
-    const waterUnitSelect = document.getElementById("water-unit")
-    if (waterUnitSelect) {
-      for (let i = 0; i < waterUnitSelect.options.length; i++) {
-        if (waterUnitSelect.options[i].value === product.defaultWaterUnit) {
-          waterUnitSelect.selectedIndex = i
-          break
-        }
-      }
-    }
+  // Set product and water units
+  document.getElementById("product-unit").value = product.defaultDosageUnit
+  document.getElementById("water-unit").value = product.defaultWaterUnit
 
-    // Set water amount for water_to_product mode
-    document.getElementById("water-amount-2").value = product.defaultWaterAmount
-    const waterUnit2Select = document.getElementById("water-unit-2")
-    if (waterUnit2Select) {
-      for (let i = 0; i < waterUnit2Select.options.length; i++) {
-        if (waterUnit2Select.options[i].value === product.defaultWaterUnit) {
-          waterUnit2Select.selectedIndex = i
-          break
-        }
-      }
-    }
+  // Update ratio labels
+  updateRatioLabels(product.defaultDosageUnit, product.defaultWaterUnit)
 
-    // Set target amount for ratio_based mode
-    document.getElementById("target-amount").value = product.defaultWaterAmount
-    const targetUnitSelect = document.getElementById("target-unit")
-    if (targetUnitSelect) {
-      for (let i = 0; i < targetUnitSelect.options.length; i++) {
-        if (targetUnitSelect.options[i].value === product.defaultWaterUnit) {
-          targetUnitSelect.selectedIndex = i
-          break
-        }
-      }
-    }
+  // Update ratio fields
+  const ratio = product.defaultDosage / product.defaultWaterAmount
+  document.getElementById("ratio").value = ratio.toFixed(2)
+  document.getElementById("ratio-2").value = ratio.toFixed(2)
 
-    // Calculate the ratio based on product's default values
-    const defaultRatio = product.defaultDosage / product.defaultWaterAmount
+  // Set cap size if available
+  if (product.capSize) {
+    document.getElementById("cap-size").value = product.capSize.fullCapML
+  }
 
-    // Set ratio for water_to_product mode
-    const ratioField = document.getElementById("ratio")
-    if (ratioField) {
-      // Convert ratio to match the selected water unit
-      let convertedRatio = defaultRatio
-      const waterUnit2 = document.getElementById("water-unit-2").value
-
-      if (waterUnit2 === "gal_uk" && product.defaultWaterUnit === "l") {
-        convertedRatio = defaultRatio * 4.55 // Convert from per liter to per gallon
-      } else if (waterUnit2 === "l" && product.defaultWaterUnit === "gal_uk") {
-        convertedRatio = defaultRatio / 4.55 // Convert from per gallon to per liter
-      } else if (waterUnit2 === "ml" && product.defaultWaterUnit === "l") {
-        convertedRatio = defaultRatio / 1000 // Convert from per liter to per ml
-      }
-
-      ratioField.value = convertedRatio.toFixed(2)
-    }
-
-    // Set ratio for ratio_based mode
-    const ratioField2 = document.getElementById("ratio-2")
-    if (ratioField2) {
-      // Convert ratio to match the selected water unit
-      let convertedRatio = defaultRatio
-      const targetUnit = document.getElementById("target-unit").value
-
-      if (targetUnit === "gal_uk" && product.defaultWaterUnit === "l") {
-        convertedRatio = defaultRatio * 4.55 // Convert from per liter to per gallon
-      } else if (targetUnit === "l" && product.defaultWaterUnit === "gal_uk") {
-        convertedRatio = defaultRatio / 4.55 // Convert from per gallon to per liter
-      } else if (targetUnit === "ml" && product.defaultWaterUnit === "l") {
-        convertedRatio = defaultRatio / 1000 // Convert from per liter to per ml
-      }
-
-      ratioField2.value = convertedRatio.toFixed(2)
-    }
-
-    // Update ratio labels to match the selected units
-    updateRatioLabels(product.defaultDosageUnit, document.getElementById("water-unit-2").value)
-    updateRatioLabels(product.defaultDosageUnit, document.getElementById("target-unit").value, true)
-  } else if (product.applicationMethod === "direct_application") {
-    // Set application rate
-    document.getElementById("application-rate").value = product.defaultDosage
-    const rateUnitSelect = document.getElementById("rate-unit")
-    if (rateUnitSelect) {
-      for (let i = 0; i < rateUnitSelect.options.length; i++) {
-        if (rateUnitSelect.options[i].value === product.defaultDosageUnit) {
-          rateUnitSelect.selectedIndex = i
-          break
-        }
-      }
-    }
-
-    // Set area unit
-    const rateAreaUnitSelect = document.getElementById("rate-area-unit")
-    if (rateAreaUnitSelect) {
-      for (let i = 0; i < rateAreaUnitSelect.options.length; i++) {
-        if (rateAreaUnitSelect.options[i].value === product.defaultWaterUnit) {
-          rateAreaUnitSelect.selectedIndex = i
-          break
-        }
-      }
-    }
-  } else if (product.applicationMethod === "water_treatment") {
-    // Set dosage amount
-    document.getElementById("dosage-amount").value = product.defaultDosage
-    const dosageUnitSelect = document.getElementById("dosage-unit")
-    if (dosageUnitSelect) {
-      for (let i = 0; i < dosageUnitSelect.options.length; i++) {
-        if (dosageUnitSelect.options[i].value === product.defaultDosageUnit) {
-          dosageUnitSelect.selectedIndex = i
-          break
-        }
-      }
-    }
+  // Set scoop size if available
+  if (product.scoopSize) {
+    document.getElementById("scoop-size").value = product.scoopSize
   }
 }
 
-// Function to perform calculation based on selected application method
+// Function to perform the calculation
 function performCalculation() {
   console.log("Performing calculation")
 
-  // Get the selected application method
+  // Get selected application method
   const applicationMethod = document.getElementById("application-method").value
 
-  // Perform the appropriate calculation
+  // Perform calculation based on application method
   if (applicationMethod === "water_mixing") {
     calculateWaterMixing()
   } else if (applicationMethod === "direct_application") {
@@ -1864,1257 +1775,364 @@ function performCalculation() {
   } else if (applicationMethod === "water_treatment") {
     calculateWaterTreatment()
   }
-
-  // Update debug info
-  updateDebugInfo()
 }
 
 // Function to calculate water mixing
 function calculateWaterMixing() {
   console.log("Calculating water mixing")
 
-  // Get calculation mode
-  const calculationMode = document.querySelector('input[name="calculation-mode"]:checked').value
+  // Get values from input fields
+  const productAmount = Number.parseFloat(document.getElementById("product-amount").value)
+  const waterAmount = Number.parseFloat(document.getElementById("water-amount").value)
+  const productUnit = document.getElementById("product-unit").value
+  const waterUnit = document.getElementById("water-unit").value
 
-  // Get measurement type
-  const measurementType = document.querySelector('input[name="measurement-type"]:checked').value
+  // Perform calculation
+  const ratio = productAmount / waterAmount
 
-  // Initialize capSize variable at the top of the function
-  let capSize = 10 // Default value
-  if (measurementType === "cap") {
-    capSize = Number.parseFloat(document.getElementById("cap-size").value)
-  }
-
-  // Get values based on calculation mode
-  let productAmount, productUnit, waterAmount, waterUnit, ratio
-
-  if (calculationMode === "product_to_water") {
-    productAmount = Number.parseFloat(document.getElementById("product-amount").value)
-    productUnit = document.getElementById("product-unit").value
-    waterAmount = Number.parseFloat(document.getElementById("water-amount").value)
-    waterUnit = document.getElementById("water-unit").value
-
-    // Calculate ratio (product per unit of water)
-    ratio = productAmount / waterAmount
-  } else if (calculationMode === "water_to_product") {
-    waterAmount = Number.parseFloat(document.getElementById("water-amount-2").value)
-    waterUnit = document.getElementById("water-unit-2").value
-    ratio = Number.parseFloat(document.getElementById("ratio").value)
-
-    // Calculate product amount based on ratio and water amount
-    // The ratio is specified in the units selected (per liter or per gallon)
-    // Convert water amount to the base unit (liters) for calculation
-    let waterAmountInLiters = waterAmount
-    if (waterUnit === "gal_uk") {
-      waterAmountInLiters = waterAmount * 4.55 // Convert UK gallons to liters
-    } else if (waterUnit === "ml") {
-      waterAmountInLiters = waterAmount / 1000 // Convert ml to liters
-    }
-
-    // If ratio is specified per gallon, convert it to per liter
-    let ratioPerLiter = ratio
-    if (waterUnit === "gal_uk") {
-      ratioPerLiter = ratio / 4.55 // Convert ratio from per gallon to per liter
-    } else if (waterUnit === "ml") {
-      ratioPerLiter = ratio * 1000 // Convert ratio from per ml to per liter
-    }
-
-    // Calculate product amount based on ratio per liter and water amount in liters
-    productAmount = ratioPerLiter * waterAmountInLiters
-    productUnit = measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"
-  } else if (calculationMode === "ratio_based") {
-    ratio = Number.parseFloat(document.getElementById("ratio-2").value)
-    waterAmount = Number.parseFloat(document.getElementById("target-amount").value)
-    waterUnit = document.getElementById("target-unit").value
-
-    // Calculate product amount based on ratio and water amount
-    // Convert water amount to the base unit (liters) for calculation
-    let waterAmountInLiters = waterAmount
-    if (waterUnit === "gal_uk") {
-      waterAmountInLiters = waterAmount * 4.55 // Convert UK gallons to liters
-    } else if (waterUnit === "ml") {
-      waterAmountInLiters = waterAmount / 1000 // Convert ml to liters
-    }
-
-    // If ratio is specified per gallon, convert it to per liter
-    let ratioPerLiter = ratio
-    if (waterUnit === "gal_uk") {
-      ratioPerLiter = ratio / 4.55 // Convert ratio from per gallon to per liter
-    } else if (waterUnit === "ml") {
-      ratioPerLiter = ratio * 1000 // Convert ratio from per ml to per liter
-    }
-
-    // Calculate product amount based on ratio per liter and water amount in liters
-    productAmount = ratioPerLiter * waterAmountInLiters
-    productUnit = measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"
-  }
-
-  // Calculate results
-  let metricResult, imperialResult, alternativeResult
-
-  if (measurementType === "weight") {
-    // Weight-based calculation
-    const precision = getDecimalPrecision(productAmount)
-    const waterUnitDisplay = getFormattedUnitDisplay(waterUnit)
-
-    metricResult = `${productAmount.toFixed(precision)} ${getFormattedUnitDisplay(productUnit)} for ${waterAmount.toFixed(1)} ${waterUnitDisplay}`
-    imperialResult = `${convertMetricToImperial(productAmount, productUnit).toFixed(precision)} ${getImperialUnit(productUnit)} for ${convertMetricToImperial(waterAmount, waterUnit).toFixed(2)} ${getImperialUnit(waterUnit)}`
-    alternativeResult = `${convertToTeaspoons(productAmount, productUnit).toFixed(precision)} teaspoons for ${waterAmount.toFixed(1)} ${waterUnitDisplay}`
-  } else if (measurementType === "volume") {
-    // Volume-based calculation
-    const precision = getDecimalPrecision(productAmount)
-    const waterUnitDisplay = getFormattedUnitDisplay(waterUnit)
-
-    metricResult = `${productAmount.toFixed(precision)} ${getFormattedUnitDisplay(productUnit)} for ${waterAmount.toFixed(1)} ${waterUnitDisplay}`
-    imperialResult = `${convertMetricToImperial(productAmount, productUnit).toFixed(precision)} ${getImperialUnit(productUnit)} for ${convertMetricToImperial(waterAmount, waterUnit).toFixed(2)} ${getImperialUnit(waterUnit)}`
-    alternativeResult = `${convertToTeaspoons(productAmount, productUnit).toFixed(precision)} teaspoons for ${waterAmount.toFixed(1)} ${waterUnitDisplay}`
-  } else if (measurementType === "cap") {
-    // Cap-based calculation
-    const mlAmount = productAmount * capSize
-    const precision = getDecimalPrecision(productAmount)
-    const mlPrecision = getDecimalPrecision(mlAmount)
-    const waterUnitDisplay = getFormattedUnitDisplay(waterUnit)
-
-    metricResult = `${productAmount.toFixed(precision)} caps (${mlAmount.toFixed(mlPrecision)} ml) for ${waterAmount.toFixed(1)} ${waterUnitDisplay}`
-    imperialResult = `${productAmount.toFixed(precision)} caps (${convertMetricToImperial(mlAmount, "ml").toFixed(mlPrecision)} fl oz) for ${convertMetricToImperial(waterAmount, waterUnit).toFixed(2)} ${getImperialUnit(waterUnit)}`
-    alternativeResult = `${convertToTeaspoons(mlAmount, "ml").toFixed(precision)} teaspoons for ${waterAmount.toFixed(1)} ${waterUnitDisplay}`
-
-    // Update cap result
-    document.getElementById("cap-result").textContent =
-      `${productAmount.toFixed(precision)} caps (${mlAmount.toFixed(mlPrecision)} ml)`
-    document.getElementById("cap-result-card").classList.remove("hidden")
-  }
-
-  // Check if product has a scoop
-  const hasScoop = document.querySelector('input[name="has-scoop"]:checked').value === "yes"
-  if (hasScoop) {
-    const scoopSize = Number.parseFloat(document.getElementById("scoop-size").value)
-    const scoopUnit = document.getElementById("scoop-unit").value
-    const scoopAmount = productAmount / scoopSize
-
-    document.getElementById("scoop-result").textContent =
-      `${scoopAmount.toFixed(2)} scoops (${productAmount.toFixed(2)} ${productUnit})`
-    document.getElementById("scoop-result-card").classList.remove("hidden")
-  } else {
-    document.getElementById("scoop-result-card").classList.add("hidden")
-  }
-
-  // Calculate for standard watering can (8-10 litres)
-  const wateringCanSize = 9 // Average 9 litres
-  let wateringCanAmount
-
-  // Calculate the amount needed for a watering can based on the ratio
-  // Convert to a consistent unit (liters) for calculation
-  let ratioPerLiter
-  if (waterUnit === "l") {
-    ratioPerLiter = ratio
-  } else if (waterUnit === "ml") {
-    ratioPerLiter = ratio * 1000 // Convert from per ml to per liter
-  } else if (waterUnit === "gal_uk") {
-    ratioPerLiter = ratio / 4.55 // Convert from per gallon to per liter
-  }
-
-  wateringCanAmount = ratioPerLiter * wateringCanSize
-
-  // Format the watering can result based on measurement type
-  let wateringCanResult
-  const wateringCanPrecision = getDecimalPrecision(wateringCanAmount)
-
-  if (measurementType === "cap") {
-    const mlAmount = wateringCanAmount * capSize
-    const mlPrecision = getDecimalPrecision(mlAmount)
-    wateringCanResult = `${wateringCanAmount.toFixed(wateringCanPrecision)} caps (${mlAmount.toFixed(mlPrecision)} ml)`
-  } else {
-    wateringCanResult = `${wateringCanAmount.toFixed(wateringCanPrecision)} ${getFormattedUnitDisplay(productUnit)}`
-  }
-
-  document.getElementById("watering-can-title").textContent = `For a ${wateringCanSize} litre watering can:`
-  document.getElementById("watering-can-result").textContent = wateringCanResult
-  document.getElementById("watering-can-info").textContent =
-    `Based on the ratio of ${ratioPerLiter.toFixed(3)} ${getFormattedUnitDisplay(productUnit)} per litre`
-  document.getElementById("watering-can-section").classList.remove("hidden")
-
-  // Add a warning if the ratio significantly differs from the product's recommended ratio
-  if (calculationMode === "water_to_product" || calculationMode === "ratio_based") {
-    // Get the current product
-    const productNameSelect = document.getElementById("product-name-select")
-    const selectedId = productNameSelect.value
-
-    if (selectedId) {
-      // Find the selected product
-      const allProducts = [...COMMON_PRODUCTS, ...AREA_TREATMENT_PRODUCTS, ...WATER_TREATMENT_PRODUCTS]
-      const selectedProduct = allProducts.find((p) => p.id === selectedId)
-
-      if (selectedProduct) {
-        // Calculate the recommended ratio based on product's default values
-        const recommendedRatio = selectedProduct.defaultDosage / selectedProduct.defaultWaterAmount
-
-        // Convert to the same unit for comparison
-        let recommendedRatioPerLiter = recommendedRatio
-        if (selectedProduct.defaultWaterUnit === "gal_uk") {
-          recommendedRatioPerLiter = recommendedRatio / 4.55 // Convert from per gallon to per liter
-        } else if (selectedProduct.defaultWaterUnit === "ml") {
-          recommendedRatioPerLiter = recommendedRatio * 1000 // Convert from per ml to per liter
-        }
-
-        // Compare with the current ratio
-        const difference = Math.abs(ratioPerLiter - recommendedRatioPerLiter) / recommendedRatioPerLiter
-
-        if (difference > 0.2) {
-          // If more than 20% difference
-          // Create or update warning message
-          let warningElement = document.getElementById("ratio-warning")
-          if (!warningElement) {
-            warningElement = document.createElement("div")
-            warningElement.id = "ratio-warning"
-            warningElement.className = "beta-warning"
-            const resultsContainer = document.querySelector("#water-mixing-results .results")
-            resultsContainer.insertBefore(warningElement, resultsContainer.firstChild)
-          }
-
-          warningElement.innerHTML = `
-            <p><strong>Warning:</strong> The ratio you entered (${ratioPerLiter.toFixed(2)} ${productUnit} per liter) 
-            differs significantly from the recommended ratio (${recommendedRatioPerLiter.toFixed(2)} ${productUnit} per liter) 
-            for this product. Please check the product instructions.</p>
-          `
-        } else {
-          // Remove warning if it exists
-          const warningElement = document.getElementById("ratio-warning")
-          if (warningElement) {
-            warningElement.remove()
-          }
-        }
-      }
-    }
-  }
-
-  // Update results
-  document.getElementById("metric-result").textContent = metricResult
-  document.getElementById("imperial-result").textContent = imperialResult
-  document.getElementById("alternative-result").textContent = alternativeResult
-
-  // Add a result card that matches exactly what the user requested
-  const userRequestedResult = document.createElement("div")
-  userRequestedResult.className = "result-card"
-  const precision = getDecimalPrecision(productAmount)
-
-  userRequestedResult.innerHTML = `
-  <h3>Your Requested Amount</h3>
-  <p>${productAmount.toFixed(precision)} ${getFormattedUnitDisplay(productUnit)} for ${waterAmount.toFixed(2)} ${getFormattedUnitDisplay(waterUnit)}</p>
-  <p class="hint">Based on ${ratio.toFixed(3)} ${getFormattedUnitDisplay(productUnit)} per ${getFormattedUnitDisplay(waterUnit)}</p>
-`
-
-  // Find the results container and add the new card
-  const resultsContainer = document.querySelector("#water-mixing-results .results")
-  // Remove any previous "Your Requested Amount" cards
-  const existingRequestedCards = resultsContainer.querySelectorAll(".result-card h3")
-  existingRequestedCards.forEach((h3) => {
-    if (h3.textContent === "Your Requested Amount") {
-      h3.parentElement.remove()
-    }
-  })
-  resultsContainer.appendChild(userRequestedResult)
+  // Display results
+  document.getElementById("water-mixing-result").textContent =
+    `Use ${productAmount} ${productUnit} per ${waterAmount} ${waterUnit} (Ratio: 1:${ratio.toFixed(2)})`
 }
 
 // Function to calculate direct application
 function calculateDirectApplication() {
   console.log("Calculating direct application")
 
-  // Get area shape
-  const areaShape = document.querySelector('input[name="area-shape"]:checked').value
+  // Get values from input fields
+  const areaWidth = Number.parseFloat(document.getElementById("area-width").value)
+  const areaLength = Number.parseFloat(document.getElementById("area-length").value)
+  const areaRadius = Number.parseFloat(document.getElementById("area-radius").value)
+  const productDosage = Number.parseFloat(document.getElementById("product-dosage").value)
+  const dosageUnit = document.getElementById("dosage-unit").value
 
-  // Get application rate
-  const applicationRate = Number.parseFloat(document.getElementById("application-rate").value)
-  const rateUnit = document.getElementById("rate-unit").value
-  const rateAreaUnit = document.getElementById("rate-area-unit").value
-
-  // Get area dimensions
-  let area
-  if (areaShape === "rectangle") {
-    const length = Number.parseFloat(document.getElementById("length").value)
-    const width = Number.parseFloat(document.getElementById("width").value)
-    area = length * width
-  } else if (areaShape === "circle") {
-    const diameter = Number.parseFloat(document.getElementById("diameter").value)
-    const radius = diameter / 2
-    area = Math.PI * radius * radius
+  // Calculate area
+  let area = 0
+  if (document.getElementById("area-shape-rectangle").checked) {
+    area = areaWidth * areaLength
+  } else if (document.getElementById("area-shape-circle").checked) {
+    area = Math.PI * areaRadius * areaRadius
   }
 
   // Calculate product amount
-  let productAmount
-  if (rateAreaUnit === "sq_m") {
-    productAmount = applicationRate * area
-  } else if (rateAreaUnit === "sq_ft") {
-    productAmount = applicationRate * area
-  } else if (rateAreaUnit === "sq_yd") {
-    productAmount = applicationRate * area
-  } else if (rateAreaUnit === "plant") {
-    productAmount = applicationRate * area // Assuming area represents number of plants
-  }
+  const productAmount = area * productDosage
 
-  // Calculate results
-  const precision = getDecimalPrecision(productAmount)
-  const metricResult = `${productAmount.toFixed(precision)} ${getFormattedUnitDisplay(rateUnit)} for ${area.toFixed(2)} square metres`
-  const imperialResult = `${convertMetricToImperial(productAmount, rateUnit).toFixed(precision)} ${getImperialUnit(rateUnit)} for ${convertMetricToImperial(area, "sq_m").toFixed(2)} square feet`
-  const alternativeResult = `${convertToTeaspoons(productAmount, rateUnit).toFixed(precision)} teaspoons for ${area.toFixed(2)} square metres`
-
-  // Update results
-  document.getElementById("total-amount-result").textContent =
-    `${productAmount.toFixed(precision)} ${getFormattedUnitDisplay(rateUnit)}`
-  document.getElementById("alternative-amount-result").textContent = alternativeResult
-  document.getElementById("metric-rate-result").textContent =
-    `${applicationRate.toFixed(precision)} ${getFormattedUnitDisplay(rateUnit)} per square metre`
-  document.getElementById("imperial-rate-result").textContent =
-    `${convertMetricToImperial(applicationRate, rateUnit).toFixed(precision)} ${getImperialUnit(rateUnit)} per square foot`
+  // Display results
+  document.getElementById("direct-application-result").textContent =
+    `Apply ${productAmount.toFixed(2)} ${dosageUnit} over ${area.toFixed(2)} square metres`
 }
 
 // Function to calculate water treatment
 function calculateWaterTreatment() {
   console.log("Calculating water treatment")
 
-  // Get container shape
-  const containerShape = document.querySelector('input[name="container-shape"]:checked').value
+  // Get values from input fields
+  const containerWidth = Number.parseFloat(document.getElementById("container-width").value)
+  const containerLength = Number.parseFloat(document.getElementById("container-length").value)
+  const containerDepth = Number.parseFloat(document.getElementById("container-depth").value)
+  const containerRadius = Number.parseFloat(document.getElementById("container-radius").value)
+  const containerDepthCircular = Number.parseFloat(document.getElementById("container-depth-circular").value)
+  const productDosage = Number.parseFloat(document.getElementById("product-dosage-water").value)
+  const dosageUnit = document.getElementById("dosage-unit-water").value
 
-  // Get dimension unit
-  const dimensionUnit = document.getElementById("dimension-unit").value
-  let conversionFactor = 1
-
-  // Set conversion factor based on dimension unit
-  if (dimensionUnit === "cm") {
-    conversionFactor = 0.01 // cm to m
-  } else if (dimensionUnit === "in") {
-    conversionFactor = 0.0254 // inches to m
-  } else if (dimensionUnit === "ft") {
-    conversionFactor = 0.3048 // feet to m
+  // Calculate volume
+  let volume = 0
+  if (document.getElementById("container-shape-rectangular").checked) {
+    volume = containerWidth * containerLength * containerDepth
+  } else if (document.getElementById("container-shape-circular").checked) {
+    volume = Math.PI * containerRadius * containerRadius * containerDepthCircular
   }
 
-  // Get dosage amount
-  const dosageAmount = Number.parseFloat(document.getElementById("dosage-amount").value)
-  const dosageUnit = document.getElementById("dosage-unit").value
+  // Calculate product amount
+  const productAmount = volume * productDosage
 
-  // Get container dimensions and calculate volume
-  let volume
-  if (containerShape === "rectangular") {
-    const length = Number.parseFloat(document.getElementById("container-length").value) * conversionFactor
-    const width = Number.parseFloat(document.getElementById("container-width").value) * conversionFactor
-    const height = Number.parseFloat(document.getElementById("container-height").value) * conversionFactor
-    volume = length * width * height // Result in cubic meters
-    volume *= 1000 // Convert cubic meters to liters
-  } else if (containerShape === "circular") {
-    const diameter = Number.parseFloat(document.getElementById("container-diameter").value) * conversionFactor
-    const radius = diameter / 2
-    const depth = Number.parseFloat(document.getElementById("container-depth").value) * conversionFactor
-    volume = Math.PI * radius * radius * depth // Result in cubic meters
-    volume *= 1000 // Convert cubic meters to liters
-  }
-
-  // Get water volume (if manually entered)
-  const manualWaterVolume = Number.parseFloat(document.getElementById("water-volume").value)
-  const waterVolumeUnit = document.getElementById("water-volume-unit").value
-
-  // Determine which volume to use
-  let finalVolume
-  if (containerShape === "rectangular" || containerShape === "circular") {
-    finalVolume = volume
-    // Update the calculated volume display
-    document.getElementById("volume-result").textContent = `${volume.toFixed(2)} litres`
-    document.getElementById("volume-conversion").textContent =
-      `(${(volume / 1000).toFixed(2)} cubic meters, ${(volume * 0.22).toFixed(2)} gallons UK)`
-    document.getElementById("calculated-volume").classList.remove("hidden")
-  } else {
-    // Convert manual water volume to liters if needed
-    if (waterVolumeUnit === "ml") {
-      finalVolume = manualWaterVolume / 1000
-    } else if (waterVolumeUnit === "gal_uk") {
-      finalVolume = manualWaterVolume * 4.55
-    } else {
-      finalVolume = manualWaterVolume
-    }
-  }
-
-  // Calculate product amount (dosage is per 1000 liters)
-  const productAmount = (dosageAmount * finalVolume) / 1000
-  const precision = getDecimalPrecision(productAmount)
-
-  // Calculate results
-  const metricResult = `${productAmount.toFixed(precision)} ${getFormattedUnitDisplay(dosageUnit)} for ${finalVolume.toFixed(1)} litres`
-  const imperialResult = `${convertMetricToImperial(productAmount, dosageUnit).toFixed(precision)} ${getImperialUnit(dosageUnit)} for ${(finalVolume * 0.22).toFixed(2)} gallons (UK)`
-  const alternativeResult = `${convertToTeaspoons(productAmount, dosageUnit).toFixed(precision)} teaspoons for ${finalVolume.toFixed(1)} litres`
-
-  // Update results
-  document.getElementById("water-total-amount-result").textContent =
-    `${productAmount.toFixed(precision)} ${getFormattedUnitDisplay(dosageUnit)}`
-  document.getElementById("water-metric-dosage-result").textContent =
-    `${dosageAmount.toFixed(2)} ${getFormattedUnitDisplay(dosageUnit)} per 1000 litres`
-  document.getElementById("water-imperial-dosage-result").textContent =
-    `${(dosageAmount * 4.55).toFixed(2)} ${getFormattedUnitDisplay(dosageUnit)} per 1000 gallons (UK)`
-  document.getElementById("water-alternative-dosage-result").textContent = alternativeResult
+  // Display results
+  document.getElementById("water-treatment-result").textContent =
+    `Add ${productAmount.toFixed(2)} ${dosageUnit} to ${volume.toFixed(2)} cubic metres of water`
 }
 
-// Function to convert metric to imperial units
-function convertMetricToImperial(value, unit) {
-  const oz = "oz"
-  const g = "g"
-  if (unit === g) {
-    return value * 0.035274 // grams to ounces
-  } else if (unit === "kg") {
-    return value * 2.20462 // kilograms to pounds
-  } else if (unit === "ml") {
-    return value * 0.033814 // millilitres to fluid ounces
-  } else if (unit === "l") {
-    return value * 0.219969 // litres to gallons (UK)
-  } else if (unit === "sq_m") {
-    return value * 10.764 // square metres to square feet
-  }
-  return value
-}
-
-// Function to get imperial unit
-function getImperialUnit(unit) {
-  if (unit === "g") {
-    return "ounce"
-  } else if (unit === "kg") {
-    return "pound"
-  } else if (unit === "ml") {
-    return "fluid ounce"
-  } else if (unit === "l") {
-    return "gallon (UK)"
-  } else if (unit === "sq_m") {
-    return "square foot"
-  }
-  return getFormattedUnitDisplay(unit)
-}
-
-// Function to convert to teaspoons
-function convertToTeaspoons(value, unit) {
-  if (unit === "g") {
-    return value * 0.202884 // grams to teaspoons
-  } else if (unit === "ml") {
-    return value * 0.202884 // millilitres to teaspoons
-  }
-  return value
-}
-
-// Function to update debug info
-function updateDebugInfo() {
-  const debugInfo = document.getElementById("debug-info")
-  if (debugInfo) {
-    // Get application method
-    const applicationMethod = document.getElementById("application-method").value
-
-    // Get calculation mode
-    const calculationMode = document.querySelector('input[name="calculation-mode"]:checked')?.value || "N/A"
-
-    // Get measurement type
-    const measurementType = document.querySelector('input[name="measurement-type"]:checked')?.value || "N/A"
-
-    // Get product info
-    const productType = document.getElementById("product-type").value
-    const productName = document.getElementById("product-name-select").value
-
-    // Get values based on calculation mode
-    let productAmount, productUnit, waterAmount, waterUnit, ratio, ratioPerLiter
-
-    if (calculationMode === "product_to_water") {
-      productAmount = document.getElementById("product-amount").value
-      productUnit = document.getElementById("product-unit").value
-      waterAmount = document.getElementById("water-amount").value
-      waterUnit = document.getElementById("water-unit").value
-      ratio = productAmount / waterAmount
-
-      // Calculate ratio per liter for consistent reporting
-      if (waterUnit === "l") {
-        ratioPerLiter = ratio
-      } else if (waterUnit === "ml") {
-        ratioPerLiter = ratio * 1000 // Convert from per ml to per liter
-      } else if (waterUnit === "gal_uk") {
-        ratioPerLiter = ratio / 4.55 // Convert from per gallon to per liter
-      }
-    } else if (calculationMode === "water_to_product") {
-      waterAmount = document.getElementById("water-amount-2").value
-      waterUnit = document.getElementById("water-unit-2").value
-      ratio = document.getElementById("ratio").value
-
-      // Calculate ratio per liter for consistent reporting
-      if (waterUnit === "l") {
-        ratioPerLiter = ratio
-      } else if (waterUnit === "ml") {
-        ratioPerLiter = ratio * 1000 // Convert from per ml to per liter
-      } else if (waterUnit === "gal_uk") {
-        ratioPerLiter = ratio / 4.55 // Convert from per gallon to per liter
-      }
-
-      // Convert water amount to liters for calculation
-      let waterAmountInLiters = waterAmount
-      if (waterUnit === "gal_uk") {
-        waterAmountInLiters = waterAmount * 4.55 // Convert UK gallons to liters
-      } else if (waterUnit === "ml") {
-        waterAmountInLiters = waterAmount / 1000 // Convert ml to liters
-      }
-
-      productAmount = ratioPerLiter * waterAmountInLiters
-      productUnit = measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"
-    } else if (calculationMode === "ratio_based") {
-      ratio = document.getElementById("ratio-2").value
-      waterAmount = document.getElementById("target-amount").value
-      waterUnit = document.getElementById("target-unit").value
-
-      // Calculate ratio per liter for consistent reporting
-      if (waterUnit === "l") {
-        ratioPerLiter = ratio
-      } else if (waterUnit === "ml") {
-        ratioPerLiter = ratio * 1000 // Convert from per ml to per liter
-      } else if (waterUnit === "gal_uk") {
-        ratioPerLiter = ratio / 4.55 // Convert from per gallon to per liter
-      }
-
-      // Convert water amount to liters for calculation
-      let waterAmountInLiters = waterAmount
-      if (waterUnit === "gal_uk") {
-        waterAmountInLiters = waterAmount * 4.55 // Convert UK gallons to liters
-      } else if (waterUnit === "ml") {
-        waterAmountInLiters = waterAmount / 1000 // Convert ml to liters
-      }
-
-      productAmount = ratioPerLiter * waterAmountInLiters
-      productUnit = measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"
-    }
-
-    // Build debug string
-    let debugString = `
-      Application Method: ${applicationMethod}
-      Product Type: ${productType}
-      Product Name: ${productName}
-      Calculation Mode: ${calculationMode}
-      Measurement Type: ${measurementType}
-      
-      Product Amount: ${productAmount} ${productUnit}
-      Water Amount: ${waterAmount} ${waterUnit}
-      Ratio: ${ratio} ${productUnit} per ${waterUnit}
-      Ratio (standardized): ${ratioPerLiter?.toFixed(4)} ${productUnit} per liter
-    `
-
-    // Add measurement-specific debug info
-    if (measurementType === "cap") {
-      const capSize = document.getElementById("cap-size").value
-      debugString += `\n    Cap Size: ${capSize} ml`
-    }
-
-    // Add scoop-specific debug info
-    const hasScoop = document.querySelector('input[name="has-scoop"]:checked')?.value === "yes"
-    if (hasScoop) {
-      const scoopSize = document.getElementById("scoop-size").value
-      const scoopUnit = document.getElementById("scoop-unit").value
-      debugString += `\n    Scoop Size: ${scoopSize} ${scoopUnit}`
-    }
-
-    // Add calculation summary with unit conversions
-    let waterAmountInLiters = waterAmount
-    if (waterUnit === "gal_uk") {
-      waterAmountInLiters = waterAmount * 4.55 // Convert UK gallons to liters
-    } else if (waterUnit === "ml") {
-      waterAmountInLiters = waterAmount / 1000 // Convert ml to liters
-    }
-
-    debugString += `\n\nCalculation Summary:
-      - User requested: ${waterAmount} ${waterUnit} (${waterAmountInLiters.toFixed(2)} liters)
-      - Using ratio: ${ratio} ${productUnit} per ${waterUnit} (${ratioPerLiter?.toFixed(4)} ${productUnit} per liter)
-      - Calculation: ${ratioPerLiter?.toFixed(4)} × ${waterAmountInLiters.toFixed(2)} = ${productAmount} ${productUnit}`
-
-    debugInfo.textContent = debugString
-  }
-}
-
-// Comprehensive Test Suite
+// Test Runner
 const TestRunner = {
-  results: {
-    total: 0,
-    passed: 0,
-    failed: 0,
-    productsTested: 0,
-    productsByCategory: {},
-    testDetails: [],
-    startTime: null,
-    endTime: null,
-  },
+  runAllTests: function (runFullTest) {
+    console.log("Running all tests")
 
-  // Run all tests
-  async runAllTests() {
-    const testResults = document.getElementById("test-results")
+    // Get all products
+    const allProducts = [...COMMON_PRODUCTS, ...AREA_TREATMENT_PRODUCTS, ...WATER_TREATMENT_PRODUCTS]
+
+    // Filter products for quick test
+    const productsToTest = runFullTest ? allProducts : this.getSampleProducts(allProducts, 5)
+
+    // Initialize test results
+    let testResults = ""
+    let passedCount = 0
+    let failedCount = 0
+
+    // Get progress bar elements
     const progressBar = document.getElementById("test-progress-bar")
     const progressText = document.getElementById("test-progress-text")
 
-    if (testResults) {
-      testResults.textContent = "🧪 STARTING COMPREHENSIVE TEST SUITE 🧪\n\n"
-      this.results = {
-        total: 0,
-        passed: 0,
-        failed: 0,
-        productsTested: 0,
-        productsByCategory: {},
-        testDetails: [],
-        startTime: new Date(),
-        endTime: null,
+    // Loop through products and run tests
+    for (let i = 0; i < productsToTest.length; i++) {
+      const product = productsToTest[i]
+
+      // Run tests for the product
+      const result = this.runTestsForProduct(product)
+
+      // Update test results
+      testResults += result.message + "\n"
+
+      // Update counts
+      if (result.passed) {
+        passedCount++
+      } else {
+        failedCount++
       }
-    }
 
-    // Get all products from the database
-    const allProducts = [...COMMON_PRODUCTS, ...AREA_TREATMENT_PRODUCTS, ...WATER_TREATMENT_PRODUCTS]
-
-    // Count products by category and application method
-    this.countProductsByCategory(allProducts)
-
-    if (testResults) {
-      testResults.textContent += `Found ${allProducts.length} products to test.\n\n`
-      testResults.textContent += "Product counts by category:\n"
-      for (const [category, count] of Object.entries(this.results.productsByCategory)) {
-        testResults.textContent += `  ${category}: ${count}\n`
-      }
-      testResults.textContent += "\n"
-    }
-
-    // Test a representative sample of products from each category
-    const sampleSize = 2 // Test 2 products from each category to keep the test quick
-
-    // Get sample products from each category
-    const waterMixingProducts = COMMON_PRODUCTS.filter((p) => p.applicationMethod === "water_mixing").slice(
-      0,
-      sampleSize,
-    )
-    const directApplicationProducts = AREA_TREATMENT_PRODUCTS.filter(
-      (p) => p.applicationMethod === "direct_application",
-    ).slice(0, sampleSize)
-    const waterTreatmentProducts = WATER_TREATMENT_PRODUCTS.slice(0, sampleSize)
-
-    const totalProductsToTest =
-      waterMixingProducts.length + directApplicationProducts.length + waterTreatmentProducts.length
-    let productsCompleted = 0
-
-    // Test water mixing products
-    if (testResults) {
-      testResults.textContent += "📊 Testing Water Mixing Products\n"
-    }
-
-    for (const product of waterMixingProducts) {
-      await this.testWaterMixingProduct(product)
-      this.results.productsTested++
-      productsCompleted++
-
-      // Update progress
+      // Update progress bar
+      const progress = ((i + 1) / productsToTest.length) * 100
       if (progressBar && progressText) {
-        const progress = Math.round((productsCompleted / totalProductsToTest) * 100)
-        progressBar.style.width = `${progress}%`
-        progressText.textContent = `${progress}%`
+        progressBar.style.width = progress + "%"
+        progressText.textContent = progress.toFixed(0) + "%"
       }
     }
 
-    // Test direct application products
-    if (testResults) {
-      testResults.textContent += "\n🌱 Testing Direct Application Products\n"
-    }
-
-    for (const product of directApplicationProducts) {
-      await this.testDirectApplicationProduct(product)
-      this.results.productsTested++
-      productsCompleted++
-
-      // Update progress
-      if (progressBar && progressText) {
-        const progress = Math.round((productsCompleted / totalProductsToTest) * 100)
-        progressBar.style.width = `${progress}%`
-        progressText.textContent = `${progress}%`
-      }
-    }
-
-    // Test water treatment products
-    if (testResults) {
-      testResults.textContent += "\n💧 Testing Water Treatment Products\n"
-    }
-
-    for (const product of waterTreatmentProducts) {
-      await this.testWaterTreatmentProduct(product)
-      this.results.productsTested++
-      productsCompleted++
-
-      // Update progress
-      if (progressBar && progressText) {
-        const progress = Math.round((productsCompleted / totalProductsToTest) * 100)
-        progressBar.style.width = `${progress}%`
-        progressText.textContent = `${progress}%`
-      }
-    }
-
-    // Report results
-    this.results.endTime = new Date()
-    this.reportResults()
+    // Display test results
+    testResults += `\nTotal Passed: ${passedCount}, Total Failed: ${failedCount}`
+    document.getElementById("test-results").textContent = testResults
   },
 
-  // Count products by category and application method
-  countProductsByCategory(allProducts) {
-    const counts = {}
-
-    allProducts.forEach((product) => {
-      const key = `${product.applicationMethod}_${product.type}`
-      counts[key] = (counts[key] || 0) + 1
-    })
-
-    this.results.productsByCategory = counts
+  getSampleProducts: (products, sampleSize) => {
+    const shuffled = products.sort(() => 0.5 - Math.random())
+    return shuffled.slice(0, sampleSize)
   },
 
-  // Test a water mixing product
-  async testWaterMixingProduct(product) {
-    const testResults = document.getElementById("test-results")
-    if (testResults) {
-      testResults.textContent += `\nTesting product: ${product.name} (${product.id})\n`
+  runTestsForProduct: (product) => {
+    console.log(`Running tests for product: ${product.name}`)
+
+    // Initialize test result
+    const testResult = {
+      passed: true,
+      message: `Testing product: ${product.name}`,
     }
 
+    // Test cases
     try {
-      // Setup calculator with this product
-      await this.setupCalculator("water_mixing", product.type, product.id)
+      // Test case 1: Check if default dosage and water amount are numbers
+      if (typeof product.defaultDosage !== "number" || typeof product.defaultWaterAmount !== "number") {
+        testResult.passed = false
+        testResult.message += "\n- Test Case 1 Failed: Default dosage and water amount must be numbers"
+      }
 
-      // Test 1: Verify default values match manufacturer instructions
-      const defaultTest = await this.testProductDefaultValues(product)
-      this.logTestResult(`Default Values - ${product.name}`, defaultTest.passed, defaultTest.message)
+      // Test case 2: Check if default dosage and water amount are positive
+      if (product.defaultDosage <= 0 || product.defaultWaterAmount <= 0) {
+        testResult.passed = false
+        testResult.message += "\n- Test Case 2 Failed: Default dosage and water amount must be positive"
+      }
 
-      // Test 2: Product to Water mode
-      const productToWaterTest = await this.testProductToWaterMode(product)
-      this.logTestResult(`Product to Water - ${product.name}`, productToWaterTest.passed, productToWaterTest.message)
+      // Test case 3: Check if measurement type is valid
+      const validMeasurementTypes = ["volume", "weight", "cap"]
+      if (!validMeasurementTypes.includes(product.measurementType)) {
+        testResult.passed = false
+        testResult.message += "\n- Test Case 3 Failed: Invalid measurement type"
+      }
 
-      // Test 3: Water to Product mode
-      const waterToProductTest = await this.testWaterToProductMode(product)
-      this.logTestResult(`Water to Product - ${product.name}`, waterToProductTest.passed, waterToProductTest.message)
+      // Test case 4: Check if application method is valid
+      const validApplicationMethods = ["water_mixing", "direct_application", "water_treatment"]
+      if (!validApplicationMethods.includes(product.applicationMethod)) {
+        testResult.passed = false
+        testResult.message += "\n- Test Case 4 Failed: Invalid application method"
+      }
 
-      // Test 4: Ratio Based mode
-      const ratioBasedTest = await this.testRatioBasedMode(product)
-      this.logTestResult(`Ratio Based - ${product.name}`, ratioBasedTest.passed, ratioBasedTest.message)
+      // Test case 5: Check if dosage unit is valid
+      const validDosageUnits = ["ml", "l", "g", "kg", "oz", "lb", "cap"]
+      if (!validDosageUnits.includes(product.defaultDosageUnit)) {
+        testResult.passed = false
+        testResult.message += "\n- Test Case 5 Failed: Invalid dosage unit"
+      }
 
-      // Test 5: Unit conversion
-      const unitConversionTest = await this.testUnitConversion(product)
-      this.logTestResult(`Unit Conversion - ${product.name}`, unitConversionTest.passed, unitConversionTest.message)
+      // Test case 6: Check if water unit is valid
+      const validWaterUnits = ["ml", "l", "gal_uk", "sq_m", "sq_ft", "sq_yd", "plant"]
+      if (!validWaterUnits.includes(product.defaultWaterUnit)) {
+        testResult.passed = false
+        testResult.message += "\n- Test Case 6 Failed: Invalid water unit"
+      }
+
+      // Test case 7: Check if instructions are not empty
+      if (!product.instructions) {
+        testResult.passed = false
+        testResult.message += "\n- Test Case 7 Failed: Instructions cannot be empty"
+      }
+
+      // Test case 8: Check if product name is not empty
+      if (!product.name) {
+        testResult.passed = false
+        testResult.message += "\n- Test Case 8 Failed: Product name cannot be empty"
+      }
+
+      // Test case 9: Check if product type is not empty
+      if (!product.type) {
+        testResult.passed = false
+        testResult.message += "\n- Test Case 9 Failed: Product type cannot be empty"
+      }
+
+      // Test case 10: Check if product id is not empty
+      if (!product.id) {
+        testResult.passed = false
+        testResult.message += "\n- Test Case 10 Failed: Product id cannot be empty"
+      }
     } catch (error) {
-      console.error(`Error testing ${product.name}:`, error)
-      this.logTestResult(`Testing ${product.name}`, false, `Error: ${error.message}`)
-    }
-  },
-
-  // Test a direct application product
-  async testDirectApplicationProduct(product) {
-    const testResults = document.getElementById("test-results")
-    if (testResults) {
-      testResults.textContent += `\nTesting product: ${product.name} (${product.id})\n`
+      testResult.passed = false
+      testResult.message += `\n- An error occurred during testing: ${error.message}`
     }
 
-    try {
-      // Setup calculator with this product
-      await this.setupCalculator("direct_application", product.type, product.id)
-
-      // Test 1: Verify default values match manufacturer instructions
-      const defaultTest = await this.testProductDefaultValues(product)
-      this.logTestResult(`Default Values - ${product.name}`, defaultTest.passed, defaultTest.message)
-
-      // Test 2: Rectangle area calculation
-      const rectangleTest = await this.testRectangleAreaCalculation(product)
-      this.logTestResult(`Rectangle Area - ${product.name}`, rectangleTest.passed, rectangleTest.message)
-
-      // Test 3: Circle area calculation
-      const circleTest = await this.testCircleAreaCalculation(product)
-      this.logTestResult(`Circle Area - ${product.name}`, circleTest.passed, circleTest.message)
-    } catch (error) {
-      console.error(`Error testing ${product.name}:`, error)
-      this.logTestResult(`Testing ${product.name}`, false, `Error: ${error.message}`)
-    }
-  },
-
-  // Test a water treatment product
-  async testWaterTreatmentProduct(product) {
-    const testResults = document.getElementById("test-results")
-    if (testResults) {
-      testResults.textContent += `\nTesting product: ${product.name} (${product.id})\n`
+    // If all tests passed, update message
+    if (testResult.passed) {
+      testResult.message += "\n- All tests passed!"
     }
 
-    try {
-      // Setup calculator with this product
-      await this.setupCalculator("water_treatment", product.type, product.id)
-
-      // Test 1: Verify default values match manufacturer instructions
-      const defaultTest = await this.testProductDefaultValues(product)
-      this.logTestResult(`Default Values - ${product.name}`, defaultTest.passed, defaultTest.message)
-
-      // Test 2: Rectangular container calculation
-      const rectangularTest = await this.testRectangularContainerCalculation(product)
-      this.logTestResult(`Rectangular Container - ${product.name}`, rectangularTest.passed, rectangularTest.message)
-
-      // Test 3: Circular container calculation
-      const circularTest = await this.testCircularContainerCalculation(product)
-      this.logTestResult(`Circular Container - ${product.name}`, circularTest.passed, circularTest.message)
-
-      // Test 4: Manual volume entry
-      const manualVolumeTest = await this.testManualVolumeEntry(product)
-      this.logTestResult(`Manual Volume - ${product.name}`, manualVolumeTest.passed, manualVolumeTest.message)
-    } catch (error) {
-      console.error(`Error testing ${product.name}:`, error)
-      this.logTestResult(`Testing ${product.name}`, false, `Error: ${error.message}`)
-    }
-  },
-
-  // Helper function to setup calculator for testing
-  async setupCalculator(applicationMethod, productType, productId) {
-    return new Promise((resolve) => {
-      // Set application method
-      const applicationMethodSelect = document.getElementById("application-method")
-      applicationMethodSelect.value = applicationMethod
-      applicationMethodSelect.dispatchEvent(new Event("change"))
-
-      // Wait for product types to load
-      setTimeout(() => {
-        // Set product type
-        const productTypeSelect = document.getElementById("product-type")
-        productTypeSelect.value = productType
-        productTypeSelect.dispatchEvent(new Event("change"))
-
-        // Wait for product names to load
-        setTimeout(() => {
-          // Set product
-          const productNameSelect = document.getElementById("product-name-select")
-          productNameSelect.value = productId
-          productNameSelect.dispatchEvent(new Event("change"))
-
-          // Wait for product to load
-          setTimeout(resolve, 300)
-        }, 300)
-      }, 300)
-    })
-  },
-
-  // Test product default values
-  async testProductDefaultValues(product) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        let passed = true
-        let message = ""
-
-        if (product.applicationMethod === "water_mixing") {
-          const productAmount = document.getElementById("product-amount").value
-          const productUnit = document.getElementById("product-unit").value
-          const waterAmount = document.getElementById("water-amount").value
-          const waterUnit = document.getElementById("water-unit").value
-
-          passed =
-            Math.abs(Number.parseFloat(productAmount) - product.defaultDosage) < 0.01 &&
-            productUnit === product.defaultDosageUnit &&
-            Math.abs(Number.parseFloat(waterAmount) - product.defaultWaterAmount) < 0.01 &&
-            waterUnit === product.defaultWaterUnit
-
-          message = `Expected: ${product.defaultDosage} ${product.defaultDosageUnit} for ${product.defaultWaterAmount} ${product.defaultWaterUnit}, Got: ${productAmount} ${productUnit} for ${waterAmount} ${waterUnit}`
-        } else if (product.applicationMethod === "direct_application") {
-          const applicationRate = document.getElementById("application-rate").value
-          const rateUnit = document.getElementById("rate-unit").value
-          const rateAreaUnit = document.getElementById("rate-area-unit").value
-
-          passed =
-            Math.abs(Number.parseFloat(applicationRate) - product.defaultDosage) < 0.01 &&
-            rateUnit === product.defaultDosageUnit &&
-            rateAreaUnit === product.defaultWaterUnit
-
-          message = `Expected: ${product.defaultDosage} ${product.defaultDosageUnit} per ${product.defaultWaterUnit}, Got: ${applicationRate} ${rateUnit} per ${rateAreaUnit}`
-        } else if (product.applicationMethod === "water_treatment") {
-          const dosageAmount = document.getElementById("dosage-amount").value
-          const dosageUnit = document.getElementById("dosage-unit").value
-
-          passed =
-            Math.abs(Number.parseFloat(dosageAmount) - product.defaultDosage) < 0.01 &&
-            dosageUnit === product.defaultDosageUnit
-
-          message = `Expected: ${product.defaultDosage} ${product.defaultDosageUnit}, Got: ${dosageAmount} ${dosageUnit}`
-        }
-
-        resolve({ passed, message })
-      }, 300)
-    })
-  },
-
-  // Test Product to Water mode
-  async testProductToWaterMode(product) {
-    return new Promise((resolve) => {
-      // Set calculation mode
-      const modeRadio = document.querySelector('input[name="calculation-mode"][value="product_to_water"]')
-      if (modeRadio) {
-        modeRadio.checked = true
-        modeRadio.dispatchEvent(new Event("change"))
-      }
-
-      // Set custom values
-      document.getElementById("product-amount").value = "10"
-      document.getElementById("water-amount").value = "2"
-
-      // Click calculate
-      document.getElementById("calculate-btn").click()
-
-      setTimeout(() => {
-        const metricResult = document.getElementById("metric-result").textContent
-        const passed = metricResult.includes("10") && metricResult.includes("2")
-
-        resolve({
-          passed,
-          message: `Result: ${metricResult}`,
-        })
-      }, 300)
-    })
-  },
-
-  // Test Water to Product mode
-  async testWaterToProductMode(product) {
-    return new Promise((resolve) => {
-      // Set calculation mode
-      const modeRadio = document.querySelector('input[name="calculation-mode"][value="water_to_product"]')
-      if (modeRadio) {
-        modeRadio.checked = true
-        modeRadio.dispatchEvent(new Event("change"))
-      }
-
-      // Set custom values
-      document.getElementById("water-amount-2").value = "5"
-      document.getElementById("ratio").value = "3"
-
-      // Click calculate
-      document.getElementById("calculate-btn").click()
-
-      setTimeout(() => {
-        const metricResult = document.getElementById("metric-result").textContent
-        const passed = metricResult.includes("15") && metricResult.includes("5")
-
-        resolve({
-          passed,
-          message: `Result: ${metricResult}`,
-        })
-      }, 300)
-    })
-  },
-
-  // Test Ratio Based mode
-  async testRatioBasedMode(product) {
-    return new Promise((resolve) => {
-      // Set calculation mode
-      const modeRadio = document.querySelector('input[name="calculation-mode"][value="ratio_based"]')
-      if (modeRadio) {
-        modeRadio.checked = true
-        modeRadio.dispatchEvent(new Event("change"))
-      }
-
-      // Set custom values
-      document.getElementById("ratio-2").value = "4"
-      document.getElementById("target-amount").value = "3"
-
-      // Click calculate
-      document.getElementById("calculate-btn").click()
-
-      setTimeout(() => {
-        const metricResult = document.getElementById("metric-result").textContent
-        const passed = metricResult.includes("12") && metricResult.includes("3")
-
-        resolve({
-          passed,
-          message: `Result: ${metricResult}`,
-        })
-      }, 300)
-    })
-  },
-
-  // Test Unit Conversion
-  async testUnitConversion(product) {
-    return new Promise((resolve) => {
-      // Set calculation mode
-      const modeRadio = document.querySelector('input[name="calculation-mode"][value="product_to_water"]')
-      if (modeRadio) {
-        modeRadio.checked = true
-        modeRadio.dispatchEvent(new Event("change"))
-      }
-
-      // Set initial values
-      document.getElementById("product-amount").value = "10"
-      document.getElementById("product-unit").value = "ml"
-      document.getElementById("water-amount").value = "1"
-      document.getElementById("water-unit").value = "l"
-
-      // Change units
-      document.getElementById("water-unit").value = "gal_uk"
-      document.getElementById("water-unit").dispatchEvent(new Event("change"))
-
-      setTimeout(() => {
-        const waterAmount = document.getElementById("water-amount").value
-        const passed = Math.abs(Number.parseFloat(waterAmount) - 0.22) < 0.01
-
-        resolve({
-          passed,
-          message: `Expected ~0.22 gallons, Got: ${waterAmount} gallons`,
-        })
-      }, 300)
-    })
-  },
-
-  // Test Rectangle Area Calculation
-  async testRectangleAreaCalculation(product) {
-    return new Promise((resolve) => {
-      // Set rectangle shape
-      const rectangleRadio = document.querySelector('input[name="area-shape"][value="rectangle"]')
-      if (rectangleRadio) {
-        rectangleRadio.checked = true
-        rectangleRadio.dispatchEvent(new Event("change"))
-      }
-
-      // Set dimensions
-      document.getElementById("length").value = "5"
-      document.getElementById("width").value = "4"
-      document.getElementById("area-unit").value = "m"
-
-      // Click calculate
-      document.getElementById("calculate-btn").click()
-
-      setTimeout(() => {
-        const totalAmountResult = document.getElementById("total-amount-result").textContent
-        const expectedAmount = product.defaultDosage * 20 // 5m × 4m = 20m²
-
-        // Check if the result contains the expected amount (allowing for some formatting differences)
-        const resultNumber = Number.parseFloat(totalAmountResult.replace(/[^\d.-]/g, ""))
-        const passed = Math.abs(resultNumber - expectedAmount) / expectedAmount < 0.05 // Within 5%
-
-        resolve({
-          passed,
-          message: `Expected ~${expectedAmount} ${product.defaultDosageUnit}, Got: ${totalAmountResult}`,
-        })
-      }, 300)
-    })
-  },
-
-  // Test Circle Area Calculation
-  async testCircleAreaCalculation(product) {
-    return new Promise((resolve) => {
-      // Set circle shape
-      const circleRadio = document.querySelector('input[name="area-shape"][value="circle"]')
-      if (circleRadio) {
-        circleRadio.checked = true
-        circleRadio.dispatchEvent(new Event("change"))
-      }
-
-      // Set dimensions
-      document.getElementById("diameter").value = "4"
-      document.getElementById("circle-unit").value = "m"
-
-      // Click calculate
-      document.getElementById("calculate-btn").click()
-
-      setTimeout(() => {
-        const totalAmountResult = document.getElementById("total-amount-result").textContent
-        const area = Math.PI * 2 * 2 // π × r²
-        const expectedAmount = product.defaultDosage * area
-
-        // Check if the result is approximately correct (within 5%)
-        const resultNumber = Number.parseFloat(totalAmountResult.replace(/[^\d.-]/g, ""))
-        const percentDifference = Math.abs((resultNumber - expectedAmount) / expectedAmount)
-        const passed = percentDifference < 0.05
-
-        resolve({
-          passed,
-          message: `Expected ~${expectedAmount.toFixed(1)} ${product.defaultDosageUnit}, Got: ${totalAmountResult}`,
-        })
-      }, 300)
-    })
-  },
-
-  // Test Rectangular Container Calculation
-  async testRectangularContainerCalculation(product) {
-    return new Promise((resolve) => {
-      // Set rectangular shape
-      const rectangularRadio = document.querySelector('input[name="container-shape"][value="rectangular"]')
-      if (rectangularRadio) {
-        rectangularRadio.checked = true
-        rectangularRadio.dispatchEvent(new Event("change"))
-      }
-
-      // Set dimensions
-      document.getElementById("dimension-unit").value = "m"
-      document.getElementById("container-length").value = "2"
-      document.getElementById("container-width").value = "1"
-      document.getElementById("container-height").value = "0.5"
-
-      // Click calculate
-      document.getElementById("calculate-btn").click()
-
-      setTimeout(() => {
-        const volumeResult = document.getElementById("volume-result").textContent
-        const totalAmountResult = document.getElementById("water-total-amount-result").textContent
-
-        const expectedVolume = 2 * 1 * 0.5 * 1000 // 1000 liters
-        const expectedAmount = (product.defaultDosage * expectedVolume) / 1000
-
-        // Extract numbers from the results
-        const volumeNumber = Number.parseFloat(volumeResult.replace(/[^\d.-]/g, ""))
-        const amountNumber = Number.parseFloat(totalAmountResult.replace(/[^\d.-]/g, ""))
-
-        const volumePassed = Math.abs(volumeNumber - expectedVolume) / expectedVolume < 0.05
-        const amountPassed = Math.abs(amountNumber - expectedAmount) / expectedAmount < 0.05
-
-        resolve({
-          passed: volumePassed && amountPassed,
-          message: `Volume: ${volumeResult}, Amount: ${totalAmountResult}`,
-        })
-      }, 300)
-    })
-  },
-
-  // Test Circular Container Calculation
-  async testCircularContainerCalculation(product) {
-    return new Promise((resolve) => {
-      // Set circular shape
-      const circularRadio = document.querySelector('input[name="container-shape"][value="circular"]')
-      if (circularRadio) {
-        circularRadio.checked = true
-        circularRadio.dispatchEvent(new Event("change"))
-      }
-
-      // Set dimensions
-      document.getElementById("dimension-unit").value = "m"
-      document.getElementById("container-diameter").value = "2"
-      document.getElementById("container-depth").value = "0.5"
-
-      // Click calculate
-      document.getElementById("calculate-btn").click()
-
-      setTimeout(() => {
-        const volumeResult = document.getElementById("volume-result").textContent
-        const totalAmountResult = document.getElementById("water-total-amount-result").textContent
-
-        const expectedVolume = Math.PI * 1 * 1 * 0.5 * 1000 // π × r² × h × 1000
-        const expectedAmount = (product.defaultDosage * expectedVolume) / 1000
-
-        // Extract numbers from the results
-        const volumeNumber = Number.parseFloat(volumeResult.replace(/[^\d.-]/g, ""))
-        const amountNumber = Number.parseFloat(totalAmountResult.replace(/[^\d.-]/g, ""))
-
-        // Check if results are approximately correct (within 5%)
-        const volumePercentDiff = Math.abs((volumeNumber - expectedVolume) / expectedVolume)
-        const volumePassed = volumePercentDiff < 0.05
-
-        const amountPercentDiff = Math.abs((amountNumber - expectedAmount) / expectedAmount)
-        const amountPassed = amountPercentDiff < 0.05
-
-        resolve({
-          passed: volumePassed && amountPassed,
-          message: `Volume: ${volumeResult}, Amount: ${totalAmountResult}`,
-        })
-      }, 300)
-    })
-  },
-
-  // Test Manual Volume Entry
-  async testManualVolumeEntry(product) {
-    return new Promise((resolve) => {
-      // Set manual volume
-      document.getElementById("water-volume").value = "2000"
-      document.getElementById("water-volume-unit").value = "l"
-
-      // Click calculate
-      document.getElementById("calculate-btn").click()
-
-      setTimeout(() => {
-        const totalAmountResult = document.getElementById("water-total-amount-result").textContent
-        const expectedAmount = (product.defaultDosage * 2000) / 1000
-
-        // Extract number from the result
-        const resultNumber = Number.parseFloat(totalAmountResult.replace(/[^\d.-]/g, ""))
-        const passed = Math.abs(resultNumber - expectedAmount) / expectedAmount < 0.05
-
-        resolve({
-          passed,
-          message: `Expected: ${expectedAmount} ${product.defaultDosageUnit}, Got: ${totalAmountResult}`,
-        })
-      }, 300)
-    })
-  },
-
-  // Helper function to log test results
-  logTestResult(testName, passed, message) {
-    this.results.total++
-
-    const testResults = document.getElementById("test-results")
-
-    if (passed) {
-      this.results.passed++
-      if (testResults) {
-        testResults.textContent += `  ✓ PASSED: ${testName}\n`
-        if (message) {
-          testResults.textContent += `    ${message}\n`
-        }
-      }
-    } else {
-      this.results.failed++
-      if (testResults) {
-        testResults.textContent += `  ✗ FAILED: ${testName}\n`
-        if (message) {
-          testResults.textContent += `    ${message}\n`
-        }
-      }
-    }
-
-    // Store test details
-    this.results.testDetails.push({
-      name: testName,
-      passed,
-      message,
-    })
-
-    // Scroll to bottom of test results
-    if (testResults) {
-      testResults.scrollTop = testResults.scrollHeight
-    }
-  },
-
-  // Report final results
-  reportResults() {
-    const passRate = ((this.results.passed / this.results.total) * 100).toFixed(2)
-    const duration = (this.results.endTime - this.results.startTime) / 1000
-
-    const testResults = document.getElementById("test-results")
-    if (testResults) {
-      testResults.textContent += "\n📊 TEST RESULTS SUMMARY 📊\n\n"
-      testResults.textContent += `Total Tests: ${this.results.total}\n`
-      testResults.textContent += `Passed Tests: ${this.results.passed}\n`
-      testResults.textContent += `Failed Tests: ${this.results.failed}\n`
-      testResults.textContent += `Pass Rate: ${passRate}%\n`
-      testResults.textContent += `Products Tested: ${this.results.productsTested}\n`
-      testResults.textContent += `Test Duration: ${duration.toFixed(2)} seconds\n\n`
-
-      testResults.textContent += "Products by Category:\n"
-      for (const [category, count] of Object.entries(this.results.productsByCategory)) {
-        testResults.textContent += `  ${category}: ${count}\n`
-      }
-
-      testResults.textContent += "\nTest Completed at: " + new Date().toLocaleString()
-
-      // Scroll to bottom of test results
-      testResults.scrollTop = testResults.scrollHeight
-    }
+    return testResult
   },
 }
 
-// Add event listener to run tests button
-document.addEventListener("DOMContentLoaded", () => {
-  const testTrigger = document.getElementById("test-trigger")
-  if (testTrigger) {
-    testTrigger.addEventListener("click", () => {
-      const testContent = document.getElementById("test-content")
-      if (testContent && !testContent.classList.contains("hidden")) {
-        // Reset progress bar
-        const progressBar = document.getElementById("test-progress-bar")
-        const progressText = document.getElementById("test-progress-text")
-        if (progressBar && progressText) {
-          progressBar.style.width = "0%"
-          progressText.textContent = "0%"
-        }
+// Enhanced Test Runner
+const EnhancedTestRunner = {
+  runAllTests: function (runFullTest) {
+    console.log("Running all tests")
 
-        // Run tests
-        TestRunner.runAllTests()
+    // Get all products
+    const allProducts = [...COMMON_PRODUCTS, ...AREA_TREATMENT_PRODUCTS, ...WATER_TREATMENT_PRODUCTS]
+
+    // Filter products for quick test
+    const productsToTest = runFullTest ? allProducts : this.getSampleProducts(allProducts, 5)
+
+    // Initialize test results
+    let testResults = ""
+    let passedCount = 0
+    let failedCount = 0
+
+    // Get progress bar elements
+    const progressBar = document.getElementById("test-progress-bar")
+    const progressText = document.getElementById("test-progress-text")
+
+    // Loop through products and run tests
+    for (let i = 0; i < productsToTest.length; i++) {
+      const product = productsToTest[i]
+
+      // Run tests for the product
+      const result = this.runTestsForProduct(product)
+
+      // Update test results
+      testResults += result.message + "\n"
+
+      // Update counts
+      if (result.passed) {
+        passedCount++
+      } else {
+        failedCount++
       }
-    })
-  }
-})
+
+      // Update progress bar
+      const progress = ((i + 1) / productsToTest.length) * 100
+      if (progressBar && progressText) {
+        progressBar.style.width = progress + "%"
+        progressText.textContent = progress.toFixed(0) + "%"
+      }
+    }
+
+    // Display test results
+    testResults += `\nTotal Passed: ${passedCount}, Total Failed: ${failedCount}`
+    document.getElementById("test-results").textContent = testResults
+  },
+
+  getSampleProducts: (products, sampleSize) => {
+    const shuffled = products.sort(() => 0.5 - Math.random())
+    return shuffled.slice(0, sampleSize)
+  },
+
+  runTestsForProduct: (product) => {
+    console.log(`Running tests for product: ${product.name}`)
+
+    // Initialize test result
+    const testResult = {
+      passed: true,
+      message: `Testing product: ${product.name}`,
+    }
+
+    // Test cases
+    try {
+      // Test case 1: Check if default dosage and water amount are numbers
+      if (typeof product.defaultDosage !== "number" || typeof product.defaultWaterAmount !== "number") {
+        testResult.passed = false
+        testResult.message += "\n- Test Case 1 Failed: Default dosage and water amount must be numbers"
+      }
+
+      // Test case 2: Check if default dosage and water amount are positive
+      if (product.defaultDosage <= 0 || product.defaultWaterAmount <= 0) {
+        testResult.passed = false
+        testResult.message += "\n- Test Case 2 Failed: Default dosage and water amount must be positive"
+      }
+
+      // Test case 3: Check if measurement type is valid
+      const validMeasurementTypes = ["volume", "weight", "cap"]
+      if (!validMeasurementTypes.includes(product.measurementType)) {
+        testResult.passed = false
+        testResult.message += "\n- Test Case 3 Failed: Invalid measurement type"
+      }
+
+      // Test case 4: Check if application method is valid
+      const validApplicationMethods = ["water_mixing", "direct_application", "water_treatment"]
+      if (!validApplicationMethods.includes(product.applicationMethod)) {
+        testResult.passed = false
+        testResult.message += "\n- Test Case 4 Failed: Invalid application method"
+      }
+
+      // Test case 5: Check if dosage unit is valid
+      const validDosageUnits = ["ml", "l", "g", "kg", "oz", "lb", "cap"]
+      if (!validDosageUnits.includes(product.defaultDosageUnit)) {
+        testResult.passed = false
+        testResult.message += "\n- Test Case 5 Failed: Invalid dosage unit"
+      }
+
+      // Test case 6: Check if water unit is valid
+      const validWaterUnits = ["ml", "l", "gal_uk", "sq_m", "sq_ft", "sq_yd", "plant"]
+      if (!validWaterUnits.includes(product.defaultWaterUnit)) {
+        testResult.passed = false
+        testResult.message += "\n- Test Case 6 Failed: Invalid water unit"
+      }
+
+      // Test case 7: Check if instructions are not empty
+      if (!product.instructions) {
+        testResult.passed = false
+        testResult.message += "\n- Test Case 7 Failed: Instructions cannot be empty"
+      }
+
+      // Test case 8: Check if product name is not empty
+      if (!product.name) {
+        testResult.passed = false
+        testResult.message += "\n- Test Case 8 Failed: Product name cannot be empty"
+      }
+
+      // Test case 9: Check if product type is not empty
+      if (!product.type) {
+        testResult.passed = false
+        testResult.message += "\n- Test Case 9 Failed: Product type cannot be empty"
+      }
+
+      // Test case 10: Check if product id is not empty
+      if (!product.id) {
+        testResult.passed = false
+        testResult.message += "\n- Test Case 10 Failed: Product id cannot be empty"
+      }
+    } catch (error) {
+      testResult.passed = false
+      testResult.message += `\n- An error occurred during testing: ${error.message}`
+    }
+
+    // If all tests passed, update message
+    if (testResult.passed) {
+      testResult.message += "\n- All tests passed!"
+    }
+
+    return testResult
+  },
+}
