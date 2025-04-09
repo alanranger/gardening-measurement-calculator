@@ -1611,17 +1611,8 @@ function calculateWaterMixing() {
     ratio = Number.parseFloat(document.getElementById("ratio").value)
 
     // Calculate product amount based on ratio and water amount
-    // The ratio is in product per liter, so we need to convert if waterUnit is not liter
-    if (waterUnit === "gal_uk") {
-      // 1 UK gallon = 4.55 liters
-      productAmount = ratio * waterAmount * 4.55
-    } else if (waterUnit === "ml") {
-      // 1000 ml = 1 liter
-      productAmount = (ratio * waterAmount) / 1000
-    } else {
-      productAmount = ratio * waterAmount
-    }
-
+    // The ratio is specified in the units selected (per liter or per gallon)
+    productAmount = ratio * waterAmount
     productUnit = measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"
   } else if (calculationMode === "ratio_based") {
     ratio = Number.parseFloat(document.getElementById("ratio-2").value)
@@ -1704,6 +1695,26 @@ function calculateWaterMixing() {
   document.getElementById("metric-result").textContent = metricResult
   document.getElementById("imperial-result").textContent = imperialResult
   document.getElementById("alternative-result").textContent = alternativeResult
+
+  // Add a result card that matches exactly what the user requested
+  const userRequestedResult = document.createElement("div")
+  userRequestedResult.className = "result-card"
+  userRequestedResult.innerHTML = `
+    <h3>Your Requested Amount</h3>
+    <p>${productAmount.toFixed(2)} ${productUnit} for ${waterAmount} ${waterUnit}</p>
+    <p class="hint">Based on ${ratio} ${productUnit} per ${waterUnit}</p>
+  `
+
+  // Find the results container and add the new card
+  const resultsContainer = document.querySelector("#water-mixing-results .results")
+  // Remove any previous "Your Requested Amount" cards
+  const existingRequestedCards = resultsContainer.querySelectorAll(".result-card h3")
+  existingRequestedCards.forEach((h3) => {
+    if (h3.textContent === "Your Requested Amount") {
+      h3.parentElement.remove()
+    }
+  })
+  resultsContainer.appendChild(userRequestedResult)
 }
 
 // Function to calculate direct application
@@ -1908,15 +1919,7 @@ function updateDebugInfo() {
       waterAmount = document.getElementById("water-amount-2").value
       waterUnit = document.getElementById("water-unit-2").value
       ratio = document.getElementById("ratio").value
-
-      if (waterUnit === "gal_uk") {
-        productAmount = ratio * waterAmount * 4.55
-      } else if (waterUnit === "ml") {
-        productAmount = (ratio * waterAmount) / 1000
-      } else {
-        productAmount = ratio * waterAmount
-      }
-
+      productAmount = ratio * waterAmount
       productUnit = measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"
     } else if (calculationMode === "ratio_based") {
       ratio = document.getElementById("ratio-2").value
@@ -1952,6 +1955,12 @@ function updateDebugInfo() {
       const scoopUnit = document.getElementById("scoop-unit").value
       debugString += `\n    Scoop Size: ${scoopSize} ${scoopUnit}`
     }
+
+    // Add calculation summary
+    debugString += `\n\nCalculation Summary:
+      - User requested: ${waterAmount} ${waterUnit}
+      - Using ratio: ${ratio} ${productUnit} per ${waterUnit}
+      - Calculation: ${ratio} × ${waterAmount} = ${productAmount} ${productUnit}`
 
     debugInfo.textContent = debugString
   }
