@@ -884,8 +884,13 @@ const WATER_TREATMENT_PRODUCTS = [
 
 // Update the updateProductNameDropdown function to correctly handle the product arrays
 function updateProductNameDropdown(selectedType) {
+  console.log("Updating product dropdown for type:", selectedType)
+
   const productNameSelect = document.getElementById("product-name-select")
-  if (!productNameSelect) return
+  if (!productNameSelect) {
+    console.error("Product name select element not found")
+    return
+  }
 
   // Clear existing options except the first one
   while (productNameSelect.options.length > 1) {
@@ -894,6 +899,7 @@ function updateProductNameDropdown(selectedType) {
 
   // Get the current calculator type
   const calculatorType = document.getElementById("calculator-type")?.value || "product"
+  console.log("Current calculator type:", calculatorType)
 
   // Choose the appropriate product list based on calculator type
   let productList = []
@@ -905,8 +911,11 @@ function updateProductNameDropdown(selectedType) {
     productList = WATER_TREATMENT_PRODUCTS
   }
 
+  console.log("Total products in list:", productList.length)
+
   // Filter products by selected type
   const filteredProducts = productList.filter((product) => product.type === selectedType)
+  console.log("Filtered products:", filteredProducts.length)
 
   // Add filtered products to dropdown
   filteredProducts.forEach((product) => {
@@ -930,4 +939,102 @@ function updateProductNameDropdown(selectedType) {
       commonProductSection.classList.remove("hidden")
     }
   }
+}
+
+function initProductCalculator() {
+  const calculatorTypeSelect = document.getElementById("calculator-type")
+  const productTypeSelect = document.getElementById("product-type")
+  const productNameSelect = document.getElementById("product-name-select")
+  const useCustomProductCheckbox = document.getElementById("use-custom-product")
+  const customProductSection = document.getElementById("custom-product-section")
+  const commonProductSection = document.getElementById("common-product-section")
+  const productTypeHint = document.getElementById("product-type-hint")
+
+  // Initialize product type select
+  if (productTypeSelect) {
+    productTypeSelect.addEventListener("change", () => {
+      const selectedType = productTypeSelect.value
+      // Show/hide custom product section based on selection
+      if (selectedType === "custom") {
+        if (useCustomProductCheckbox) useCustomProductCheckbox.checked = true
+        if (customProductSection) customProductSection.classList.remove("hidden")
+        if (commonProductSection) commonProductSection.classList.add("hidden")
+      } else {
+        if (useCustomProductCheckbox) useCustomProductCheckbox.checked = false
+        if (customProductSection) customProductSection.classList.add("hidden")
+        if (commonProductSection) commonProductSection.classList.remove("hidden")
+      }
+    })
+  }
+
+  // Update product type hint
+  if (productTypeSelect && productTypeHint) {
+    productTypeSelect.addEventListener("change", () => {
+      const selectedType = productTypeSelect.value
+      productTypeHint.textContent = PRODUCT_TYPE_HINTS[selectedType] || ""
+
+      // Update product name dropdown based on selected type
+      updateProductNameDropdown(selectedType)
+
+      // Show/hide custom product section based on selection
+      if (selectedType === "custom") {
+        if (useCustomProductCheckbox) useCustomProductCheckbox.checked = true
+        if (customProductSection) customProductSection.classList.remove("hidden")
+        if (commonProductSection) commonProductSection.classList.add("hidden")
+      } else {
+        if (useCustomProductCheckbox) useCustomProductCheckbox.checked = false
+        if (customProductSection) customProductSection.classList.add("hidden")
+        if (commonProductSection) commonProductSection.classList.remove("hidden")
+      }
+    })
+
+    // Initial update of product name dropdown
+    updateProductNameDropdown(productTypeSelect.value)
+  }
+}
+
+function initCalculatorTypeSelector() {
+  const calculatorTypeSelect = document.getElementById("calculator-type")
+  const productSection = document.getElementById("product-section")
+  const areaSection = document.getElementById("area-section")
+  const waterSection = document.getElementById("water-section")
+
+  if (calculatorTypeSelect) {
+    calculatorTypeSelect.addEventListener("change", () => {
+      const selectedType = calculatorTypeSelect.value
+
+      productSection.classList.add("hidden")
+      areaSection.classList.add("hidden")
+      waterSection.classList.add("hidden")
+
+      if (selectedType === "product") {
+        productSection.classList.remove("hidden")
+      } else if (selectedType === "area") {
+        areaSection.classList.remove("hidden")
+      } else if (selectedType === "water") {
+        waterSection.classList.remove("hidden")
+      }
+    })
+  }
+
+  // Add event listener to update product dropdown when calculator type changes
+  calculatorTypeSelect.addEventListener("change", () => {
+    const productTypeSelect = document.getElementById("product-type")
+    if (productTypeSelect) {
+      updateProductNameDropdown(productTypeSelect.value)
+    }
+  })
+}
+
+// Declare PRODUCT_TYPE_HINTS
+const PRODUCT_TYPE_HINTS = {
+  liquid_fertilizer:
+    "Liquid fertilizers are concentrated solutions that need to be diluted with water before application.",
+  granular_fertilizer:
+    "Granular fertilizers can be water-soluble (dissolved in water) or slow-release (applied directly to the soil).",
+  weed_killer: "Weed killers are designed to control or eliminate unwanted plants.",
+  lawn_fertilizer: "Lawn fertilizers are specifically formulated to promote healthy grass growth.",
+  pond_treatment: "Pond treatments help maintain water quality and control algae growth in ponds.",
+  algaecide: "Algaecides are chemicals used to kill or inhibit the growth of algae.",
+  water_clarifier: "Water clarifiers help to remove cloudiness and improve the clarity of water.",
 }
