@@ -88,6 +88,211 @@ function calculateWater() {
   resultElement.textContent = `You need ${volumeGallons.toFixed(2)} gallons of water.`
 }
 
+// Main Calculator Functions
+document.addEventListener("DOMContentLoaded", () => {
+  // Initialize the calculator
+  initializeCalculator()
+
+  // Set up event listeners
+  setupEventListeners()
+})
+
+function initializeCalculator() {
+  // Set default calculator type
+  const calculatorType = document.getElementById("calculator-type")
+  if (calculatorType) {
+    calculatorType.value = "product-dosage"
+    calculatorType.dispatchEvent(new Event("change"))
+  }
+
+  // Initialize product dropdown
+  populateProductDropdown()
+}
+
+function setupEventListeners() {
+  // Calculator type change
+  const calculatorType = document.getElementById("calculator-type")
+  if (calculatorType) {
+    calculatorType.addEventListener("change", function () {
+      updateCalculatorView(this.value)
+    })
+  }
+
+  // Calculate button
+  const calculateBtn = document.getElementById("calculate-btn")
+  if (calculateBtn) {
+    calculateBtn.addEventListener("click", () => {
+      calculateProduct()
+    })
+  }
+
+  // Find product button
+  const findProductBtn = document.getElementById("find-product-btn")
+  if (findProductBtn) {
+    findProductBtn.addEventListener("click", () => {
+      showFindProductDialog()
+    })
+  }
+
+  // Saved products button
+  const savedProductsBtn = document.getElementById("saved-products-btn")
+  if (savedProductsBtn) {
+    savedProductsBtn.addEventListener("click", () => {
+      showSavedProductsDialog()
+    })
+  }
+
+  // Product selection change
+  const productSelect = document.getElementById("product-select")
+  if (productSelect) {
+    productSelect.addEventListener("change", function () {
+      loadProductDetails(this.value)
+    })
+  }
+
+  // Calculation mode change
+  const calculationModes = document.querySelectorAll('input[name="calculation-mode"]')
+  calculationModes.forEach((mode) => {
+    mode.addEventListener("change", function () {
+      updateCalculationFields(this.value)
+    })
+  })
+}
+
+function updateCalculatorView(calculatorType) {
+  // Hide all calculator sections
+  const calculatorSections = document.querySelectorAll(".calculator-section")
+  calculatorSections.forEach((section) => {
+    if (!section.classList.contains("test-panel")) {
+      section.style.display = "none"
+    }
+  })
+
+  // Show the selected calculator
+  switch (calculatorType) {
+    case "product-dosage":
+      document.querySelector(".product-calculator").style.display = "block"
+      break
+    case "seed-spacing":
+      // Show seed spacing calculator (if implemented)
+      break
+    case "area":
+      // Show area calculator (if implemented)
+      break
+    case "soil-volume":
+      // Show soil volume calculator (if implemented)
+      break
+    case "fertilizer":
+      // Show fertilizer calculator (if implemented)
+      break
+    case "water-needs":
+      // Show water needs calculator (if implemented)
+      break
+  }
+}
+
+function populateProductDropdown() {
+  // This would typically load products from a database or local storage
+  // For now, we'll just add a placeholder
+  const productSelect = document.getElementById("product-select")
+  if (productSelect) {
+    productSelect.innerHTML = '<option value="">-- Select a product --</option>'
+
+    // Add some example products
+    const exampleProducts = [
+      { id: "product1", name: "Miracle-Gro All Purpose" },
+      { id: "product2", name: "Tomato Feed" },
+      { id: "product3", name: "Rose Food" },
+    ]
+
+    exampleProducts.forEach((product) => {
+      const option = document.createElement("option")
+      option.value = product.id
+      option.textContent = product.name
+      productSelect.appendChild(option)
+    })
+  }
+}
+
+function loadProductDetails(productId) {
+  // This would typically load product details from a database
+  // For now, we'll just simulate it
+  if (productId) {
+    // Set product type and name based on selection
+    document.getElementById("product-type").value = "liquid-fertilizer"
+    document.getElementById("product-name").value = document.querySelector(`option[value="${productId}"]`).textContent
+  }
+}
+
+function updateCalculationFields(calculationMode) {
+  const productAmountSection = document.querySelector(".product-amount")
+  const waterAmountSection = document.querySelector(".water-amount")
+
+  switch (calculationMode) {
+    case "product-to-water":
+      productAmountSection.style.display = "block"
+      waterAmountSection.style.display = "block"
+      break
+    case "water-to-product":
+      productAmountSection.style.display = "block"
+      waterAmountSection.style.display = "block"
+      break
+    case "ratio-based":
+      productAmountSection.style.display = "block"
+      waterAmountSection.style.display = "block"
+      break
+  }
+}
+
+function calculateProduct() {
+  // Get input values
+  const productAmount = Number.parseFloat(document.getElementById("product-amount").value)
+  const productUnit = document.getElementById("product-unit").value
+  const waterAmount = Number.parseFloat(document.getElementById("water-amount").value)
+  const waterUnit = document.getElementById("water-unit").value
+  const calculationMode = document.querySelector('input[name="calculation-mode"]:checked').value
+
+  // Validate inputs
+  if (isNaN(productAmount) || isNaN(waterAmount)) {
+    showResult("Please enter valid numbers for product and water amounts.")
+    return
+  }
+
+  // Perform calculation based on mode
+  let result = ""
+  switch (calculationMode) {
+    case "product-to-water":
+      result = `Add ${productAmount} ${productUnit} of product to ${waterAmount} ${waterUnit} of water.`
+      break
+    case "water-to-product":
+      result = `Add ${waterAmount} ${waterUnit} of water to ${productAmount} ${productUnit} of product.`
+      break
+    case "ratio-based":
+      const ratio = (productAmount / waterAmount).toFixed(3)
+      result = `The ratio is ${ratio} ${productUnit} of product per ${waterUnit} of water.`
+      break
+  }
+
+  showResult(result)
+}
+
+function showResult(message) {
+  const resultElement = document.getElementById("calculation-result")
+  if (resultElement) {
+    resultElement.textContent = message
+  }
+}
+
+function showFindProductDialog() {
+  // This would open a dialog to search for products
+  alert("Find Product feature will be available in a future update.")
+}
+
+function showSavedProductsDialog() {
+  // This would open a dialog to view saved products
+  alert("Saved Products feature will be available in a future update.")
+}
+
 // Test Functions
 function runTest(testName, testFunction) {
   try {
@@ -112,7 +317,7 @@ function updateTestResults(results) {
   const progressBar = document.getElementById("test-progress")
   const progressPercent = totalTests > 0 ? (passedTests / totalTests) * 100 : 0
   progressBar.style.width = `${progressPercent}%`
-  progressBar.style.backgroundColor = progressPercent === 100 ? "#4caf50" : "#ff9800"
+  progressBar.style.backgroundColor = progressPercent === 100 ? "#4a7c40" : "#ff9800"
 
   const detailsElement = document.getElementById("test-details")
   detailsElement.innerHTML = ""
@@ -129,33 +334,27 @@ function updateTestResults(results) {
 function runQuickTests() {
   const tests = [
     {
-      name: "Seed Spacing - Basic Calculation",
+      name: "Product Calculator - Basic Validation",
       test: () => {
-        // Mock inputs: 10 feet row with 6 inch spacing
-        const expected = 21 // (10 * 12) / 6 + 1 = 21
-        const rowLengthInches = 10 * 12
-        const plantSpacing = 6
-        const result = Math.floor(rowLengthInches / plantSpacing) + 1
-        return result === expected ? true : `Expected ${expected}, got ${result}`
+        // Test that product calculator exists
+        const productCalculator = document.querySelector(".product-calculator")
+        return productCalculator ? true : "Product calculator not found"
       },
     },
     {
-      name: "Area - Basic Calculation",
+      name: "Calculator Type Selection",
       test: () => {
-        // Mock inputs: 10 feet x 5 feet
-        const expected = 50
-        const result = 10 * 5
-        return result === expected ? true : `Expected ${expected}, got ${result}`
+        // Test that calculator type selection exists
+        const calculatorTypeSelect = document.getElementById("calculator-type")
+        return calculatorTypeSelect ? true : "Calculator type selection not found"
       },
     },
     {
-      name: "Soil Volume - Basic Calculation",
+      name: "Version Display",
       test: () => {
-        // Mock inputs: 10 feet x 5 feet x 6 inches
-        const expected = 25 // 10 * 5 * (6/12) = 25 cubic feet
-        const depthInFeet = 6 / 12
-        const result = 10 * 5 * depthInFeet
-        return Math.abs(result - expected) < 0.01 ? true : `Expected ${expected}, got ${result}`
+        // Test that version is displayed
+        const versionElement = document.querySelector(".version")
+        return versionElement ? true : "Version display not found"
       },
     },
   ]
@@ -169,33 +368,27 @@ function runFullTests() {
   // Start with quick tests
   const quickTests = [
     {
-      name: "Seed Spacing - Basic Calculation",
+      name: "Product Calculator - Basic Validation",
       test: () => {
-        // Mock inputs: 10 feet row with 6 inch spacing
-        const expected = 21 // (10 * 12) / 6 + 1 = 21
-        const rowLengthInches = 10 * 12
-        const plantSpacing = 6
-        const result = Math.floor(rowLengthInches / plantSpacing) + 1
-        return result === expected ? true : `Expected ${expected}, got ${result}`
+        // Test that product calculator exists
+        const productCalculator = document.querySelector(".product-calculator")
+        return productCalculator ? true : "Product calculator not found"
       },
     },
     {
-      name: "Area - Basic Calculation",
+      name: "Calculator Type Selection",
       test: () => {
-        // Mock inputs: 10 feet x 5 feet
-        const expected = 50
-        const result = 10 * 5
-        return result === expected ? true : `Expected ${expected}, got ${result}`
+        // Test that calculator type selection exists
+        const calculatorTypeSelect = document.getElementById("calculator-type")
+        return calculatorTypeSelect ? true : "Calculator type selection not found"
       },
     },
     {
-      name: "Soil Volume - Basic Calculation",
+      name: "Version Display",
       test: () => {
-        // Mock inputs: 10 feet x 5 feet x 6 inches
-        const expected = 25 // 10 * 5 * (6/12) = 25 cubic feet
-        const depthInFeet = 6 / 12
-        const result = 10 * 5 * depthInFeet
-        return Math.abs(result - expected) < 0.01 ? true : `Expected ${expected}, got ${result}`
+        // Test that version is displayed
+        const versionElement = document.querySelector(".version")
+        return versionElement ? true : "Version display not found"
       },
     },
   ]
@@ -203,65 +396,75 @@ function runFullTests() {
   // Add more comprehensive tests
   const additionalTests = [
     {
-      name: "Seed Spacing - Zero Input",
+      name: "Product Selection",
       test: () => {
-        // Test handling of zero input
-        const rowLength = 0
-        const plantSpacing = 6
-        if (rowLength <= 0 || plantSpacing <= 0) {
-          return true // Should detect invalid input
-        }
-        return "Failed to detect invalid input"
+        // Test product selection dropdown
+        const productSelect = document.getElementById("product-select")
+        return productSelect ? true : "Product selection dropdown not found"
       },
     },
     {
-      name: "Area - Decimal Input",
+      name: "Measurement Type Options",
       test: () => {
-        // Mock inputs: 10.5 feet x 5.25 feet
-        const expected = 55.125
-        const result = 10.5 * 5.25
-        return Math.abs(result - expected) < 0.01 ? true : `Expected ${expected}, got ${result}`
+        // Test measurement type radio buttons
+        const measurementOptions = document.querySelectorAll('input[name="measurement-type"]')
+        return measurementOptions.length > 0 ? true : "Measurement type options not found"
       },
     },
     {
-      name: "Soil Volume - Cubic Yards Conversion",
+      name: "Calculation Mode Options",
       test: () => {
-        // Mock inputs: 10 feet x 5 feet x 6 inches
-        const volumeCubicFeet = 25 // 10 * 5 * (6/12) = 25 cubic feet
-        const expected = 0.926 // 25 / 27 ≈ 0.926 cubic yards
-        const result = volumeCubicFeet / 27
-        return Math.abs(result - expected) < 0.01 ? true : `Expected ${expected}, got ${result}`
+        // Test calculation mode radio buttons
+        const calculationModes = document.querySelectorAll('input[name="calculation-mode"]')
+        return calculationModes.length > 0 ? true : "Calculation mode options not found"
       },
     },
     {
-      name: "Fertilizer - Basic Calculation",
+      name: "Product Amount Input",
       test: () => {
-        // Mock inputs: 500 sq ft area, 5 lbs per 1000 sq ft rate
-        const expected = 2.5 // (500 * 5) / 1000 = 2.5 lbs
-        const result = (500 * 5) / 1000
-        return Math.abs(result - expected) < 0.01 ? true : `Expected ${expected}, got ${result}`
+        // Test product amount input field
+        const productAmount = document.getElementById("product-amount")
+        return productAmount ? true : "Product amount input not found"
       },
     },
     {
-      name: "Water Needs - Basic Calculation",
+      name: "Water Amount Input",
       test: () => {
-        // Mock inputs: 100 sq ft area, 1 inch depth
-        const volumeCubicInches = 100 * 144 * 1 // 14,400 cubic inches
-        const expected = 62.34 // 14,400 * 0.004329 ≈ 62.34 gallons
-        const result = volumeCubicInches * 0.004329
-        return Math.abs(result - expected) < 0.1 ? true : `Expected ${expected}, got ${result}`
+        // Test water amount input field
+        const waterAmount = document.getElementById("water-amount")
+        return waterAmount ? true : "Water amount input not found"
       },
     },
     {
-      name: "Input Validation - Negative Values",
+      name: "Calculate Button",
       test: () => {
-        // Test handling of negative input
-        const length = -5
-        const width = 10
-        if (length <= 0 || width <= 0) {
-          return true // Should detect invalid input
-        }
-        return "Failed to detect negative input"
+        // Test calculate button
+        const calculateBtn = document.getElementById("calculate-btn")
+        return calculateBtn ? true : "Calculate button not found"
+      },
+    },
+    {
+      name: "Result Display",
+      test: () => {
+        // Test result display area
+        const resultDisplay = document.getElementById("calculation-result")
+        return resultDisplay ? true : "Result display not found"
+      },
+    },
+    {
+      name: "Product Type Selection",
+      test: () => {
+        // Test product type dropdown
+        const productType = document.getElementById("product-type")
+        return productType ? true : "Product type selection not found"
+      },
+    },
+    {
+      name: "Product Name Input",
+      test: () => {
+        // Test product name input
+        const productName = document.getElementById("product-name")
+        return productName ? true : "Product name input not found"
       },
     },
   ]

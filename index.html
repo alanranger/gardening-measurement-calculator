@@ -3,89 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gardening Calculator</title>
+    <title>Gardener's Measurement Calculator</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="calculator-container">
-        <h1>Gardening Calculator</h1>
-        
-        <div class="calculator-section">
-            <h2>Seed Spacing Calculator</h2>
-            <div class="input-group">
-                <label for="row-length">Row Length (feet):</label>
-                <input type="number" id="row-length" min="0" step="0.1">
-            </div>
-            <div class="input-group">
-                <label for="plant-spacing">Plant Spacing (inches):</label>
-                <input type="number" id="plant-spacing" min="0" step="0.1">
-            </div>
-            <button onclick="calculateSeeds()">Calculate</button>
-            <div id="seed-result" class="result"></div>
+        <div class="header">
+            <h1>Gardener's Measurement Calculator</h1>
+            <p class="subtitle">Calculate accurate quantities for all your gardening needs</p>
+            <div class="version">V2.0</div>
         </div>
         
-        <div class="calculator-section">
-            <h2>Area Calculator</h2>
-            <div class="input-group">
-                <label for="length">Length (feet):</label>
-                <input type="number" id="length" min="0" step="0.1">
-            </div>
-            <div class="input-group">
-                <label for="width">Width (feet):</label>
-                <input type="number" id="width" min="0" step="0.1">
-            </div>
-            <button onclick="calculateArea()">Calculate</button>
-            <div id="area-result" class="result"></div>
+        <div class="beta-notice">
+            This is a beta version. Please double-check all calculations against product instructions.
         </div>
         
-        <div class="calculator-section">
-            <h2>Soil Volume Calculator</h2>
-            <div class="input-group">
-                <label for="soil-length">Length (feet):</label>
-                <input type="number" id="soil-length" min="0" step="0.1">
-            </div>
-            <div class="input-group">
-                <label for="soil-width">Width (feet):</label>
-                <input type="number" id="soil-width" min="0" step="0.1">
-            </div>
-            <div class="input-group">
-                <label for="soil-depth">Depth (inches):</label>
-                <input type="number" id="soil-depth" min="0" step="0.1">
-            </div>
-            <button onclick="calculateSoilVolume()">Calculate</button>
-            <div id="soil-result" class="result"></div>
+        <div class="calculator-type-selector">
+            <label for="calculator-type">Select Calculator Type:</label>
+            <select name="calculator-type" id="calculator-type">
+                <option value="product-dosage">Product Dosage</option>
+                <option value="seed-spacing">Seed Spacing</option>
+                <option value="area">Area</option>
+                <option value="soil-volume">Soil Volume</option>
+                <option value="fertilizer">Fertilizer</option>
+                <option value="water-needs">Water Needs</option>
+            </select>
         </div>
         
-        <div class="calculator-section">
-            <h2>Fertilizer Calculator</h2>
-            <div class="input-group">
-                <label for="fert-area">Garden Area (square feet):</label>
-                <input type="number" id="fert-area" min="0" step="0.1">
+        <div class="calculator-section product-calculator">
+            <h2>Product Calculator</h2>
+            <p>Calculate the correct amount of product to use for your plants</p>
+            
+            <div class="product-actions">
+                <button id="find-product-btn" class="find-product">
+                    <span class="icon">🔍</span> Find Product
+                </button>
+                <button id="saved-products-btn" class="saved-products">
+                    <span class="icon">⭐</span> My Saved Products
+                </button>
             </div>
-            <div class="input-group">
-                <label for="fert-rate">Application Rate (lbs per 1000 sq ft):</label>
-                <input type="number" id="fert-rate" min="0" step="0.1">
+            
+            <div class="product-selection">
+                <p>Select a product:</p>
+                <select name="product-select" id="product-select">
+                    <option value="">-- Select a product --</option>
+                </select>
             </div>
-            <button onclick="calculateFertilizer()">Calculate</button>
-            <div id="fert-result" class="result"></div>
-        </div>
-        
-        <div class="calculator-section">
-            <h2>Water Needs Calculator</h2>
-            <div class="input-group">
-                <label for="water-area">Garden Area (square feet):</label>
-                <input type="number" id="water-area" min="0" step="0.1">
+            
+            <div class="product-details">
+                <div class="product-type">
+                    <label for="product-type">Product Type</label>
+                    <select name="product-type" id="product-type">
+                        <option value="liquid-fertilizer">Liquid Fertilizer</option>
+                        <option value="granular-fertilizer">Granular Fertilizer</option>
+                        <option value="pesticide">Pesticide</option>
+                        <option value="herbicide">Herbicide</option>
+                    </select>
+                </div>
+                
+                <div class="product-name">
+                    <label for="product-name">Product Name</label>
+                    <input type="text" id="product-name" name="product-name" placeholder="e.g., Miracle-Gro All Purpose">
+                </div>
             </div>
-            <div class="input-group">
-                <label for="water-depth">Water Depth (inches):</label>
-                <input type="number" id="water-depth" min="0" step="0.1">
+            
+            <div class="measurement-type">
+                <p>Measurement Type</p>
+                <div class="radio-options">
+                    <label>
+                        <input type="radio" name="measurement-type" value="weight" checked> Weight (g, oz, etc.)
+                    </label>
+                    <label>
+                        <input type="radio" name="measurement-type" value="volume"> Volume (ml, litres, etc.)
+                    </label>
+                    <label>
+                        <input type="radio" name="measurement-type" value="cap"> Cap Measurement
+                    </label>
+                </div>
             </div>
-            <button onclick="calculateWater()">Calculate</button>
-            <div id="water-result" class="result"></div>
+            
+            <div class="scoop-option">
+                <p>Does your product use scoops?</p>
+                <div class="radio-options">
+                    <label>
+                        <input type="radio" name="uses-scoops" value="no" checked> No
+                    </label>
+                    <label>
+                        <input type="radio" name="uses-scoops" value="yes"> Yes
+                    </label>
+                </div>
+            </div>
+            
+            <div class="calculation-mode">
+                <p>Calculation Mode</p>
+                <div class="radio-options">
+                    <label>
+                        <input type="radio" name="calculation-mode" value="product-to-water" checked> Product to Water
+                    </label>
+                    <label>
+                        <input type="radio" name="calculation-mode" value="water-to-product"> Water to Product
+                    </label>
+                    <label>
+                        <input type="radio" name="calculation-mode" value="ratio-based"> Ratio Based
+                    </label>
+                </div>
+            </div>
+            
+            <div class="amount-inputs">
+                <div class="product-amount">
+                    <label for="product-amount">Product Amount:</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="product-amount" name="product-amount" min="0" step="0.1">
+                        <select id="product-unit" name="product-unit">
+                            <option value="g">g</option>
+                            <option value="oz">oz</option>
+                            <option value="ml">ml</option>
+                            <option value="tsp">tsp</option>
+                            <option value="tbsp">tbsp</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="water-amount">
+                    <label for="water-amount">Water Amount:</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="water-amount" name="water-amount" min="0" step="0.1">
+                        <select id="water-unit" name="water-unit">
+                            <option value="l">L</option>
+                            <option value="gal">gal</option>
+                            <option value="ml">ml</option>
+                            <option value="fl-oz">fl oz</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="calculate-btn" class="calculate-button">Calculate</button>
+            
+            <div id="calculation-result" class="result"></div>
         </div>
         
         <!-- Test Panel Section -->
-        <div class="calculator-section test-panel">
+        <div class="test-panel">
             <h2>Test Panel</h2>
             <div class="test-controls">
                 <button id="quick-test-btn" onclick="runQuickTests()">Quick Test</button>
