@@ -24,8 +24,8 @@ body {
 
 /* Header */
 header {
-  background-color: white;
-  color: #2e7d32;
+  background-color: #4a7c59;
+  color: white;
   text-align: center;
   padding: 20px;
   border-bottom: 1px solid #e0e0e0;
@@ -35,31 +35,31 @@ header {
 h1 {
   margin-bottom: 10px;
   font-size: 2.2rem;
-  color: #2e7d32;
+  color: white;
 }
 
 h2 {
   margin-bottom: 10px;
   font-size: 1.8rem;
-  color: #2e7d32;
+  color: #4a7c59;
 }
 
 h3 {
   margin-bottom: 10px;
   font-size: 1.4rem;
-  color: #2e7d32;
+  color: #4a7c59;
 }
 
 h4 {
   margin-bottom: 8px;
   font-size: 1.1rem;
-  color: #2e7d32;
+  color: #4a7c59;
 }
 
 .subtitle {
   font-size: 1.1rem;
   opacity: 0.9;
-  color: #555;
+  color: #f0f0f0;
 }
 
 .beta-warning {
@@ -96,39 +96,52 @@ h4 {
   cursor: pointer;
 }
 
-/* Tab Navigation - Keeping for reference */
-.tab-navigation {
+/* Step Navigation */
+.step-navigation {
   display: flex;
   background-color: #f8f8f8;
   border-bottom: 1px solid #ddd;
   overflow-x: auto;
 }
 
-.tab-button {
+.step-indicator {
+  display: flex;
+  justify-content: space-between;
+  background-color: #f8f8f8;
   padding: 15px 20px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.step-number {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #ccc;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.step.active .step-number {
+  background-color: #4a7c59;
+}
+
+.step-title {
   font-weight: 500;
   color: #555;
-  transition: all 0.3s;
-  white-space: nowrap;
-  border-right: 1px solid #ddd;
-  min-width: 120px;
-  text-align: center;
-  background-color: #f8f8f8;
-  border-bottom: 1px solid #e0e0e0;
 }
 
-.tab-button:hover {
-  background-color: #e8f5e9;
-}
-
-.tab-button.active {
-  background-color: #e8f5e9;
-  color: #2e7d32;
-  border-bottom: none;
+.step.active .step-title {
+  color: #4a7c59;
   font-weight: bold;
 }
 
@@ -144,6 +157,7 @@ h4 {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
   padding: 20px;
+  border-left: 4px solid #4a7c59;
 }
 
 .card-header {
@@ -155,7 +169,7 @@ h4 {
 .card-title {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #2e7d32;
+  color: #4a7c59;
   margin-bottom: 15px;
 }
 
@@ -257,14 +271,14 @@ button {
 }
 
 .primary-button {
-  background-color: #2e7d32;
+  background-color: #4a7c59;
   color: white;
   padding: 12px 20px;
   font-weight: 500;
 }
 
 .primary-button:hover {
-  background-color: #1b5e20;
+  background-color: #3a6249;
 }
 
 .secondary-button {
@@ -296,12 +310,13 @@ button {
   border-radius: 6px;
   padding: 15px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-left: 3px solid #4a7c59;
 }
 
 .result-card h4 {
   margin-bottom: 10px;
   font-size: 1.1rem;
-  color: #2e7d32;
+  color: #4a7c59;
 }
 
 .result-card p {
@@ -314,6 +329,7 @@ button {
   padding: 15px;
   border-radius: 6px;
   margin-bottom: 20px;
+  border-left: 3px solid #4a7c59;
 }
 
 /* Calculation Mode */
@@ -323,6 +339,7 @@ button {
   padding: 15px;
   margin-top: 15px;
   border: 1px solid #e0e0e0;
+  border-left: 3px solid #4a7c59;
 }
 
 /* Accordion */
@@ -419,20 +436,21 @@ button {
   position: absolute;
   top: 10px;
   right: 20px;
-  background-color: #2e7d32;
-  color: white;
+  background-color: white;
+  color: #4a7c59;
   padding: 5px 10px;
   border-radius: 20px;
   font-size: 0.8rem;
+  font-weight: bold;
 }
 
 /* Footer */
 footer {
-  background-color: #f1f1f1;
+  background-color: #4a7c59;
   padding: 15px;
   text-align: center;
   font-size: 0.9rem;
-  color: #666;
+  color: white;
   border-top: 1px solid #ddd;
   margin-top: 20px;
 }
@@ -442,14 +460,43 @@ footer {
   margin-right: 5px;
 }
 
+/* Step-by-step navigation */
+.step-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.next-step-btn {
+  background-color: #4a7c59;
+  color: white;
+  padding: 12px 20px;
+  font-weight: 500;
+}
+
+.prev-step-btn {
+  background-color: #f1f1f1;
+  color: #333;
+  padding: 12px 20px;
+  border: 1px solid #ddd;
+}
+
+.next-step-btn:hover {
+  background-color: #3a6249;
+}
+
+.prev-step-btn:hover {
+  background-color: #ddd;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .tab-navigation {
+  .step-navigation {
     flex-wrap: wrap;
   }
 
-  .tab-button {
-    flex: 1 1 auto;
+  .step {
+    margin-bottom: 10px;
   }
 
   .results {

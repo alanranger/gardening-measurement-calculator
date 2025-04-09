@@ -291,7 +291,175 @@ document.addEventListener("DOMContentLoaded", () => {
 //  })
 //}
 
-// Initialize calculator type selector
+// Additional code for step navigation
+document.addEventListener("DOMContentLoaded", () => {
+  // Initialize step navigation
+  initStepNavigation()
+})
+
+function initStepNavigation() {
+  // Product calculator step navigation
+  const productStep1Next = document.getElementById("product-step1-next")
+  const productStep2Prev = document.getElementById("product-step2-prev")
+  const calculateBtn = document.getElementById("calculate-btn")
+  const productStep3Prev = document.getElementById("product-step3-prev")
+  const productStep3Restart = document.getElementById("product-step3-restart")
+
+  if (productStep1Next) {
+    productStep1Next.addEventListener("click", () => {
+      document.getElementById("product-calculator-step1").classList.add("hidden")
+      document.getElementById("product-calculator-step2").classList.remove("hidden")
+      updateStepIndicator("product", 2)
+    })
+  }
+
+  if (productStep2Prev) {
+    productStep2Prev.addEventListener("click", () => {
+      document.getElementById("product-calculator-step2").classList.add("hidden")
+      document.getElementById("product-calculator-step1").classList.remove("hidden")
+      updateStepIndicator("product", 1)
+    })
+  }
+
+  if (calculateBtn) {
+    calculateBtn.addEventListener("click", () => {
+      calculateProductDosage()
+      document.getElementById("product-calculator-step2").classList.add("hidden")
+      document.getElementById("product-calculator-step3").classList.remove("hidden")
+      updateStepIndicator("product", 3)
+    })
+  }
+
+  if (productStep3Prev) {
+    productStep3Prev.addEventListener("click", () => {
+      document.getElementById("product-calculator-step3").classList.add("hidden")
+      document.getElementById("product-calculator-step2").classList.remove("hidden")
+      updateStepIndicator("product", 2)
+    })
+  }
+
+  if (productStep3Restart) {
+    productStep3Restart.addEventListener("click", () => {
+      document.getElementById("product-calculator-step3").classList.add("hidden")
+      document.getElementById("product-calculator-step1").classList.remove("hidden")
+      updateStepIndicator("product", 1)
+    })
+  }
+
+  // Area calculator step navigation
+  const areaStep1Next = document.getElementById("area-step1-next")
+  const areaStep2Prev = document.getElementById("area-step2-prev")
+  const calculateAreaBtn = document.getElementById("calculate-area-btn")
+  const areaStep3Prev = document.getElementById("area-step3-prev")
+  const areaStep3Restart = document.getElementById("area-step3-restart")
+
+  if (areaStep1Next) {
+    areaStep1Next.addEventListener("click", () => {
+      document.getElementById("area-calculator-step1").classList.add("hidden")
+      document.getElementById("area-calculator-step2").classList.remove("hidden")
+      updateStepIndicator("area", 2)
+    })
+  }
+
+  if (areaStep2Prev) {
+    areaStep2Prev.addEventListener("click", () => {
+      document.getElementById("area-calculator-step2").classList.add("hidden")
+      document.getElementById("area-calculator-step1").classList.remove("hidden")
+      updateStepIndicator("area", 1)
+    })
+  }
+
+  if (calculateAreaBtn) {
+    calculateAreaBtn.addEventListener("click", () => {
+      calculateAreaApplication()
+      document.getElementById("area-calculator-step2").classList.add("hidden")
+      document.getElementById("area-calculator-step3").classList.remove("hidden")
+      updateStepIndicator("area", 3)
+    })
+  }
+
+  if (areaStep3Prev) {
+    areaStep3Prev.addEventListener("click", () => {
+      document.getElementById("area-calculator-step3").classList.add("hidden")
+      document.getElementById("area-calculator-step2").classList.remove("hidden")
+      updateStepIndicator("area", 2)
+    })
+  }
+
+  if (areaStep3Restart) {
+    areaStep3Restart.addEventListener("click", () => {
+      document.getElementById("area-calculator-step3").classList.add("hidden")
+      document.getElementById("area-calculator-step1").classList.remove("hidden")
+      updateStepIndicator("area", 1)
+    })
+  }
+
+  // Water calculator step navigation
+  const waterStep1Next = document.getElementById("water-step1-next")
+  const waterStep2Prev = document.getElementById("water-step2-prev")
+  const calculateWaterBtn = document.getElementById("calculate-water-btn")
+  const waterStep3Prev = document.getElementById("water-step3-prev")
+  const waterStep3Restart = document.getElementById("water-step3-restart")
+
+  if (waterStep1Next) {
+    waterStep1Next.addEventListener("click", () => {
+      document.getElementById("water-calculator-step1").classList.add("hidden")
+      document.getElementById("water-calculator-step2").classList.remove("hidden")
+      updateStepIndicator("water", 2)
+    })
+  }
+
+  if (waterStep2Prev) {
+    waterStep2Prev.addEventListener("click", () => {
+      document.getElementById("water-calculator-step2").classList.add("hidden")
+      document.getElementById("water-calculator-step1").classList.remove("hidden")
+      updateStepIndicator("water", 1)
+    })
+  }
+
+  if (calculateWaterBtn) {
+    calculateWaterBtn.addEventListener("click", () => {
+      calculateWaterDosage()
+      document.getElementById("water-calculator-step2").classList.add("hidden")
+      document.getElementById("water-calculator-step3").classList.remove("hidden")
+      updateStepIndicator("water", 3)
+    })
+  }
+
+  if (waterStep3Prev) {
+    waterStep3Prev.addEventListener("click", () => {
+      document.getElementById("water-calculator-step3").classList.add("hidden")
+      document.getElementById("water-calculator-step2").classList.remove("hidden")
+      updateStepIndicator("water", 2)
+    })
+  }
+
+  if (waterStep3Restart) {
+    waterStep3Restart.addEventListener("click", () => {
+      document.getElementById("water-calculator-step3").classList.add("hidden")
+      document.getElementById("water-calculator-step1").classList.remove("hidden")
+      updateStepIndicator("water", 1)
+    })
+  }
+}
+
+// Update step indicator
+function updateStepIndicator(calculatorType, stepNumber) {
+  const stepIndicator = document.getElementById(`${calculatorType}-step-indicator`)
+  if (!stepIndicator) return
+
+  const steps = stepIndicator.querySelectorAll(".step")
+  steps.forEach((step) => {
+    step.classList.remove("active")
+  })
+
+  const activeStep = stepIndicator.querySelector(`.step[data-step="${stepNumber}"]`)
+  if (activeStep) {
+    activeStep.classList.add("active")
+  }
+}
+
+// Update the calculator type selector to handle step indicators
 function initCalculatorTypeSelector() {
   const calculatorTypeSelect = document.getElementById("calculator-type")
 
@@ -300,41 +468,33 @@ function initCalculatorTypeSelector() {
       const selectedType = this.value
       console.log("Calculator type changed to:", selectedType)
 
-      // Check if elements exist before trying to hide/show them
-      const productInputs = document.getElementById("product-calculator-inputs")
-      const areaInputs = document.getElementById("area-calculator-inputs")
-      const waterInputs = document.getElementById("water-calculator-inputs")
-      const productResults = document.getElementById("product-calculator-results")
-      const areaResults = document.getElementById("area-calculator-results")
-      const waterResults = document.getElementById("water-calculator-results")
-      const conversionSection = document.getElementById("conversion-section")
+      // Hide all calculator inputs and results
+      const calculatorSections = document.querySelectorAll(".calculator-section")
+      calculatorSections.forEach((section) => {
+        section.classList.add("hidden")
+      })
 
-      // Hide all calculator inputs and results if they exist
-      if (productInputs) productInputs.classList.add("hidden")
-      if (areaInputs) areaInputs.classList.add("hidden")
-      if (waterInputs) waterInputs.classList.add("hidden")
-      if (productResults) productResults.classList.add("hidden")
-      if (areaResults) areaResults.classList.add("hidden")
-      if (waterResults) waterResults.classList.add("hidden")
-      if (conversionSection) conversionSection.classList.add("hidden")
+      // Hide all step indicators
+      const stepIndicators = document.querySelectorAll(".step-indicator")
+      stepIndicators.forEach((indicator) => {
+        indicator.classList.add("hidden")
+      })
 
-      // Show the selected calculator inputs and results if they exist
+      // Show the selected calculator inputs and step indicator
       if (selectedType === "product") {
-        if (productInputs) productInputs.classList.remove("hidden")
-        if (productResults) productResults.classList.remove("hidden")
-
-        // Set up calculation mode for product type
-        setTimeout(() => {
-          setupCalculationModeForProductType()
-        }, 100)
+        document.getElementById("product-calculator-step1").classList.remove("hidden")
+        document.getElementById("product-step-indicator").classList.remove("hidden")
+        updateStepIndicator("product", 1)
       } else if (selectedType === "area") {
-        if (areaInputs) areaInputs.classList.remove("hidden")
-        if (areaResults) areaResults.classList.remove("hidden")
+        document.getElementById("area-calculator-step1").classList.remove("hidden")
+        document.getElementById("area-step-indicator").classList.remove("hidden")
+        updateStepIndicator("area", 1)
       } else if (selectedType === "water") {
-        if (waterInputs) waterInputs.classList.remove("hidden")
-        if (waterResults) waterResults.classList.remove("hidden")
+        document.getElementById("water-calculator-step1").classList.remove("hidden")
+        document.getElementById("water-step-indicator").classList.remove("hidden")
+        updateStepIndicator("water", 1)
       } else if (selectedType === "conversion") {
-        if (conversionSection) conversionSection.classList.remove("hidden")
+        document.getElementById("conversion-section").classList.remove("hidden")
       }
 
       // Update product type options based on calculator type
