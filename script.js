@@ -2933,38 +2933,38 @@ const TestRunner = {
     }),
 
   // Test Rectangle Area Calculation
-  async testRectangleAreaCalculation(product) {
-    return new Promise((resolve) => {
-      // Set rectangle shape
-      const rectangleRadio = document.querySelector('input[name="area-shape"][value="rectangle"]')
-      if (rectangleRadio) {
-        rectangleRadio.checked = true
-        rectangleRadio.dispatchEvent(new Event("change"))
-      }
+async testRectangleAreaCalculation(product) {
+  return new Promise((resolve) => {
+    // Set rectangle shape
+    const rectangleRadio = document.querySelector('input[name="area-shape"][value="rectangle"]')
+    if (rectangleRadio) {
+      rectangleRadio.checked = true
+      rectangleRadio.dispatchEvent(new Event("change"))
+    }
 
-      // Set dimensions
-      document.getElementById("length").value = "5"
-      document.getElementById("width").value = "4"
-      document.getElementById("area-unit").value = "m"
+    // Set dimensions
+    document.getElementById("length").value = "5"
+    document.getElementById("width").value = "4"
+    document.getElementById("area-unit").value = "m"
 
-      // Click calculate
-      document.getElementById("calculate-btn").click()
+    // Click calculate
+    document.getElementById("calculate-btn").click()
 
-      setTimeout(() => {
-        const totalAmountResult = document.getElementById("total-amount-result").textContent
-        const expectedAmount = product.defaultDosage * 20 // 5m × 4m = 20m²
-        const passed =
-          totalAmountResult.includes(expectedAmount.toString()) ||
-          totalAmountResult.includes(expectedAmount.toFixed(1)) ||
-          totalAmountResult.includes(expectedAmount.toFixed(2))
+    setTimeout(() => {
+      const totalAmountResult = document.getElementById("total-amount-result").textContent
+      const expectedAmount = product.defaultDosage * 20 // 5m × 4m = 20m²
+      const passed =
+        totalAmountResult.includes(expectedAmount.toString()) ||
+        totalAmountResult.includes(expectedAmount.toFixed(1)) ||
+        totalAmountResult.includes(expectedAmount.toFixed(2))
 
-        resolve({
-          passed,
-          message: `Expected ~${expectedAmount} ${product.defaultDosageUnit}, Got: ${totalAmountResult}`,
-        })
-      }, 300)
-    })
-  },
+      resolve({
+        passed,
+        message: `Expected ~${expectedAmount} ${product.defaultDosageUnit}, Got: ${totalAmountResult}`,
+      })
+    }, 300)
+  })
+}, // <-- Add this comma here
 
   // Test Circle Area Calculation
   async testCircleAreaCalculation(product) {
