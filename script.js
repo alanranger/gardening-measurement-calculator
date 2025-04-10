@@ -1158,7 +1158,7 @@ function setupEventListeners() {
     })
   })
 
-  // Container shape change\
+  // Container shape change
   const containerShapeRadios = document.querySelectorAll('input[name="container-shape"]')
   containerShapeRadios.forEach((radio) => {
     radio.addEventListener("change", function () {
@@ -1507,6 +1507,42 @@ function setupEventListeners() {
       const icon = this.querySelector(".icon")
       if (icon) {
         icon.textContent = testContent.classList.contains("hidden") ? "▼" : "▲"
+      }
+
+      // If showing the panel, run tests
+      if (!testContent.classList.contains("hidden")) {
+        // Reset progress bar
+        const progressBar = document.getElementById("test-progress-bar")
+        const progressText = document.getElementById("test-progress-text")
+        if (progressBar && progressText) {
+          progressBar.style.width = "0%"
+          progressText.textContent = "0%"
+        }
+
+        // Clear previous test results
+        const testResults = document.getElementById("test-results")
+        if (testResults) {
+          testResults.textContent = "Running tests...\n\n"
+        }
+
+        // Run tests after a short delay
+        setTimeout(() => {
+          try {
+            if (typeof TestRunner !== "undefined") {
+              TestRunner.runAllTests()
+            } else {
+              console.error("TestRunner is not defined")
+              if (testResults) {
+                testResults.textContent += "Error: Test runner not available.\n"
+              }
+            }
+          } catch (error) {
+            console.error("Error running tests:", error)
+            if (testResults) {
+              testResults.textContent += `Error running tests: ${error.message}\n`
+            }
+          }
+        }, 100)
       }
     })
   }
@@ -2073,10 +2109,10 @@ function calculateWaterMixing() {
           }
 
           warningElement.innerHTML = `
-            <p><strong>Warning:</strong> The ratio you entered (${ratioPerLiter.toFixed(2)} ${productUnit} per liter) 
-            differs significantly from the recommended ratio (${recommendedRatioPerLiter.toFixed(2)} ${productUnit} per liter) 
-            for this product. Please check the product instructions.</p>
-          `
+           <p><strong>Warning:</strong> The ratio you entered (${ratioPerLiter.toFixed(2)} ${productUnit} per liter) 
+           differs significantly from the recommended ratio (${recommendedRatioPerLiter.toFixed(2)} ${productUnit} per liter) 
+           for this product. Please check the product instructions.</p>
+         `
         } else {
           // Remove warning if it exists
           const warningElement = document.getElementById("ratio-warning")
@@ -2099,9 +2135,9 @@ function calculateWaterMixing() {
   const precision = getDecimalPrecision(productAmount)
 
   userRequestedResult.innerHTML = `
-  <h3>Your Requested Amount</h3>
-  <p>${productAmount.toFixed(precision)} ${getFormattedUnitDisplay(productUnit)} for ${waterAmount.toFixed(2)} ${getFormattedUnitDisplay(waterUnit)}</p>
-  <p class="hint">Based on ${ratio.toFixed(3)} ${getFormattedUnitDisplay(productUnit)} per ${getFormattedUnitDisplay(waterUnit)}</p>
+ <h3>Your Requested Amount</h3>
+ <p>${productAmount.toFixed(precision)} ${getFormattedUnitDisplay(productUnit)} for ${waterAmount.toFixed(2)} ${getFormattedUnitDisplay(waterUnit)}</p>
+ <p class="hint">Based on ${ratio.toFixed(3)} ${getFormattedUnitDisplay(productUnit)} per ${getFormattedUnitDisplay(waterUnit)}</p>
 `
 
   // Find the results container and add the new card
@@ -2302,129 +2338,138 @@ function convertToTeaspoons(value, unit) {
 function updateDebugInfo() {
   const debugInfo = document.getElementById("debug-info")
   if (debugInfo) {
-    // Get application method
-    const applicationMethod = document.getElementById("application-method").value
+    try {
+      // Get application method
+      const applicationMethod = document.getElementById("application-method").value
 
-    // Get calculation mode
-    const calculationMode = document.querySelector('input[name="calculation-mode"]:checked')?.value || "N/A"
+      // Get calculation mode
+      const calculationMode = document.querySelector('input[name="calculation-mode"]:checked')?.value || "N/A"
 
-    // Get measurement type
-    const measurementType = document.querySelector('input[name="measurement-type"]:checked')?.value || "N/A"
+      // Get measurement type
+      const measurementType = document.querySelector('input[name="measurement-type"]:checked')?.value || "N/A"
 
-    // Get product info
-    const productType = document.getElementById("product-type").value
-    const productName = document.getElementById("product-name-select").value
+      // Get product info
+      const productType = document.getElementById("product-type").value
+      const productName = document.getElementById("product-name-select").value
 
-    // Get values based on calculation mode
-    let productAmount, productUnit, waterAmount, waterUnit, ratio, ratioPerLiter
+      // Get values based on calculation mode
+      let productAmount, productUnit, waterAmount, waterUnit, ratio, ratioPerLiter
 
-    if (calculationMode === "product_to_water") {
-      productAmount = document.getElementById("product-amount").value
-      productUnit = document.getElementById("product-unit").value
-      waterAmount = document.getElementById("water-amount").value
-      waterUnit = document.getElementById("water-unit").value
-      ratio = productAmount / waterAmount
+      if (calculationMode === "product_to_water") {
+        productAmount = document.getElementById("product-amount").value
+        productUnit = document.getElementById("product-unit").value
+        waterAmount = document.getElementById("water-amount").value
+        waterUnit = document.getElementById("water-unit").value
+        ratio = Number(productAmount) / Number(waterAmount)
 
-      // Calculate ratio per liter for consistent reporting
-      if (waterUnit === "l") {
-        ratioPerLiter = ratio
-      } else if (waterUnit === "ml") {
-        ratioPerLiter = ratio * 1000 // Convert from per ml to per liter
-      } else if (waterUnit === "gal_uk") {
-        ratioPerLiter = ratio / 4.55 // Convert from per gallon to per liter
+        // Calculate ratio per liter for consistent reporting
+        if (waterUnit === "l") {
+          ratioPerLiter = ratio
+        } else if (waterUnit === "ml") {
+          ratioPerLiter = ratio * 1000 // Convert from per ml to per liter
+        } else if (waterUnit === "gal_uk") {
+          ratioPerLiter = ratio / 4.55 // Convert from per gallon to per liter
+        }
+      } else if (calculationMode === "water_to_product") {
+        waterAmount = document.getElementById("water-amount-2").value
+        waterUnit = document.getElementById("water-unit-2").value
+        ratio = document.getElementById("ratio").value
+
+        // Calculate ratio per liter for consistent reporting
+        if (waterUnit === "l") {
+          ratioPerLiter = Number(ratio)
+        } else if (waterUnit === "ml") {
+          ratioPerLiter = Number(ratio) * 1000 // Convert from per ml to per liter
+        } else if (waterUnit === "gal_uk") {
+          ratioPerLiter = Number(ratio) / 4.55 // Convert from per gallon to per liter
+        }
+
+        // Convert water amount to liters for calculation
+        let waterAmountInLiters = Number(waterAmount)
+        if (waterUnit === "gal_uk") {
+          waterAmountInLiters = waterAmountInLiters * 4.55 // Convert UK gallons to liters
+        } else if (waterUnit === "ml") {
+          waterAmountInLiters = waterAmountInLiters / 1000 // Convert ml to liters
+        }
+
+        productAmount = ratioPerLiter * waterAmountInLiters
+        productUnit = measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"
+      } else if (calculationMode === "ratio_based") {
+        ratio = document.getElementById("ratio-2").value
+        waterAmount = document.getElementById("target-amount").value
+        waterUnit = document.getElementById("target-unit").value
+
+        // Calculate ratio per liter for consistent reporting
+        if (waterUnit === "l") {
+          ratioPerLiter = Number(ratio)
+        } else if (waterUnit === "ml") {
+          ratioPerLiter = Number(ratio) * 1000 // Convert from per ml to per liter
+        } else if (waterUnit === "gal_uk") {
+          ratioPerLiter = Number(ratio) / 4.55 // Convert from per gallon to per liter
+        }
+
+        // Convert water amount to liters for calculation
+        let waterAmountInLiters = Number(waterAmount)
+        if (waterUnit === "gal_uk") {
+          waterAmountInLiters = waterAmountInLiters * 4.55 // Convert UK gallons to liters
+        } else if (waterUnit === "ml") {
+          waterAmountInLiters = waterAmountInLiters / 1000 // Convert ml to liters
+        }
+
+        productAmount = ratioPerLiter * waterAmountInLiters
+        productUnit = measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"
       }
-    } else if (calculationMode === "water_to_product") {
-      waterAmount = document.getElementById("water-amount-2").value
-      waterUnit = document.getElementById("water-unit-2").value
-      ratio = document.getElementById("ratio").value
 
-      // Calculate ratio per liter for consistent reporting
-      if (waterUnit === "l") {
-        ratioPerLiter = ratio
-      } else if (waterUnit === "ml") {
-        ratioPerLiter = ratio * 1000 // Convert from per ml to per liter
-      } else if (waterUnit === "gal_uk") {
-        ratioPerLiter = ratio / 4.55 // Convert from per gallon to per liter
+      // Build debug string
+      let debugString = `
+       Application Method: ${applicationMethod}
+       Product Type: ${productType}
+       Product Name: ${productName}
+       Calculation Mode: ${calculationMode}
+       Measurement Type: ${measurementType}
+       
+       Product Amount: ${productAmount} ${productUnit}
+       Water Amount: ${waterAmount} ${waterUnit}
+       Ratio: ${ratio} ${productUnit} per ${waterUnit}
+       Ratio (standardized): ${typeof ratioPerLiter === "number" ? ratioPerLiter.toFixed(4) : "N/A"} ${productUnit} per liter
+     `
+
+      // Add measurement-specific debug info
+      if (measurementType === "cap") {
+        const capSize = document.getElementById("cap-size").value
+        debugString += `
+      Cap Size: ${capSize} ml`
       }
 
-      // Convert water amount to liters for calculation
-      let waterAmountInLiters = waterAmount
+      // Add scoop-specific debug info
+      const hasScoop = document.querySelector('input[name="has-scoop"]:checked')?.value === "yes"
+      if (hasScoop) {
+        const scoopSize = document.getElementById("scoop-size").value
+        const scoopUnit = document.getElementById("scoop-unit").value
+        debugString += `
+      Scoop Size: ${scoopSize} ${scoopUnit}`
+      }
+
+      // Add calculation summary with unit conversions
+      let waterAmountInLiters = Number(waterAmount)
       if (waterUnit === "gal_uk") {
-        waterAmountInLiters = waterAmount * 4.55 // Convert UK gallons to liters
+        waterAmountInLiters = waterAmountInLiters * 4.55 // Convert UK gallons to liters
       } else if (waterUnit === "ml") {
-        waterAmountInLiters = waterAmount / 1000 // Convert ml to liters
+        waterAmountInLiters = waterAmountInLiters / 1000 // Convert ml to liters
       }
 
-      productAmount = ratioPerLiter * waterAmountInLiters
-      productUnit = measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"
-    } else if (calculationMode === "ratio_based") {
-      ratio = document.getElementById("ratio-2").value
-      waterAmount = document.getElementById("target-amount").value
-      waterUnit = document.getElementById("target-unit").value
+      debugString += `
 
-      // Calculate ratio per liter for consistent reporting
-      if (waterUnit === "l") {
-        ratioPerLiter = ratio
-      } else if (waterUnit === "ml") {
-        ratioPerLiter = ratio * 1000 // Convert from per ml to per liter
-      } else if (waterUnit === "gal_uk") {
-        ratioPerLiter = ratio / 4.55 // Convert from per gallon to per liter
-      }
+Calculation Summary:
+       - User requested: ${waterAmount} ${waterUnit} (${waterAmountInLiters.toFixed(2)} liters)
+       - Using ratio: ${ratio} ${productUnit} per ${waterUnit} (${typeof ratioPerLiter === "number" ? ratioPerLiter.toFixed(4) : "N/A"} ${productUnit} per liter)
+       - Calculation: ${typeof ratioPerLiter === "number" ? ratioPerLiter.toFixed(4) : "N/A"} × ${waterAmountInLiters.toFixed(2)} = ${productAmount} ${productUnit}`
 
-      // Convert water amount to liters for calculation
-      let waterAmountInLiters = waterAmount
-      if (waterUnit === "gal_uk") {
-        waterAmountInLiters = waterAmount * 4.55 // Convert UK gallons to liters
-      } else if (waterUnit === "ml") {
-        waterAmountInLiters = waterAmount / 1000 // Convert ml to liters
-      }
-
-      productAmount = ratioPerLiter * waterAmountInLiters
-      productUnit = measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"
+      debugInfo.textContent = debugString
+    } catch (error) {
+      console.error("Error in updateDebugInfo:", error)
+      debugInfo.textContent = "Error generating debug info: " + error.message
     }
-
-    // Build debug string
-    let debugString = `
-      Application Method: ${applicationMethod}
-      Product Type: ${productType}
-      Product Name: ${productName}
-      Calculation Mode: ${calculationMode}
-      Measurement Type: ${measurementType}
-      
-      Product Amount: ${productAmount} ${productUnit}
-      Water Amount: ${waterAmount} ${waterUnit}
-      Ratio: ${ratio} ${productUnit} per ${waterUnit}
-      Ratio (standardized): ${ratioPerLiter?.toFixed(4)} ${productUnit} per liter
-    `
-
-    // Add measurement-specific debug info
-    if (measurementType === "cap") {
-      const capSize = document.getElementById("cap-size").value
-      debugString += `\n    Cap Size: ${capSize} ml`
-    }
-
-    // Add scoop-specific debug info
-    const hasScoop = document.querySelector('input[name="has-scoop"]:checked')?.value === "yes"
-    if (hasScoop) {
-      const scoopSize = document.getElementById("scoop-size").value
-      const scoopUnit = document.getElementById("scoop-unit").value
-      debugString += `\n    Scoop Size: ${scoopSize} ${scoopUnit}`
-    }
-
-    // Add calculation summary with unit conversions
-    let waterAmountInLiters = waterAmount
-    if (waterUnit === "gal_uk") {
-      waterAmountInLiters = waterAmount * 4.55 // Convert UK gallons to liters
-    } else if (waterUnit === "ml") {
-      waterAmountInLiters = waterAmount / 1000 // Convert ml to liters
-    }
-
-    debugString += `\n\nCalculation Summary:
-      - User requested: ${waterAmount} ${waterUnit} (${waterAmountInLiters.toFixed(2)} liters)
-      - Using ratio: ${ratio} ${productUnit} per ${waterUnit} (${typeof ratioPerLiter === "number" ? ratioPerLiter.toFixed(4) : "N/A"} ${productUnit} per liter)
-      - Calculation: ${typeof ratioPerLiter === "number" ? ratioPerLiter.toFixed(4) : "N/A"} × ${waterAmountInLiters.toFixed(2)} = ${productAmount} ${productUnit}`
-
-    debugInfo.textContent = debugString
   }
 }
 
@@ -3116,58 +3161,3 @@ const TestRunner = {
     }
   },
 }
-
-// Add event listener to run tests button - SIMPLIFIED VERSION
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("Setting up test button listener")
-
-  const testTrigger = document.getElementById("test-trigger")
-  const testContent = document.getElementById("test-content")
-
-  if (testTrigger && testContent) {
-    console.log("Test button and content found, adding click handler")
-
-    testTrigger.onclick = () => {
-      console.log("Test button clicked!")
-
-      // Toggle visibility
-      if (testContent.classList.contains("hidden")) {
-        testContent.classList.remove("hidden")
-        console.log("Test panel opened")
-
-        // Reset progress bar
-        const progressBar = document.getElementById("test-progress-bar")
-        const progressText = document.getElementById("test-progress-text")
-        if (progressBar && progressText) {
-          progressBar.style.width = "0%"
-          progressText.textContent = "0%"
-        }
-
-        // Clear previous test results
-        const testResults = document.getElementById("test-results")
-        if (testResults) {
-          testResults.textContent = "Running tests...\n\n"
-          console.log("Test results cleared")
-        }
-
-        // Run tests after a short delay
-        setTimeout(() => {
-          console.log("Starting test execution")
-          try {
-            TestRunner.runAllTests()
-          } catch (error) {
-            console.error("Error running tests:", error)
-            if (testResults) {
-              testResults.textContent += `\nError running tests: ${error.message}\n`
-            }
-          }
-        }, 100)
-      } else {
-        testContent.classList.add("hidden")
-        console.log("Test panel closed")
-      }
-    }
-  } else {
-    console.error("Test button or content not found")
-  }
-})
