@@ -2379,7 +2379,7 @@ function updateDebugInfo() {
           ratioPerLiter = ratio
         } else if (waterUnit === "ml") {
           ratioPerLiter = ratio * 1000 // Convert from per ml to per liter
-        } else if === "gal_uk") {
+        } else if (waterUnit === "gal_uk") {
           ratioPerLiter = ratio / 4.55 // Convert from per gallon to per liter
         }
       } else if (calculationMode === "water_to_product") {
