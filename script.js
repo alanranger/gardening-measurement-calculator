@@ -3117,26 +3117,23 @@ const TestRunner = {
   },
 }
 
-// Add event listener to run tests button
+// Add event listener to run tests button - SIMPLIFIED VERSION
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("Setting up test button listener")
+
   const testTrigger = document.getElementById("test-trigger")
   const testContent = document.getElementById("test-content")
-  const testInstructions = document.getElementById("test-instructions")
 
   if (testTrigger && testContent) {
-    testTrigger.addEventListener("click", function () {
-      // Toggle the visibility of the test panel
-      testContent.classList.toggle("hidden")
+    console.log("Test button and content found, adding click handler")
 
-      // Update the icon
-      const icon = this.querySelector(".icon")
-      if (icon) {
-        icon.textContent = testContent.classList.contains("hidden") ? "▼" : "▲"
-      }
+    testTrigger.onclick = () => {
+      console.log("Test button clicked!")
 
-      // If the panel is now visible, run the tests
-      if (!testContent.classList.contains("hidden")) {
-        console.log("Test panel is visible, running tests...")
+      // Toggle visibility
+      if (testContent.classList.contains("hidden")) {
+        testContent.classList.remove("hidden")
+        console.log("Test panel opened")
 
         // Reset progress bar
         const progressBar = document.getElementById("test-progress-bar")
@@ -3149,27 +3146,28 @@ document.addEventListener("DOMContentLoaded", () => {
         // Clear previous test results
         const testResults = document.getElementById("test-results")
         if (testResults) {
-          testResults.textContent = "Preparing to run tests...\n\n"
+          testResults.textContent = "Running tests...\n\n"
+          console.log("Test results cleared")
         }
 
-        // Hide instructions if they exist
-        if (testInstructions) {
-          testInstructions.classList.add("hidden")
-        }
-
-        // Add a small delay before running tests to allow UI to update
+        // Run tests after a short delay
         setTimeout(() => {
+          console.log("Starting test execution")
           try {
-            console.log("Starting test execution...")
             TestRunner.runAllTests()
           } catch (error) {
             console.error("Error running tests:", error)
             if (testResults) {
-              testResults.textContent += `\nError running tests: ${error.message}\n${error.stack}\n`
+              testResults.textContent += `\nError running tests: ${error.message}\n`
             }
           }
         }, 100)
+      } else {
+        testContent.classList.add("hidden")
+        console.log("Test panel closed")
       }
-    })
+    }
+  } else {
+    console.error("Test button or content not found")
   }
 })
