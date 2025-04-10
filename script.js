@@ -1156,9 +1156,9 @@ function setupEventListeners() {
         document.getElementById("circle-inputs").classList.remove("hidden")
       }
     })
-  })
+  }
 
-  // Container shape change
+  // Container shape change\
   const containerShapeRadios = document.querySelectorAll('input[name="container-shape"]')
   containerShapeRadios.forEach((radio) => {
     radio.addEventListener("change", function () {
@@ -1170,7 +1170,7 @@ function setupEventListeners() {
         document.getElementById("circular-inputs").classList.remove("hidden")
       }
     })
-  })
+  }
 
   // Calculation mode change
   const calculationModeRadios = document.querySelectorAll('input[name="calculation-mode"]')
@@ -1184,7 +1184,7 @@ function setupEventListeners() {
       // Show the selected panel
       document.getElementById(`${this.value}-panel`).classList.remove("hidden")
     })
-  })
+  }
 
   // Measurement type change
   const measurementTypeRadios = document.querySelectorAll('input[name="measurement-type"]')
@@ -1196,7 +1196,7 @@ function setupEventListeners() {
         document.getElementById("cap-size-group").classList.add("hidden")
       }
     })
-  })
+  }
 
   // Has scoop change
   const hasScoopRadios = document.querySelectorAll('input[name="has-scoop"]')
@@ -1208,7 +1208,7 @@ function setupEventListeners() {
         document.getElementById("scoop-size-group").classList.add("hidden")
       }
     })
-  })
+  }
 
   // Add water unit change listeners to update ratios
   const waterUnit2Select = document.getElementById("water-unit-2")
@@ -2406,30 +2406,6 @@ function updateDebugInfo() {
 
         productAmount = ratioPerLiter * waterAmountInLiters
         productUnit = measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"
-      } else if (calculationMode === "ratio_based") {
-        ratio = document.getElementById("ratio-2").value
-        waterAmount = document.getElementById("target-amount").value
-        waterUnit = document.getElementById("target-unit").value
-
-        // Calculate ratio per liter for consistent reporting
-        if (waterUnit === "l") {
-          ratioPerLiter = Number(ratio)
-        } else if (waterUnit === "ml") {
-          ratioPerLiter = Number(ratio) * 1000 // Convert from per ml to per liter
-        } else if (waterUnit === "gal_uk") {
-          ratioPerLiter = Number(ratio) / 4.55 // Convert from per gallon to per liter
-        }
-
-        // Convert water amount to liters for calculation
-        let waterAmountInLiters = Number(waterAmount)
-        if (waterUnit === "gal_uk") {
-          waterAmountInLiters = waterAmountInLiters * 4.55 // Convert UK gallons to liters
-        } else if (waterUnit === "ml") {
-          waterAmountInLiters = waterAmountInLiters / 1000 // Convert ml to liters
-        }
-
-        productAmount = ratioPerLiter * waterAmountInLiters
-        productUnit = measurementType === "weight" ? "g" : measurementType === "cap" ? "cap" : "ml"
       }
 
       // Build debug string
@@ -2880,46 +2856,47 @@ const TestRunner = {
     })
   },
 
-  // Test Unit Conversion - completely rewritten to bypass event handling issues\
-  TestRunner.testUnitConversion = async (product) => 
-  new Promise((resolve) => {
-    // Set calculation mode
-    const modeRadio = document.querySelector('input[name="calculation-mode"][value="product_to_water"]')
-    if (modeRadio) {
-      modeRadio.checked = true
-      modeRadio.dispatchEvent(new Event("change"))
-    }
+  // Test Unit Conversion - completely rewritten to bypass event handling issues
+  testUnitConversion(product) {
+    return new Promise((resolve) => {
+      // Set calculation mode
+      const modeRadio = document.querySelector('input[name="calculation-mode"][value="product_to_water"]')
+      if (modeRadio) {
+        modeRadio.checked = true
+        modeRadio.dispatchEvent(new Event("change"))
+      }
 
-    // Set initial values directly
-    document.getElementById("product-amount").value = "10"
-    document.getElementById("product-unit").value = "ml"
-    document.getElementById("water-amount").value = "1"
-    document.getElementById("water-unit").value = "l"
+      // Set initial values directly
+      document.getElementById("product-amount").value = "10"
+      document.getElementById("product-unit").value = "ml"
+      document.getElementById("water-amount").value = "1"
+      document.getElementById("water-unit").value = "l"
 
-    // First, click calculate with liters to establish baseline
-    document.getElementById("calculate-btn").click()
-    
-    // Wait for calculation to complete
-    setTimeout(() => {
-      // Now manually change to gallons and set the expected converted value
-      document.getElementById("water-unit").value = "gal_uk"
-      document.getElementById("water-amount").value = "0.22" // Manually set the expected value
-      
-      // Click calculate again with the new values
+      // First, click calculate with liters to establish baseline
       document.getElementById("calculate-btn").click()
-      
+
+      // Wait for calculation to complete
       setTimeout(() => {
-        // Check the result contains the expected values
-        const metricResult = document.getElementById("metric-result").textContent
-        const passed = metricResult.includes("10") && metricResult.includes("0.22") && metricResult.includes("gal")
-        
-        resolve({
-          passed,
-          message: `Result with gallons: ${metricResult}`,
-        })
+        // Now manually change to gallons and set the expected converted value
+        document.getElementById("water-unit").value = "gal_uk"
+        document.getElementById("water-amount").value = "0.22" // Manually set the expected value
+
+        // Click calculate again with the new values
+        document.getElementById("calculate-btn").click()
+
+        setTimeout(() => {
+          // Check the result contains the expected values
+          const metricResult = document.getElementById("metric-result").textContent
+          const passed = metricResult.includes("10") && metricResult.includes("0.22") && metricResult.includes("gal")
+
+          resolve({
+            passed,
+            message: `Result with gallons: ${metricResult}`,
+          })
+        }, 300)
       }, 300)
-    }, 300)
-  })
+    })
+  },
 
   // Test Rectangle Area Calculation
   async testRectangleAreaCalculation(product) {
