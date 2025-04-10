@@ -3121,6 +3121,7 @@ const TestRunner = {
 document.addEventListener("DOMContentLoaded", () => {
   const testTrigger = document.getElementById("test-trigger")
   const testContent = document.getElementById("test-content")
+  const testInstructions = document.getElementById("test-instructions")
 
   if (testTrigger && testContent) {
     testTrigger.addEventListener("click", function () {
@@ -3135,6 +3136,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // If the panel is now visible, run the tests
       if (!testContent.classList.contains("hidden")) {
+        console.log("Test panel is visible, running tests...")
+
         // Reset progress bar
         const progressBar = document.getElementById("test-progress-bar")
         const progressText = document.getElementById("test-progress-text")
@@ -3149,9 +3152,22 @@ document.addEventListener("DOMContentLoaded", () => {
           testResults.textContent = "Preparing to run tests...\n\n"
         }
 
+        // Hide instructions if they exist
+        if (testInstructions) {
+          testInstructions.classList.add("hidden")
+        }
+
         // Add a small delay before running tests to allow UI to update
         setTimeout(() => {
-          TestRunner.runAllTests()
+          try {
+            console.log("Starting test execution...")
+            TestRunner.runAllTests()
+          } catch (error) {
+            console.error("Error running tests:", error)
+            if (testResults) {
+              testResults.textContent += `\nError running tests: ${error.message}\n${error.stack}\n`
+            }
+          }
         }, 100)
       }
     })
