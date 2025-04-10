@@ -1156,7 +1156,7 @@ function setupEventListeners() {
         document.getElementById("circle-inputs").classList.remove("hidden")
       }
     })
-  }
+  })
 
   // Container shape change\
   const containerShapeRadios = document.querySelectorAll('input[name="container-shape"]')
@@ -1170,7 +1170,7 @@ function setupEventListeners() {
         document.getElementById("circular-inputs").classList.remove("hidden")
       }
     })
-  }
+  })
 
   // Calculation mode change
   const calculationModeRadios = document.querySelectorAll('input[name="calculation-mode"]')
@@ -1184,7 +1184,7 @@ function setupEventListeners() {
       // Show the selected panel
       document.getElementById(`${this.value}-panel`).classList.remove("hidden")
     })
-  }
+  })
 
   // Measurement type change
   const measurementTypeRadios = document.querySelectorAll('input[name="measurement-type"]')
@@ -1196,7 +1196,7 @@ function setupEventListeners() {
         document.getElementById("cap-size-group").classList.add("hidden")
       }
     })
-  }
+  })
 
   // Has scoop change
   const hasScoopRadios = document.querySelectorAll('input[name="has-scoop"]')
@@ -1208,7 +1208,7 @@ function setupEventListeners() {
         document.getElementById("scoop-size-group").classList.add("hidden")
       }
     })
-  }
+  })
 
   // Add water unit change listeners to update ratios
   const waterUnit2Select = document.getElementById("water-unit-2")
@@ -2971,7 +2971,7 @@ const TestRunner = {
   },
 
   // Test Circular Container Calculation
-  async testCircularContainerCalculation(product) {
+  async testCircularCalculation(product) {
     return new Promise((resolve) => {
       // Set circular shape
       const circularRadio = document.querySelector('input[name="container-shape"][value="circular"]')
