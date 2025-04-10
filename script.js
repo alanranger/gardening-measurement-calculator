@@ -3171,3 +3171,89 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("Test button or content not found")
   }
 })
+// Modified script for iframe compatibility
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("Setting up iframe-compatible debug and test buttons")
+
+  // Direct click handlers instead of event listeners
+  setupDebugButton()
+  setupTestButton()
+
+  function setupDebugButton() {
+    const debugTrigger = document.getElementById("debug-trigger")
+    const debugContent = document.getElementById("debug-content")
+
+    if (debugTrigger && debugContent) {
+      // Remove any existing listeners and use direct onclick
+      debugTrigger.onclick = function () {
+        debugContent.classList.toggle("hidden")
+        const icon = this.querySelector(".icon")
+        if (icon) {
+          icon.textContent = debugContent.classList.contains("hidden") ? "▼" : "▲"
+        }
+
+        // Update debug info when opened
+        if (!debugContent.classList.contains("hidden")) {
+          updateDebugInfo()
+        }
+      }
+
+      console.log("Debug button handler attached")
+    }
+  }
+
+  function setupTestButton() {
+    const testTrigger = document.getElementById("test-trigger")
+    const testContent = document.getElementById("test-content")
+
+    if (testTrigger && testContent) {
+      // Remove any existing listeners and use direct onclick
+      testTrigger.onclick = function () {
+        testContent.classList.toggle("hidden")
+        const icon = this.querySelector(".icon")
+        if (icon) {
+          icon.textContent = testContent.classList.contains("hidden") ? "▼" : "▲"
+        }
+
+        // Run tests if panel is opened
+        if (!testContent.classList.contains("hidden")) {
+          // Reset progress bar
+          const progressBar = document.getElementById("test-progress-bar")
+          const progressText = document.getElementById("test-progress-text")
+          if (progressBar && progressText) {
+            progressBar.style.width = "0%"
+            progressText.textContent = "0%"
+          }
+
+          // Clear previous test results
+          const testResults = document.getElementById("test-results")
+          if (testResults) {
+            testResults.textContent = "Running tests...\n\n"
+          }
+
+          // Run tests after a short delay
+          setTimeout(() => {
+            try {
+              if (typeof TestRunner !== "undefined") {
+                TestRunner.runAllTests()
+              } else {
+                throw new Error("TestRunner is not defined")
+              }
+            } catch (error) {
+              console.error("Error running tests:", error)
+              if (testResults) {
+                testResults.textContent += "\nError running tests: " + error.message + "\n"
+              }
+            }
+          }, 100)
+        }
+      }
+
+      console.log("Test button handler attached")
+    }
+  }
+
+  // Dummy declarations to satisfy the linter.  These should be defined elsewhere.
+  function updateDebugInfo() {}
+  let TestRunner
+})
