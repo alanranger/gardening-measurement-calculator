@@ -2421,8 +2421,8 @@ function updateDebugInfo() {
 
     debugString += `\n\nCalculation Summary:
       - User requested: ${waterAmount} ${waterUnit} (${waterAmountInLiters.toFixed(2)} liters)
-      - Using ratio: ${ratio} ${productUnit} per ${waterUnit} (${ratioPerLiter?.toFixed(4)} ${productUnit} per liter)
-      - Calculation: ${ratioPerLiter?.toFixed(4)} × ${waterAmountInLiters.toFixed(2)} = ${productAmount} ${productUnit}`
+      - Using ratio: ${ratio} ${productUnit} per ${waterUnit} (${typeof ratioPerLiter === "number" ? ratioPerLiter.toFixed(4) : "N/A"} ${productUnit} per liter)
+      - Calculation: ${typeof ratioPerLiter === "number" ? ratioPerLiter.toFixed(4) : "N/A"} × ${waterAmountInLiters.toFixed(2)} = ${productAmount} ${productUnit}`
 
     debugInfo.textContent = debugString
   }
