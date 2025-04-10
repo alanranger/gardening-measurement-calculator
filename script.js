@@ -1156,9 +1156,9 @@ function setupEventListeners() {
         document.getElementById("circle-inputs").classList.remove("hidden")
       }
     })
-  }
+  })
 
-  // Container shape change\
+  // Container shape change
   const containerShapeRadios = document.querySelectorAll('input[name="container-shape"]')
   containerShapeRadios.forEach((radio) => {
     radio.addEventListener("change", function () {
@@ -1170,7 +1170,7 @@ function setupEventListeners() {
         document.getElementById("circular-inputs").classList.remove("hidden")
       }
     })
-  }
+  })
 
   // Calculation mode change
   const calculationModeRadios = document.querySelectorAll('input[name="calculation-mode"]')
@@ -1288,13 +1288,7 @@ function setupEventListeners() {
   // Add event listeners for water unit changes in product_to_water mode
   const waterUnitSelect = document.getElementById("water-unit")
   if (waterUnitSelect) {
-    // Add data attribute to track previous unit
-    waterUnitSelect.dataset.previousUnit = waterUnitSelect.value || "l"
-
     waterUnitSelect.addEventListener("change", function () {
-      // Get the previous unit value
-      const previousUnit = this.dataset.previousUnit || "l"
-
       // Get the current product
       const productNameSelect = document.getElementById("product-name-select")
       const selectedId = productNameSelect.value
@@ -1308,11 +1302,8 @@ function setupEventListeners() {
         // Get current values
         const productAmount = Number.parseFloat(document.getElementById("product-amount").value)
         const oldWaterAmount = Number.parseFloat(document.getElementById("water-amount").value)
-        const oldWaterUnit = previousUnit
+        const oldWaterUnit = document.getElementById("water-unit").value
         const newWaterUnit = this.value
-
-        // Store the current unit for next time
-        this.dataset.previousUnit = newWaterUnit
 
         // Convert water amount to the new unit
         let newWaterAmount = oldWaterAmount
@@ -1351,9 +1342,6 @@ function setupEventListeners() {
         if (ratioField2) {
           ratioField2.value = ratio.toFixed(2)
         }
-
-        // Log for debugging
-        console.log(`Converted ${oldWaterAmount} ${oldWaterUnit} to ${newWaterAmount.toFixed(2)} ${newWaterUnit}`)
       }
     })
   }
@@ -2880,9 +2868,9 @@ const TestRunner = {
     })
   },
 
-  // Inside the TestRunner object, replace the existing testUnitConversion function with this:
-  testUnitConversion: async (product) =>
-    new Promise((resolve) => {
+  // Test Unit Conversion
+  async testUnitConversion(product) {
+    return new Promise((resolve) => {
       // Set calculation mode
       const modeRadio = document.querySelector('input[name="calculation-mode"][value="product_to_water"]')
       if (modeRadio) {
@@ -2890,53 +2878,224 @@ const TestRunner = {
         modeRadio.dispatchEvent(new Event("change"))
       }
 
-      // Set initial values with proper event dispatching
-      const productAmountInput = document.getElementById("product-amount")
-      const productUnitSelect = document.getElementById("product-unit")
-      const waterAmountInput = document.getElementById("water-amount")
+      // Set initial values
+      document.getElementById("product-amount").value = "10"
+      document.getElementById("product-unit").value = "ml"
+      document.getElementById("water-amount").value = "1"
+      document.getElementById("water-unit").value = "l"
+
+      // Change units and trigger the change event properly
       const waterUnitSelect = document.getElementById("water-unit")
+      waterUnitSelect.value = "gal_uk"
 
-      if (productAmountInput && productUnitSelect && waterAmountInput && waterUnitSelect) {
-        // Set values
-        productAmountInput.value = "10"
-        productUnitSelect.value = "ml"
-        waterAmountInput.value = "1"
-        waterUnitSelect.value = "l"
+      // Create and dispatch a proper change event
+      const changeEvent = new Event("change", { bubbles: true })
+      waterUnitSelect.dispatchEvent(changeEvent)
 
-        // Store the current unit for tracking
-        waterUnitSelect.dataset.previousUnit = "l"
+      // Give it a bit more time to process the conversion
+      setTimeout(() => {
+        const waterAmount = document.getElementById("water-amount").value
+        const passed = Math.abs(Number.parseFloat(waterAmount) - 0.22) < 0.05 // Allow a bit more tolerance
 
-        // Dispatch events properly
-        productAmountInput.dispatchEvent(new Event("change", { bubbles: true }))
-        productUnitSelect.dispatchEvent(new Event("change", { bubbles: true }))
-        waterAmountInput.dispatchEvent(new Event("change", { bubbles: true }))
-        waterUnitSelect.dispatchEvent(new Event("change", { bubbles: true }))
-
-        // Now change the water unit to gallons with proper event
-        setTimeout(() => {
-          waterUnitSelect.value = "gal_uk"
-          // Create and dispatch a proper change event
-          const changeEvent = new Event("change", { bubbles: true })
-          waterUnitSelect.dispatchEvent(changeEvent)
-
-          // Give it time to process the conversion
-          setTimeout(() => {
-            const waterAmount = waterAmountInput.value
-            const passed = Math.abs(Number.parseFloat(waterAmount) - 0.22) < 0.05 // Allow a bit more tolerance
-
-            resolve({
-              passed,
-              message: `Expected ~0.22 gallons, Got: ${waterAmount} gallons`,
-            })
-          }, 500)
-        }, 300)
-      } else {
         resolve({
-          passed: false,
-          message: "Could not find required input elements",
+          passed,
+          message: `Expected ~0.22 gallons, Got: ${waterAmount} gallons`,
         })
+      }, 500) // Increased timeout to ensure conversion completes
+    })
+  },
+
+  // Test Rectangle Area Calculation
+  async testRectangleAreaCalculation(product) {
+    return new Promise((resolve) => {
+      // Set rectangle shape
+      const rectangleRadio = document.querySelector('input[name="area-shape"][value="rectangle"]')
+      if (rectangleRadio) {
+        rectangleRadio.checked = true
+        rectangleRadio.dispatchEvent(new Event("change"))
       }
-    }),
+
+      // Set dimensions
+      document.getElementById("length").value = "5"
+      document.getElementById("width").value = "4"
+      document.getElementById("area-unit").value = "m"
+
+      // Click calculate
+      document.getElementById("calculate-btn").click()
+
+      setTimeout(() => {
+        const totalAmountResult = document.getElementById("total-amount-result").textContent
+        const expectedAmount = product.defaultDosage * 20 // 5m × 4m = 20m²
+
+        // Check if the result contains the expected amount (allowing for some formatting differences)
+        const resultNumber = Number.parseFloat(totalAmountResult.replace(/[^\d.-]/g, ""))
+        const passed = Math.abs(resultNumber - expectedAmount) / expectedAmount < 0.05 // Within 5%
+
+        resolve({
+          passed,
+          message: `Expected ~${expectedAmount} ${product.defaultDosageUnit}, Got: ${totalAmountResult}`,
+        })
+      }, 300)
+    })
+  },
+
+  // Test Circle Area Calculation
+  async testCircleAreaCalculation(product) {
+    return new Promise((resolve) => {
+      // Set circle shape
+      const circleRadio = document.querySelector('input[name="area-shape"][value="circle"]')
+      if (circleRadio) {
+        circleRadio.checked = true
+        circleRadio.dispatchEvent(new Event("change"))
+      }
+
+      // Set dimensions
+      document.getElementById("diameter").value = "4"
+      document.getElementById("circle-unit").value = "m"
+
+      // Click calculate
+      document.getElementById("calculate-btn").click()
+
+      setTimeout(() => {
+        const totalAmountResult = document.getElementById("total-amount-result").textContent
+        const area = Math.PI * 2 * 2 // π × r²
+        const expectedAmount = product.defaultDosage * area
+
+        // Check if the result is approximately correct (within 5%)
+        const resultNumber = Number.parseFloat(totalAmountResult.replace(/[^\d.-]/g, ""))
+        const percentDifference = Math.abs((resultNumber - expectedAmount) / expectedAmount)
+        const passed = percentDifference < 0.05
+
+        resolve({
+          passed,
+          message: `Expected ~${expectedAmount.toFixed(1)} ${product.defaultDosageUnit}, Got: ${totalAmountResult}`,
+        })
+      }, 300)
+    })
+  },
+
+  // Test Rectangular Container Calculation
+  async testRectangularContainerCalculation(product) {
+    return new Promise((resolve) => {
+      // Set rectangular shape
+      const rectangularRadio = document.querySelector('input[name="container-shape"][value="rectangular"]')
+      if (rectangularRadio) {
+        rectangularRadio.checked = true
+        rectangularRadio.dispatchEvent(new Event("change"))
+      }
+
+      // Set dimensions
+      document.getElementById("dimension-unit").value = "m"
+      document.getElementById("container-length").value = "2"
+      document.getElementById("container-width").value = "1"
+      document.getElementById("container-height").value = "0.5"
+
+      // Click calculate
+      document.getElementById("calculate-btn").click()
+
+      setTimeout(() => {
+        const volumeResult = document.getElementById("volume-result").textContent
+        const totalAmountResult = document.getElementById("water-total-amount-result").textContent
+
+        const expectedVolume = 2 * 1 * 0.5 * 1000 // 1000 liters
+        const expectedAmount = (product.defaultDosage * expectedVolume) / 1000
+
+        // Extract numbers from the results
+        const volumeNumber = Number.parseFloat(volumeResult.replace(/[^\d.-]/g, ""))
+        const amountNumber = Number.parseFloat(totalAmountResult.replace(/[^\d.-]/g, ""))
+
+        const volumePassed = Math.abs(volumeNumber - expectedVolume) / expectedVolume < 0.05
+        const amountPassed = Math.abs(amountNumber - expectedAmount) / expectedAmount < 0.05
+
+        resolve({
+          passed: volumePassed && amountPassed,
+          message: `Volume: ${volumeResult}, Amount: ${totalAmountResult}`,
+        })
+      }, 300)
+    })
+  },
+
+  // Test Circular Container Calculation
+  async testCircularCalculation(product) {
+    return new Promise((resolve) => {
+      // Set circular shape
+      const circularRadio = document.querySelector('input[name="container-shape"][value="circular"]')
+      if (circularRadio) {
+        circularRadio.checked = true
+        circularRadio.dispatchEvent(new Event("change"))
+      }
+
+      // Set dimensions
+      document.getElementById("dimension-unit").value = "m"
+      document.getElementById("container-diameter").value = "2"
+      document.getElementById("container-depth").value = "0.5"
+
+      // Click calculate
+      document.getElementById("calculate-btn").click()
+
+      setTimeout(() => {
+        const volumeResult = document.getElementById("volume-result").textContent
+        const totalAmountResult = document.getElementById("water-total-amount-result").textContent
+
+        const expectedVolume = Math.PI * 1 * 1 * 0.5 * 1000 // π × r² × h × 1000
+        const expectedAmount = (product.defaultDosage * expectedVolume) / 1000
+
+        // Extract numbers from the results
+        const volumeNumber = Number.parseFloat(volumeResult.replace(/[^\d.-]/g, ""))
+        const amountNumber = Number.parseFloat(totalAmountResult.replace(/[^\d.-]/g, ""))
+
+        // Check if results are approximately correct (within 5%)
+        const volumePercentDiff = Math.abs((volumeNumber - expectedVolume) / expectedVolume)
+        const volumePassed = volumePercentDiff < 0.05
+
+        const amountPercentDiff = Math.abs((amountNumber - expectedAmount) / expectedAmount)
+        const amountPassed = amountPercentDiff < 0.05
+
+        resolve({
+          passed: volumePassed && amountPassed,
+          message: `Volume: ${volumeResult}, Amount: ${totalAmountResult}`,
+        })
+      }, 300)
+    })
+  },
+
+  // Test Manual Volume Entry
+  async testManualVolumeEntry(product) {
+    return new Promise((resolve) => {
+      // First, make sure we're not using a container shape
+      const noneRadio = document.createElement("input")
+      noneRadio.type = "radio"
+      noneRadio.name = "container-shape"
+      noneRadio.value = "none"
+      noneRadio.checked = true
+      document.body.appendChild(noneRadio)
+      noneRadio.dispatchEvent(new Event("change"))
+
+      // Set manual volume
+      document.getElementById("water-volume").value = "2000"
+      document.getElementById("water-volume-unit").value = "l"
+
+      // Click calculate
+      document.getElementById("calculate-btn").click()
+
+      setTimeout(() => {
+        const totalAmountResult = document.getElementById("water-total-amount-result").textContent
+        const expectedAmount = (product.defaultDosage * 2000) / 1000
+
+        // Extract number from the result
+        const resultNumber = Number.parseFloat(totalAmountResult.replace(/[^\d.-]/g, ""))
+        const passed = Math.abs(resultNumber - expectedAmount) / expectedAmount < 0.05
+
+        // Clean up the temporary radio button
+        document.body.removeChild(noneRadio)
+
+        resolve({
+          passed,
+          message: `Expected: ${expectedAmount} ${product.defaultDosageUnit}, Got: ${totalAmountResult}`,
+        })
+      }, 500)
+    })
+  },
 
   // Helper function to log test results
   logTestResult(testName, passed, message) {
@@ -3001,87 +3160,4 @@ const TestRunner = {
       testResults.scrollTop = testResults.scrollHeight
     }
   },
-}
-
-// Look for this section in setupEventListeners:
-// Add event listeners for water unit changes in product_to_water mode
-// const waterUnitSelect = document.getElementById("water-unit")
-// if (waterUnitSelect) {
-//   waterUnitSelect.addEventListener("change", function () {
-//     ...
-//   })
-// }
-
-// Replace that entire water unit change handler with this enhanced version:
-const waterUnitSelect = document.getElementById("water-unit")
-if (waterUnitSelect) {
-  // Add data attribute to track previous unit
-  waterUnitSelect.dataset.previousUnit = waterUnitSelect.value || "l"
-
-  waterUnitSelect.addEventListener("change", function () {
-    // Get the previous unit value
-    const previousUnit = this.dataset.previousUnit || "l"
-
-    // Get the current product
-    const productNameSelect = document.getElementById("product-name-select")
-    const selectedId = productNameSelect.value
-    if (!selectedId) return
-
-    // Find the selected product
-    const allProducts = [...COMMON_PRODUCTS, ...AREA_TREATMENT_PRODUCTS, ...WATER_TREATMENT_PRODUCTS]
-    const selectedProduct = allProducts.find((p) => p.id === selectedId)
-
-    if (selectedProduct) {
-      // Get current values
-      const productAmount = Number.parseFloat(document.getElementById("product-amount").value)
-      const oldWaterAmount = Number.parseFloat(document.getElementById("water-amount").value)
-      const oldWaterUnit = previousUnit
-      const newWaterUnit = this.value
-
-      // Store the current unit for next time
-      this.dataset.previousUnit = newWaterUnit
-
-      // Convert water amount to the new unit
-      let newWaterAmount = oldWaterAmount
-
-      // Convert from old unit to liters first
-      let waterAmountInLiters = oldWaterAmount
-      if (oldWaterUnit === "gal_uk") {
-        waterAmountInLiters = oldWaterAmount * 4.55 // Convert UK gallons to liters
-      } else if (oldWaterUnit === "ml") {
-        waterAmountInLiters = oldWaterAmount / 1000 // Convert ml to liters
-      }
-
-      // Then convert from liters to new unit
-      if (newWaterUnit === "gal_uk") {
-        newWaterAmount = waterAmountInLiters / 4.55 // Convert liters to UK gallons
-      } else if (newWaterUnit === "ml") {
-        newWaterAmount = waterAmountInLiters * 1000 // Convert liters to ml
-      } else {
-        newWaterAmount = waterAmountInLiters // Already in liters
-      }
-
-      // Update the water amount field
-      document.getElementById("water-amount").value = newWaterAmount.toFixed(2)
-
-      // Also update the ratio fields to maintain consistency
-      const ratio = productAmount / newWaterAmount
-
-      // Update ratio for water_to_product mode
-      const ratioField = document.getElementById("ratio")
-      if (ratioField) {
-        ratioField.value = ratio.toFixed(2)
-      }
-
-      // Update ratio for ratio_based mode
-      const ratioField2 = document.getElementById("ratio-2")
-      if (ratioField2) {
-        ratioField2.value = ratio.toFixed(2)
-      }
-
-      // Log for debugging
-      console.log(`Converted ${oldWaterAmount} ${oldWaterUnit} to ${newWaterAmount.toFixed(2)} ${newWaterUnit}`)
-    }
-  })
-}
 }
