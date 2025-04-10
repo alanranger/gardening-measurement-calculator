@@ -2379,7 +2379,7 @@ function updateDebugInfo() {
           ratioPerLiter = ratio
         } else if (waterUnit === "ml") {
           ratioPerLiter = ratio * 1000 // Convert from per ml to per liter
-        } else if (waterUnit === "gal_uk") {
+        } else if === "gal_uk") {
           ratioPerLiter = ratio / 4.55 // Convert from per gallon to per liter
         }
       } else if (calculationMode === "water_to_product") {
@@ -2856,11 +2856,11 @@ const TestRunner = {
     })
   },
 
-  // Test Unit Conversion - completely rewritten to bypass event handling issues
-  testUnitConversion(product) {
-    return new Promise((resolve) => {
+  // Test Unit Conversion
+  testUnitConversion: (product) =>
+    new Promise((resolve) => {
       // Set calculation mode
-      const modeRadio = document.querySelector('input[name="calculation-mode"][value="product_to_water"]')
+      var modeRadio = document.querySelector('input[name="calculation-mode"][value="product_to_water"]')
       if (modeRadio) {
         modeRadio.checked = true
         modeRadio.dispatchEvent(new Event("change"))
@@ -2886,17 +2886,16 @@ const TestRunner = {
 
         setTimeout(() => {
           // Check the result contains the expected values
-          const metricResult = document.getElementById("metric-result").textContent
-          const passed = metricResult.includes("10") && metricResult.includes("0.22") && metricResult.includes("gal")
+          var metricResult = document.getElementById("metric-result").textContent
+          var passed = metricResult.includes("10") && metricResult.includes("0.22") && metricResult.includes("gal")
 
           resolve({
-            passed,
-            message: `Result with gallons: ${metricResult}`,
+            passed: passed,
+            message: "Result with gallons: " + metricResult,
           })
         }, 300)
       }, 300)
-    })
-  },
+    }),
 
   // Test Rectangle Area Calculation
   async testRectangleAreaCalculation(product) {
