@@ -1,5 +1,5 @@
-// Consolidated test runner that combines functionality from various test scripts
-const TestRunner = {
+// Define TestRunner in the global scope
+window.TestRunner = {
   results: {
     total: 0,
     passed: 0,
@@ -225,5 +225,5 @@ const TestRunner = {
   },
 }
 
-// Make TestRunner available globally
-window.TestRunner = TestRunner
+// Explicitly log that TestRunner is now available
+console.log("TestRunner is now defined and available globally")

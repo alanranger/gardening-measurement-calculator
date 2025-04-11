@@ -50,19 +50,22 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
           // Check if TestRunner is defined in the global scope
           if (typeof window.TestRunner !== "undefined") {
+            console.log("Using window.TestRunner")
             window.TestRunner.runAllTests()
           } else if (typeof TestRunner !== "undefined") {
             // Try direct reference as fallback
+            console.log("Using direct TestRunner reference")
             TestRunner.runAllTests()
           } else {
             // If TestRunner is not available, try to use the TestSuite from calculator-test-script.js
             if (typeof TestSuite !== "undefined") {
+              console.log("Using TestSuite instead of TestRunner")
               TestSuite.runAllTests()
               if (testResults) {
                 testResults.textContent += "Using TestSuite instead of TestRunner.\n"
               }
             } else {
-              throw new Error("Neither TestRunner nor TestSuite is defined. Ensure test scripts are properly loaded.")
+              throw new Error("TestRunner is not defined. Ensure it is properly imported or declared.")
             }
           }
         } catch (error) {
