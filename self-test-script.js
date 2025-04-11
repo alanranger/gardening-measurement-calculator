@@ -48,14 +48,21 @@ document.addEventListener("DOMContentLoaded", () => {
       // Run tests after a short delay
       setTimeout(() => {
         try {
-          // Check if TestRunner is defined before using it
-          if (typeof TestRunner !== "undefined") {
+          // Check if TestRunner is defined in the global scope
+          if (typeof window.TestRunner !== "undefined") {
+            window.TestRunner.runAllTests()
+          } else if (typeof TestRunner !== "undefined") {
+            // Try direct reference as fallback
             TestRunner.runAllTests()
           } else {
-            const errorMessage = "TestRunner is not defined. Ensure it is properly imported or declared."
-            console.error(errorMessage)
-            if (testResults) {
-              testResults.textContent += "\n" + errorMessage + "\n"
+            // If TestRunner is not available, try to use the TestSuite from calculator-test-script.js
+            if (typeof TestSuite !== "undefined") {
+              TestSuite.runAllTests()
+              if (testResults) {
+                testResults.textContent += "Using TestSuite instead of TestRunner.\n"
+              }
+            } else {
+              throw new Error("Neither TestRunner nor TestSuite is defined. Ensure test scripts are properly loaded.")
             }
           }
         } catch (error) {
