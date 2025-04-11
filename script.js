@@ -821,33 +821,33 @@ const PRODUCT_TYPE_HINTS = {
 function getFormattedUnitDisplay(unit) {
   switch (unit) {
     case "l":
-      return "litre"
+      return "l" // Changed from "litre" to "l"
     case "ml":
-      return "millilitre"
+      return "ml" // Changed from "millilitre" to "ml"
     case "g":
-      return "gram"
+      return "g" // Changed from "gram" to "g"
     case "kg":
-      return "kilogram"
+      return "kg" // Changed from "kilogram" to "kg"
     case "oz":
-      return "ounce"
+      return "oz" // Changed from "ounce" to "oz"
     case "lb":
-      return "pound"
+      return "lb" // Changed from "pound" to "lb"
     case "gal_uk":
-      return "gallon (UK)"
+      return "gallon (UK)" // Keep this as is for clarity
     case "sq_m":
-      return "square metre"
+      return "sq m" // Changed from "square metre" to "sq m"
     case "sq_ft":
-      return "square foot"
+      return "sq ft" // Changed from "square foot" to "sq ft"
     case "sq_yd":
-      return "square yard"
+      return "sq yd" // Changed from "square yard" to "sq yd"
     case "plant":
       return "plant"
     case "cap":
       return "cap"
     case "tsp":
-      return "teaspoon"
+      return "tsp" // Changed from "teaspoon" to "tsp"
     case "tbsp":
-      return "tablespoon"
+      return "tbsp" // Changed from "tablespoon" to "tbsp"
     default:
       return unit
   }
@@ -864,6 +864,32 @@ function getDecimalPrecision(value) {
   } else {
     return 1 // Large values
   }
+}
+
+// Declare the missing functions
+function updateCalculatorInputs(selectedProduct) {
+  console.log("updateCalculatorInputs called with:", selectedProduct)
+  // Implementation for updateCalculatorInputs
+}
+
+function showAppropriateCalculator(selectedMethod) {
+  console.log("showAppropriateCalculator called with:", selectedMethod)
+  // Implementation for showAppropriateCalculator
+}
+
+function updateProductNameOptions() {
+  console.log("updateProductNameOptions called")
+  // Implementation for updateProductNameOptions
+}
+
+function performCalculation() {
+  console.log("performCalculation called")
+  // Implementation for performCalculation
+}
+
+function updateDebugInfo() {
+  console.log("updateDebugInfo called")
+  // Implementation for updateDebugInfo
 }
 
 // Initialize the application
@@ -1519,17 +1545,33 @@ function setupEventListeners() {
           testResults.textContent = "Running tests...\n\n"
         }
 
-        // Run tests after a short delay
-        setTimeout(() => {
-          try {
-            TestRunner.runAllTests()
-          } catch (error) {
-            console.error("Error running tests:", error)
+        // Declare TestRunner before using it
+        let TestRunner
+
+        // Dynamically import the test runner module
+        import("./test-runner.js")
+          .then((module) => {
+            TestRunner = module.default // Assign the default export to TestRunner
+
+            // Run tests after a short delay
+            setTimeout(() => {
+              try {
+                TestRunner.runAllTests()
+              } catch (error) {
+                console.error("Error running tests:", error)
+                if (testResults) {
+                  testResults.textContent += "\nError running tests: " + error.message + "\n"
+                }
+              }
+            }, 100)
+          })
+          .catch((error) => {
+            console.error("Error importing test-runner.js:", error)
+            const testResults = document.getElementById("test-results")
             if (testResults) {
-              testResults.textContent += "\nError running tests: " + error.message + "\n"
+              testResults.textContent += "\nError importing test-runner.js: " + error.message + "\n"
             }
-          }
-        }, 100)
+          })
       }
     }
   }
@@ -1621,7 +1663,179 @@ function updateProductTypeOptions(selectedMethod) {
     productTypeSelect.selectedIndex = 0
     updateProductNameOptions()
   }
+}
 
+// Update product type hint
+
+function updateRatioLabels(productUnit, waterUnit, isTarget = false) {
+  let ratioLabel1, ratioLabel2
+
+  if (!isTarget) {
+    ratioLabel1 = document.getElementById("ratio-label-1")
+    ratioLabel2 = document.getElementById("ratio-label-2")
+  } else {
+    ratioLabel1 = document.getElementById("ratio-label-3")
+    ratioLabel2 = document.getElementById("ratio-label-4")
+  }
+
+  if (ratioLabel1) {
+    ratioLabel1.textContent = `Product (${productUnit}) per`
+  }
+
+  if (ratioLabel2) {
+    ratioLabel2.textContent = `Water (${waterUnit})`
+  }
+}
+
+function calculateWaterMixing() {
+  // Get values from input fields
+  const productAmount = Number(document.getElementById("product-amount").value)
+  const productUnit = document.getElementById("product-unit").value
+  const waterAmount = Number(document.getElementById("water-amount").value)
+  const waterUnit = document.getElementById("water-unit").value
+  const capSize = Number(document.getElementById("cap-size").value)
+  const measurementType = document.querySelector('input[name="measurement-type"]:checked').value
+
+  // Validate inputs
+  if (isNaN(productAmount) || isNaN(waterAmount)) {
+    alert("Please enter valid numbers for product and water amounts.")
+    return
+  }
+
+  // Perform calculations
+  let ratioPerLiter = productAmount / waterAmount
+  if (waterUnit === "gal_uk") {
+    ratioPerLiter = ratioPerLiter / 4.546 // Convert UK gallons to liters
+  } else if (waterUnit === "ml") {
+    ratioPerLiter = ratioPerLiter * 1000 // Convert ml to liters
+  }
+
+  // Determine appropriate decimal precision
+  const precision = getDecimalPrecision(ratioPerLiter)
+
+  // Format results
+  const metricResult = `${productAmount.toFixed(1)} ${getFormattedUnitDisplay(productUnit)} for ${waterAmount.toFixed(1)} ${getFormattedUnitDisplay(waterUnit)}`
+  let wateringCanResult = ""
+
+  // Calculate for a standard watering can (4.5 litres)
+  const wateringCanAmount = ratioPerLiter * 4.5
+  wateringCanResult = `${wateringCanAmount.toFixed(1)} ${getFormattedUnitDisplay(productUnit)}`
+
+  // If using cap measurements, calculate cap amounts
+  if (measurementType === "cap") {
+    const mlAmount = wateringCanAmount * capSize
+    wateringCanResult = `${wateringCanAmount.toFixed(1)} caps (${mlAmount.toFixed(1)} ml)`
+  }
+
+  // Display results
+  document.getElementById("metric-result").textContent = metricResult
+  document.getElementById("watering-can-result").textContent =
+    `For a standard 4.5 ${getFormattedUnitDisplay("l")} watering can: ${wateringCanResult}`
+
+  // Update debug info
+  let debugString = "Calculation Details:\n"
+  debugString += `- Product Amount: ${productAmount} ${productUnit}\n`
+  debugString += `- Water Amount: ${waterAmount} ${waterUnit}\n`
+  debugString += `- Measurement Type: ${measurementType}\n`
+  debugString += `- Standardized Ratio: ${ratioPerLiter?.toFixed(2)} ${productUnit} per litre\n`
+  debugString += `- Watering Can Amount: ${wateringCanAmount} ${productUnit}\n`
+
+  document.getElementById("debug-info").textContent = debugString
+}
+
+function calculateDirectApplication() {
+  // Get values from input fields
+  const productAmount = Number(document.getElementById("product-amount").value)
+  const productUnit = document.getElementById("product-unit").value
+  const areaSize = Number(document.getElementById("area-size").value)
+  const areaUnit = document.getElementById("area-unit").value
+
+  // Validate inputs
+  if (isNaN(productAmount) || isNaN(areaSize)) {
+    alert("Please enter valid numbers for product amount and area size.")
+    return
+  }
+
+  // Perform calculations
+  let ratioPerSqMeter = productAmount / areaSize
+  if (areaUnit === "sq_ft") {
+    ratioPerSqMeter = ratioPerSqMeter * 10.764 // Convert square feet to square meters
+  } else if (areaUnit === "sq_yd") {
+    ratioPerSqMeter = ratioPerSqMeter * 1.196 // Convert square yards to square meters
+  }
+
+  // Determine appropriate decimal precision
+  const precision = getDecimalPrecision(ratioPerSqMeter)
+
+  // Format results
+  const metricResult = `${productAmount.toFixed(1)} ${getFormattedUnitDisplay(productUnit)} for ${areaSize.toFixed(1)} ${getFormattedUnitDisplay(areaUnit)}`
+  let smallAreaResult = ""
+
+  // Calculate for a small area (1 square meter)
+  const smallAreaAmount = ratioPerSqMeter * 1
+  smallAreaResult = `${smallAreaAmount.toFixed(1)} ${getFormattedUnitDisplay(productUnit)}`
+
+  // Display results
+  document.getElementById("metric-result").textContent = metricResult
+  document.getElementById("small-area-result").textContent =
+    `For a small 1 ${getFormattedUnitDisplay("sq_m")} area: ${smallAreaResult}`
+
+  // Update debug info
+  let debugString = "Calculation Details:\n"
+  debugString += `- Product Amount: ${productAmount} ${productUnit}\n`
+  debugString += `- Area Size: ${areaSize} ${areaUnit}\n`
+  debugString += `- Standardized Ratio: ${ratioPerSqMeter?.toFixed(2)} ${productUnit} per square meter\n`
+  debugString += `- Small Area Amount: ${smallAreaAmount} ${productUnit}\n`
+
+  document.getElementById("debug-info").textContent = debugString
+}
+
+function calculateWaterTreatment() {
+  // Get values from input fields
+  const productAmount = Number(document.getElementById("product-amount").value)
+  const productUnit = document.getElementById("product-unit").value
+  const waterVolume = Number(document.getElementById("water-volume").value)
+  const waterUnit = document.getElementById("water-unit").value
+
+  // Validate inputs
+  if (isNaN(productAmount) || isNaN(waterVolume)) {
+    alert("Please enter valid numbers for product amount and water volume.")
+    return
+  }
+
+  // Perform calculations
+  let ratioPerLiter = productAmount / waterVolume
+  if (waterUnit === "gal_uk") {
+    ratioPerLiter = ratioPerLiter / 4.546 // Convert UK gallons to liters
+  } else if (waterUnit === "ml") {
+    ratioPerLiter = ratioPerLiter * 1000 // Convert ml to liters
+  }
+
+  // Determine appropriate decimal precision
+  const precision = getDecimalPrecision(ratioPerLiter)
+
+  // Format results
+  const metricResult = `${productAmount.toFixed(1)} ${getFormattedUnitDisplay(productUnit)} for ${waterVolume.toFixed(1)} ${getFormattedUnitDisplay(waterUnit)}`
+  let smallPondResult = ""
+
+  // Calculate for a small pond (1000 liters)
+  const smallPondAmount = ratioPerLiter * 1000
+  smallPondResult = `${smallPondAmount.toFixed(1)} ${getFormattedUnitDisplay(productUnit)}`
+
+  // Display results
+  document.getElementById("metric-result").textContent = metricResult
+  document.getElementById("small-pond-result").textContent =
+    `For a small 1000 ${getFormattedUnitDisplay("l")} pond: ${smallPondResult}`
+
+  // Update debug info
+  let debugString = "Calculation Details:\n"
+  debugString += `- Product Amount: ${productAmount} ${productUnit}\n`
+  debugString += `- Water Volume: ${waterVolume} ${waterUnit}\n`
+  debugString += `- Standardized Ratio: ${ratioPerLiter?.toFixed(2)} ${productUnit} per litre\n`
+  debugString += `- Small Pond Amount: ${smallPondAmount} ${productUnit}\n`
+
+  document.getElementById("debug-info").textContent = debugString
+}
 // Update product type hint
   if (productTypeHint && productTypeSelect.value) {
     productTypeHint.textContent = PRODUCT_TYPE_HINTS[productTypeSelect.value] || ""
