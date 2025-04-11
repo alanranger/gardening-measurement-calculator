@@ -12,7 +12,7 @@ window.TestRunner = {
   },
 
   // Run all tests
-  runAllTests() {
+  async runAllTests() {
     console.log("%c🧪 STARTING TEST SUITE 🧪", "font-size: 16px; font-weight: bold; color: #2e7d32;")
 
     const testResults = document.getElementById("test-results")
@@ -33,124 +33,113 @@ window.TestRunner = {
       }
     }
 
-    // Run basic tests first
-    this.testWaterMixingCalculations()
-    this.testDirectApplicationCalculations()
-    this.testWaterTreatmentCalculations()
-    this.testUnitConversions()
-    this.testProductSelection()
-    this.testEdgeCases()
+    try {
+      // Run basic tests first
+      await this.testWaterMixingCalculations()
+      await this.testDirectApplicationCalculations()
+      await this.testWaterTreatmentCalculations()
+      await this.testUnitConversions()
+      await this.testProductSelection()
+      await this.testEdgeCases()
+    } catch (error) {
+      console.error("Error running tests:", error)
+      if (testResults) {
+        testResults.textContent += `\nError running tests: ${error.message}\n`
+      }
+    } finally {
+      // Report results
+      this.results.endTime = new Date()
+      this.reportResults()
 
-    // Report results
-    this.results.endTime = new Date()
-    this.reportResults()
-
-    // Update progress to 100%
-    if (progressBar && progressText) {
-      progressBar.style.width = "100%"
-      progressText.textContent = "100%"
+      // Update progress to 100%
+      if (progressBar && progressText) {
+        progressBar.style.width = "100%"
+        progressText.textContent = "100%"
+      }
     }
   },
 
   // Test water mixing calculations
-  testWaterMixingCalculations() {
+  async testWaterMixingCalculations() {
     console.log("%c📊 Testing Water Mixing Calculations", "font-size: 14px; font-weight: bold; color: blue;")
 
     // Simple test for water mixing
-    const result = this.testSimpleWaterMixing()
+    const result = await this.testSimpleWaterMixing()
     this.logTestResult("Simple Water Mixing", result.passed, result.message)
-
-    // Update progress
-    this.updateProgress(16)
   },
 
   // Test direct application calculations
-  testDirectApplicationCalculations() {
+  async testDirectApplicationCalculations() {
     console.log("%c🌱 Testing Direct Application Calculations", "font-size: 14px; font-weight: bold; color: green;")
 
     // Simple test for direct application
-    const result = this.testSimpleDirectApplication()
+    const result = await this.testSimpleDirectApplication()
     this.logTestResult("Simple Direct Application", result.passed, result.message)
-
-    // Update progress
-    this.updateProgress(33)
   },
 
   // Test water treatment calculations
-  testWaterTreatmentCalculations() {
+  async testWaterTreatmentCalculations() {
     console.log("%c💧 Testing Water Treatment Calculations", "font-size: 14px; font-weight: bold; color: blue;")
 
     // Simple test for water treatment
-    const result = this.testSimpleWaterTreatment()
+    const result = await this.testSimpleWaterTreatment()
     this.logTestResult("Simple Water Treatment", result.passed, result.message)
-
-    // Update progress
-    this.updateProgress(50)
   },
 
   // Test unit conversions
-  testUnitConversions() {
+  async testUnitConversions() {
     console.log("%c📏 Testing Unit Conversions", "font-size: 14px; font-weight: bold; color: orange;")
 
     // Simple test for unit conversion
-    const result = this.testSimpleUnitConversion()
+    const result = await this.testSimpleUnitConversion()
     this.logTestResult("Simple Unit Conversion", result.passed, result.message)
-
-    // Update progress
-    this.updateProgress(66)
   },
 
   // Test product selection
-  testProductSelection() {
+  async testProductSelection() {
     console.log("%c🧴 Testing Product Selection", "font-size: 14px; font-weight: bold; color: purple;")
 
     // Simple test for product selection
-    const result = this.testSimpleProductSelection()
+    const result = await this.testSimpleProductSelection()
     this.logTestResult("Simple Product Selection", result.passed, result.message)
-
-    // Update progress
-    this.updateProgress(83)
   },
 
   // Test edge cases
-  testEdgeCases() {
+  async testEdgeCases() {
     console.log("%c⚠️ Testing Edge Cases", "font-size: 14px; font-weight: bold; color: red;")
 
     // Simple test for edge cases
-    const result = this.testSimpleEdgeCase()
+    const result = await this.testSimpleEdgeCase()
     this.logTestResult("Simple Edge Case", result.passed, result.message)
-
-    // Update progress
-    this.updateProgress(100)
   },
 
   // Simple test implementations
-  testSimpleWaterMixing() {
+  async testSimpleWaterMixing() {
     // This is a simplified test that always passes
     return { passed: true, message: "Basic water mixing calculation test passed" }
   },
 
-  testSimpleDirectApplication() {
+  async testSimpleDirectApplication() {
     // This is a simplified test that always passes
     return { passed: true, message: "Basic direct application calculation test passed" }
   },
 
-  testSimpleWaterTreatment() {
+  async testSimpleWaterTreatment() {
     // This is a simplified test that always passes
     return { passed: true, message: "Basic water treatment calculation test passed" }
   },
 
-  testSimpleUnitConversion() {
+  async testSimpleUnitConversion() {
     // This is a simplified test that always passes
     return { passed: true, message: "Basic unit conversion test passed" }
   },
 
-  testSimpleProductSelection() {
+  async testSimpleProductSelection() {
     // This is a simplified test that always passes
     return { passed: true, message: "Basic product selection test passed" }
   },
 
-  testSimpleEdgeCase() {
+  async testSimpleEdgeCase() {
     // This is a simplified test that always passes
     return { passed: true, message: "Basic edge case test passed" }
   },
@@ -181,9 +170,11 @@ window.TestRunner = {
     // Update test results display
     const testResults = document.getElementById("test-results")
     if (testResults) {
-      testResults.textContent += `${passed ? "✓" : "✗"} ${testName}: ${passed ? "PASSED" : "FAILED"}\n`
+      testResults.textContent += `${passed ? "✓" : "✗"} ${testName}: ${passed ? "PASSED" : "FAILED"}
+`
       if (message) {
-        testResults.textContent += `  ${message}\n`
+        testResults.textContent += `  ${message}
+`
       }
       testResults.textContent += "\n"
     }
@@ -215,12 +206,19 @@ window.TestRunner = {
     // Update test results display
     const testResults = document.getElementById("test-results")
     if (testResults) {
-      testResults.textContent += `\n📊 TEST RESULTS SUMMARY 📊\n`
-      testResults.textContent += `Total Tests: ${this.results.total}\n`
-      testResults.textContent += `Passed Tests: ${this.results.passed}\n`
-      testResults.textContent += `Failed Tests: ${this.results.failed}\n`
-      testResults.textContent += `Pass Rate: ${passRate}%\n`
-      testResults.textContent += `Duration: ${duration} seconds\n`
+      testResults.textContent += `
+📊 TEST RESULTS SUMMARY 📊
+`
+      testResults.textContent += `Total Tests: ${this.results.total}
+`
+      testResults.textContent += `Passed Tests: ${this.results.passed}
+`
+      testResults.textContent += `Failed Tests: ${this.results.failed}
+`
+      testResults.textContent += `Pass Rate: ${passRate}%
+`
+      testResults.textContent += `Duration: ${duration} seconds
+`
     }
   },
 }

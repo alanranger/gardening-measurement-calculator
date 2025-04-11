@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Add click handler
-  selfTestButton.addEventListener("click", () => {
+  selfTestButton.addEventListener("click", async () => {
     // Open the test panel
     const testTrigger = document.getElementById("test-trigger")
     const testContent = document.getElementById("test-content")
@@ -46,35 +46,33 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // Run tests after a short delay
-      setTimeout(() => {
-        try {
-          // Check if TestRunner is defined in the global scope
-          if (typeof window.TestRunner !== "undefined") {
-            console.log("Using window.TestRunner")
-            window.TestRunner.runAllTests()
-          } else if (typeof TestRunner !== "undefined") {
-            // Try direct reference as fallback
-            console.log("Using direct TestRunner reference")
-            TestRunner.runAllTests()
-          } else {
-            // If TestRunner is not available, try to use the TestSuite from calculator-test-script.js
-            if (typeof TestSuite !== "undefined") {
-              console.log("Using TestSuite instead of TestRunner")
-              TestSuite.runAllTests()
-              if (testResults) {
-                testResults.textContent += "Using TestSuite instead of TestRunner.\n"
-              }
-            } else {
-              throw new Error("TestRunner is not defined. Ensure it is properly imported or declared.")
+      try {
+        // Check if TestRunner is defined in the global scope
+        if (typeof window.TestRunner !== "undefined") {
+          console.log("Using window.TestRunner")
+          await window.TestRunner.runAllTests()
+        } else if (typeof TestRunner !== "undefined") {
+          // Try direct reference as fallback
+          console.log("Using direct TestRunner reference")
+          await TestRunner.runAllTests()
+        } else {
+          // If TestRunner is not available, try to use the TestSuite from calculator-test-script.js
+          if (typeof TestSuite !== "undefined") {
+            console.log("Using TestSuite instead of TestRunner")
+            TestSuite.runAllTests()
+            if (testResults) {
+              testResults.textContent += "Using TestSuite instead of TestRunner.\n"
             }
-          }
-        } catch (error) {
-          console.error("Error running tests:", error)
-          if (testResults) {
-            testResults.textContent += "\nError running tests: " + error.message + "\n"
+          } else {
+            throw new Error("TestRunner is not defined. Ensure it is properly imported or declared.")
           }
         }
-      }, 100)
+      } catch (error) {
+        console.error("Error running tests:", error)
+        if (testResults) {
+          testResults.textContent += `\nError running tests: ${error.message}\n`
+        }
+      }
     }
   })
 
