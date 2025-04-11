@@ -1112,18 +1112,23 @@ function setupEventListeners() {
     })
   }
 
-  // Debug panel toggle
+  // Debug panel toggle - Direct click handler for iframe compatibility
   const debugTrigger = document.getElementById("debug-trigger")
   const debugContent = document.getElementById("debug-content")
 
   if (debugTrigger && debugContent) {
-    debugTrigger.addEventListener("click", function () {
+    debugTrigger.onclick = function () {
       debugContent.classList.toggle("hidden")
       const icon = this.querySelector(".icon")
       if (icon) {
         icon.textContent = debugContent.classList.contains("hidden") ? "▼" : "▲"
       }
-    })
+
+      // Update debug info when opened
+      if (!debugContent.classList.contains("hidden")) {
+        updateDebugInfo()
+      }
+    }
   }
 
   // Copy debug info button
@@ -1158,7 +1163,7 @@ function setupEventListeners() {
     })
   })
 
-  // Container shape change\
+  // Container shape change
   const containerShapeRadios = document.querySelectorAll('input[name="container-shape"]')
   containerShapeRadios.forEach((radio) => {
     radio.addEventListener("change", function () {
@@ -1497,18 +1502,47 @@ function setupEventListeners() {
     })
   })
 
-  // Test panel toggle
+  // Test panel toggle - Direct click handler for iframe compatibility
   const testTrigger = document.getElementById("test-trigger")
   const testContent = document.getElementById("test-content")
 
   if (testTrigger && testContent) {
-    testTrigger.addEventListener("click", function () {
+    testTrigger.onclick = function () {
       testContent.classList.toggle("hidden")
       const icon = this.querySelector(".icon")
       if (icon) {
         icon.textContent = testContent.classList.contains("hidden") ? "▼" : "▲"
       }
-    })
+
+      // Run tests if panel is opened
+      if (!testContent.classList.contains("hidden")) {
+        // Reset progress bar
+        const progressBar = document.getElementById("test-progress-bar")
+        const progressText = document.getElementById("test-progress-text")
+        if (progressBar && progressText) {
+          progressBar.style.width = "0%"
+          progressText.textContent = "0%"
+        }
+
+        // Clear previous test results
+        const testResults = document.getElementById("test-results")
+        if (testResults) {
+          testResults.textContent = "Running tests...\n\n"
+        }
+
+        // Run tests after a short delay
+        setTimeout(() => {
+          try {
+            TestRunner.runAllTests()
+          } catch (error) {
+            console.error("Error running tests:", error)
+            if (testResults) {
+              testResults.textContent += "\nError running tests: " + error.message + "\n"
+            }
+          }
+        }, 100)
+      }
+    }
   }
 
   // Copy test results button
@@ -1527,6 +1561,23 @@ function setupEventListeners() {
           })
       }
     })
+  }
+
+  // Check for debug parameter in URL
+  const urlParams = new URLSearchParams(window.location.search)
+  const debugMode = urlParams.get("debug") === "true"
+
+  if (debugMode) {
+    // Automatically show debug panel
+    if (debugContent) {
+      debugContent.classList.remove("hidden")
+      updateDebugInfo()
+    }
+
+    // Automatically show test panel if needed
+    if (testContent) {
+      testContent.classList.remove("hidden")
+    }
   }
 }
 
@@ -1740,6 +1791,7 @@ function updateCalculatorInputs(product) {
       for (let i = 0; i < waterUnitSelect.options.length; i++) {
         if (waterUnitSelect.options[i].value === product.defaultWaterUnit) {
           waterUnitSelect.selectedIndex = i
+
           break
         }
       }
@@ -2042,6 +2094,7 @@ function calculateWaterMixing() {
 
     if (selectedId) {
       // Find the selected product
+
       const allProducts = [...COMMON_PRODUCTS, ...AREA_TREATMENT_PRODUCTS, ...WATER_TREATMENT_PRODUCTS]
       const selectedProduct = allProducts.find((p) => p.id === selectedId)
 
@@ -2073,10 +2126,10 @@ function calculateWaterMixing() {
           }
 
           warningElement.innerHTML = `
-            <p><strong>Warning:</strong> The ratio you entered (${ratioPerLiter.toFixed(2)} ${productUnit} per liter) 
-            differs significantly from the recommended ratio (${recommendedRatioPerLiter.toFixed(2)} ${productUnit} per liter) 
-            for this product. Please check the product instructions.</p>
-          `
+          <p><strong>Warning:</strong> The ratio you entered (${ratioPerLiter.toFixed(2)} ${productUnit} per liter) 
+          differs significantly from the recommended ratio (${recommendedRatioPerLiter.toFixed(2)} ${productUnit} per liter) 
+          for this product. Please check the product instructions.</p>
+        `
         } else {
           // Remove warning if it exists
           const warningElement = document.getElementById("ratio-warning")
@@ -2099,9 +2152,9 @@ function calculateWaterMixing() {
   const precision = getDecimalPrecision(productAmount)
 
   userRequestedResult.innerHTML = `
-  <h3>Your Requested Amount</h3>
-  <p>${productAmount.toFixed(precision)} ${getFormattedUnitDisplay(productUnit)} for ${waterAmount.toFixed(2)} ${getFormattedUnitDisplay(waterUnit)}</p>
-  <p class="hint">Based on ${ratio.toFixed(3)} ${getFormattedUnitDisplay(productUnit)} per ${getFormattedUnitDisplay(waterUnit)}</p>
+<h3>Your Requested Amount</h3>
+<p>${productAmount.toFixed(precision)} ${getFormattedUnitDisplay(productUnit)} for ${waterAmount.toFixed(2)} ${getFormattedUnitDisplay(waterUnit)}</p>
+<p class="hint">Based on ${ratio.toFixed(3)} ${getFormattedUnitDisplay(productUnit)} per ${getFormattedUnitDisplay(waterUnit)}</p>
 `
 
   // Find the results container and add the new card
@@ -2385,22 +2438,23 @@ function updateDebugInfo() {
 
     // Build debug string
     let debugString = `
-      Application Method: ${applicationMethod}
-      Product Type: ${productType}
-      Product Name: ${productName}
-      Calculation Mode: ${calculationMode}
-      Measurement Type: ${measurementType}
-      
-      Product Amount: ${productAmount} ${productUnit}
-      Water Amount: ${waterAmount} ${waterUnit}
-      Ratio: ${ratio} ${productUnit} per ${waterUnit}
-      Ratio (standardized): ${ratioPerLiter?.toFixed(4)} ${productUnit} per liter
-    `
+    Application Method: ${applicationMethod}
+    Product Type: ${productType}
+    Product Name: ${productName}
+    Calculation Mode: ${calculationMode}
+    Measurement Type: ${measurementType}
+    
+    Product Amount: ${productAmount} ${productUnit}
+    Water Amount: ${waterAmount} ${waterUnit}
+    Ratio: ${ratio} ${productUnit} per ${waterUnit}
+    Ratio (standardized): ${ratioPerLiter?.toFixed(4)} ${productUnit} per liter
+  `
 
     // Add measurement-specific debug info
     if (measurementType === "cap") {
       const capSize = document.getElementById("cap-size").value
-      debugString += `\n    Cap Size: ${capSize} ml`
+      debugString += `
+   Cap Size: ${capSize} ml`
     }
 
     // Add scoop-specific debug info
@@ -2408,7 +2462,8 @@ function updateDebugInfo() {
     if (hasScoop) {
       const scoopSize = document.getElementById("scoop-size").value
       const scoopUnit = document.getElementById("scoop-unit").value
-      debugString += `\n    Scoop Size: ${scoopSize} ${scoopUnit}`
+      debugString += `
+   Scoop Size: ${scoopSize} ${scoopUnit}`
     }
 
     // Add calculation summary with unit conversions
@@ -2419,841 +2474,679 @@ function updateDebugInfo() {
       waterAmountInLiters = waterAmount / 1000 // Convert ml to liters
     }
 
-    debugString += `\n\nCalculation Summary:
-      - User requested: ${waterAmount} ${waterUnit} (${waterAmountInLiters.toFixed(2)} liters)
-      - Using ratio: ${ratio} ${productUnit} per ${waterUnit} (${ratioPerLiter?.toFixed(4)} ${productUnit} per liter)
-      - Calculation: ${ratioPerLiter?.toFixed(4)} × ${waterAmountInLiters.toFixed(2)} = ${productAmount} ${productUnit}`
+    debugString += `
+
+Calculation Summary:
+    - User requested: ${waterAmount} ${waterUnit} (${waterAmountInLiters.toFixed(2)} liters)
+    - Using ratio: ${ratio} ${productUnit} per ${waterUnit} (${ratioPerLiter?.toFixed(4)} ${productUnit} per liter)
+    - Calculation: ${ratioPerLiter?.toFixed(4)} × ${waterAmountInLiters.toFixed(2)} = ${productAmount} ${productUnit}`
 
     debugInfo.textContent = debugString
   }
 }
 
-// Comprehensive Test Suite
+// Test Runner for comprehensive testing
 const TestRunner = {
-  results: {
-    total: 0,
-    passed: 0,
-    failed: 0,
-    productsTested: 0,
-    productsByCategory: {},
-    testDetails: [],
-    startTime: null,
-    endTime: null,
-  },
-
-  // Run all tests
-  async runAllTests() {
-    const testResults = document.getElementById("test-results")
-    const progressBar = document.getElementById("test-progress-bar")
-    const progressText = document.getElementById("test-progress-text")
-
-    if (testResults) {
-      testResults.textContent = "🧪 STARTING COMPREHENSIVE TEST SUITE 🧪\n\n"
-      this.results = {
-        total: 0,
-        passed: 0,
-        failed: 0,
-        productsTested: 0,
-        productsByCategory: {},
-        testDetails: [],
-        startTime: new Date(),
-        endTime: null,
-      }
-    }
-
-    // Get all products from the database
-    const allProducts = [...COMMON_PRODUCTS, ...AREA_TREATMENT_PRODUCTS, ...WATER_TREATMENT_PRODUCTS]
-
-    // Count products by category and application method
-    this.countProductsByCategory(allProducts)
-
-    if (testResults) {
-      testResults.textContent += `Found ${allProducts.length} products to test.\n\n`
-      testResults.textContent += "Product counts by category:\n"
-      for (const [category, count] of Object.entries(this.results.productsByCategory)) {
-        testResults.textContent += `  ${category}: ${count}\n`
-      }
-      testResults.textContent += "\n"
-    }
-
-    // Test a representative sample of products from each category
-    const sampleSize = 2 // Test 2 products from each category to keep the test quick
-
-    // Get sample products from each category
-    const waterMixingProducts = COMMON_PRODUCTS.filter((p) => p.applicationMethod === "water_mixing").slice(
-      0,
-      sampleSize,
-    )
-    const directApplicationProducts = AREA_TREATMENT_PRODUCTS.filter(
-      (p) => p.applicationMethod === "direct_application",
-    ).slice(0, sampleSize)
-    const waterTreatmentProducts = WATER_TREATMENT_PRODUCTS.slice(0, sampleSize)
-
-    const totalProductsToTest =
-      waterMixingProducts.length + directApplicationProducts.length + waterTreatmentProducts.length
-    let productsCompleted = 0
-
-    // Test water mixing products
-    if (testResults) {
-      testResults.textContent += "📊 Testing Water Mixing Products\n"
-    }
-
-    for (const product of waterMixingProducts) {
-      await this.testWaterMixingProduct(product)
-      this.results.productsTested++
-      productsCompleted++
-
-      // Update progress
-      if (progressBar && progressText) {
-        const progress = Math.round((productsCompleted / totalProductsToTest) * 100)
-        progressBar.style.width = `${progress}%`
-        progressText.textContent = `${progress}%`
-      }
-    }
-
-    // Test direct application products
-    if (testResults) {
-      testResults.textContent += "\n🌱 Testing Direct Application Products\n"
-    }
-
-    for (const product of directApplicationProducts) {
-      await this.testDirectApplicationProduct(product)
-      this.results.productsTested++
-      productsCompleted++
-
-      // Update progress
-      if (progressBar && progressText) {
-        const progress = Math.round((productsCompleted / totalProductsToTest) * 100)
-        progressBar.style.width = `${progress}%`
-        progressText.textContent = `${progress}%`
-      }
-    }
-
-    // Test water treatment products
-    if (testResults) {
-      testResults.textContent += "\n💧 Testing Water Treatment Products\n"
-    }
-
-    for (const product of waterTreatmentProducts) {
-      await this.testWaterTreatmentProduct(product)
-      this.results.productsTested++
-      productsCompleted++
-
-      // Update progress
-      if (progressBar && progressText) {
-        const progress = Math.round((productsCompleted / totalProductsToTest) * 100)
-        progressBar.style.width = `${progress}%`
-        progressText.textContent = `${progress}%`
-      }
-    }
-
-    // Report results
-    this.results.endTime = new Date()
-    this.reportResults()
-  },
-
-  // Count products by category and application method
-  countProductsByCategory(allProducts) {
-    const counts = {}
-
-    allProducts.forEach((product) => {
-      const key = `${product.applicationMethod}_${product.type}`
-      counts[key] = (counts[key] || 0) + 1
-    })
-
-    this.results.productsByCategory = counts
-  },
-
-  // Test a water mixing product
-  async testWaterMixingProduct(product) {
-    const testResults = document.getElementById("test-results")
-    if (testResults) {
-      testResults.textContent += `\nTesting product: ${product.name} (${product.id})\n`
-    }
-
-    try {
-      // Setup calculator with this product
-      await this.setupCalculator("water_mixing", product.type, product.id)
-
-      // Test 1: Verify default values match manufacturer instructions
-      const defaultTest = await this.testProductDefaultValues(product)
-      this.logTestResult(`Default Values - ${product.name}`, defaultTest.passed, defaultTest.message)
-
-      // Test 2: Product to Water mode
-      const productToWaterTest = await this.testProductToWaterMode(product)
-      this.logTestResult(`Product to Water - ${product.name}`, productToWaterTest.passed, productToWaterTest.message)
-
-      // Test 3: Water to Product mode
-      const waterToProductTest = await this.testWaterToProductMode(product)
-      this.logTestResult(`Water to Product - ${product.name}`, waterToProductTest.passed, waterToProductTest.message)
-
-      // Test 4: Ratio Based mode
-      const ratioBasedTest = await this.testRatioBasedMode(product)
-      this.logTestResult(`Ratio Based - ${product.name}`, ratioBasedTest.passed, ratioBasedTest.message)
-
-      // Test 5: Unit conversion
-      const unitConversionTest = await this.testUnitConversion(product)
-      this.logTestResult(`Unit Conversion - ${product.name}`, unitConversionTest.passed, unitConversionTest.message)
-    } catch (error) {
-      console.error(`Error testing ${product.name}:`, error)
-      this.logTestResult(`Testing ${product.name}`, false, `Error: ${error.message}`)
-    }
-  },
-
-  // Test a direct application product
-  async testDirectApplicationProduct(product) {
-    const testResults = document.getElementById("test-results")
-    if (testResults) {
-      testResults.textContent += `\nTesting product: ${product.name} (${product.id})\n`
-    }
-
-    try {
-      // Setup calculator with this product
-      await this.setupCalculator("direct_application", product.type, product.id)
-
-      // Test 1: Verify default values match manufacturer instructions
-      const defaultTest = await this.testProductDefaultValues(product)
-      this.logTestResult(`Default Values - ${product.name}`, defaultTest.passed, defaultTest.message)
-
-      // Test 2: Rectangle area calculation
-      const rectangleTest = await this.testRectangleAreaCalculation(product)
-      this.logTestResult(`Rectangle Area - ${product.name}`, rectangleTest.passed, rectangleTest.message)
-
-      // Test 3: Circle area calculation
-      const circleTest = await this.testCircleAreaCalculation(product)
-      this.logTestResult(`Circle Area - ${product.name}`, circleTest.passed, circleTest.message)
-    } catch (error) {
-      console.error(`Error testing ${product.name}:`, error)
-      this.logTestResult(`Testing ${product.name}`, false, `Error: ${error.message}`)
-    }
-  },
-
-  // Test a water treatment product
-  async testWaterTreatmentProduct(product) {
-    const testResults = document.getElementById("test-results")
-    if (testResults) {
-      testResults.textContent += `\nTesting product: ${product.name} (${product.id})\n`
-    }
-
-    try {
-      // Setup calculator with this product
-      await this.setupCalculator("water_treatment", product.type, product.id)
-
-      // Test 1: Verify default values match manufacturer instructions
-      const defaultTest = await this.testProductDefaultValues(product)
-      this.logTestResult(`Default Values - ${product.name}`, defaultTest.passed, defaultTest.message)
-
-      // Test 2: Rectangular container calculation
-      const rectangularTest = await this.testRectangularContainerCalculation(product)
-      this.logTestResult(`Rectangular Container - ${product.name}`, rectangularTest.passed, rectangularTest.message)
-
-      // Test 3: Circular container calculation
-      const circularTest = await this.testCircularCalculation(product)
-      this.logTestResult(`Circular Container - ${product.name}`, circularTest.passed, circularTest.message)
-
-      // Test 4: Manual volume entry
-      const manualVolumeTest = await this.testManualVolumeEntry(product)
-      this.logTestResult(`Manual Volume - ${product.name}`, manualVolumeTest.passed, manualVolumeTest.message)
-    } catch (error) {
-      console.error(`Error testing ${product.name}:`, error)
-      this.logTestResult(`Testing ${product.name}`, false, `Error: ${error.message}`)
-    }
-  },
-
-  // Helper function to setup calculator for testing
-  async setupCalculator(applicationMethod, productType, productId) {
-    return new Promise((resolve) => {
-      // Set application method
-      const applicationMethodSelect = document.getElementById("application-method")
-      applicationMethodSelect.value = applicationMethod
-      applicationMethodSelect.dispatchEvent(new Event("change"))
-
-      // Wait for product types to load
-      setTimeout(() => {
-        // Set product type
-        const productTypeSelect = document.getElementById("product-type")
-        productTypeSelect.value = productType
-        productTypeSelect.dispatchEvent(new Event("change"))
-
-        // Wait for product names to load
-        setTimeout(() => {
-          // Set product
-          const productNameSelect = document.getElementById("product-name-select")
-          productNameSelect.value = productId
-          productNameSelect.dispatchEvent(new Event("change"))
-
-          // Wait for product to load
-          setTimeout(resolve, 300)
-        }, 300)
-      }, 300)
-    })
-  },
-
-  // Test product default values
-  async testProductDefaultValues(product) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        let passed = true
-        let message = ""
-
-        if (product.applicationMethod === "water_mixing") {
-          const productAmount = document.getElementById("product-amount").value
-          const productUnit = document.getElementById("product-unit").value
-          const waterAmount = document.getElementById("water-amount").value
-          const waterUnit = document.getElementById("water-unit").value
-
-          passed =
-            Math.abs(Number.parseFloat(productAmount) - product.defaultDosage) < 0.01 &&
-            productUnit === product.defaultDosageUnit &&
-            Math.abs(Number.parseFloat(waterAmount) - product.defaultWaterAmount) < 0.01 &&
-            waterUnit === product.defaultWaterUnit
-
-          message = `Expected: ${product.defaultDosage} ${product.defaultDosageUnit} for ${product.defaultWaterAmount} ${product.defaultWaterUnit}, Got: ${productAmount} ${productUnit} for ${waterAmount} ${waterUnit}`
-        } else if (product.applicationMethod === "direct_application") {
-          const applicationRate = document.getElementById("application-rate").value
-          const rateUnit = document.getElementById("rate-unit").value
-          const rateAreaUnit = document.getElementById("rate-area-unit").value
-
-          passed =
-            Math.abs(Number.parseFloat(applicationRate) - product.defaultDosage) < 0.01 &&
-            rateUnit === product.defaultDosageUnit &&
-            rateAreaUnit === product.defaultWaterUnit
-
-          message = `Expected: ${product.defaultDosage} ${product.defaultDosageUnit} per ${product.defaultWaterUnit}, Got: ${applicationRate} ${rateUnit} per ${rateAreaUnit}`
-        } else if (product.applicationMethod === "water_treatment") {
-          const dosageAmount = document.getElementById("dosage-amount").value
-          const dosageUnit = document.getElementById("dosage-unit").value
-
-          passed =
-            Math.abs(Number.parseFloat(dosageAmount) - product.defaultDosage) < 0.01 &&
-            dosageUnit === product.defaultDosageUnit
-
-          message = `Expected: ${product.defaultDosage} ${product.defaultDosageUnit}, Got: ${dosageAmount} ${dosageUnit}`
-        }
-
-        resolve({ passed, message })
-      }, 300)
-    })
-  },
-
-  // Test Product to Water mode
-  async testProductToWaterMode(product) {
-    return new Promise((resolve) => {
-      // Set calculation mode
-      const modeRadio = document.querySelector('input[name="calculation-mode"][value="product_to_water"]')
-      if (modeRadio) {
-        modeRadio.checked = true
-        modeRadio.dispatchEvent(new Event("change"))
-      }
-
-      // Set custom values
-      document.getElementById("product-amount").value = "10"
-      document.getElementById("water-amount").value = "2"
-
-      // Click calculate
-      document.getElementById("calculate-btn").click()
-
-      setTimeout(() => {
-        const metricResult = document.getElementById("metric-result").textContent
-        const passed = metricResult.includes("10") && metricResult.includes("2")
-
-        resolve({
-          passed,
-          message: `Result: ${metricResult}`,
-        })
-      }, 300)
-    })
-  },
-
-  // Test Water to Product mode
-  async testWaterToProductMode(product) {
-    return new Promise((resolve) => {
-      // Set calculation mode
-      const modeRadio = document.querySelector('input[name="calculation-mode"][value="water_to_product"]')
-      if (modeRadio) {
-        modeRadio.checked = true
-        modeRadio.dispatchEvent(new Event("change"))
-      }
-
-      // Set custom values
-      document.getElementById("water-amount-2").value = "5"
-      document.getElementById("ratio").value = "3"
-
-      // Click calculate
-      document.getElementById("calculate-btn").click()
-
-      setTimeout(() => {
-        const metricResult = document.getElementById("metric-result").textContent
-        const passed = metricResult.includes("15") && metricResult.includes("5")
-
-        resolve({
-          passed,
-          message: `Result: ${metricResult}`,
-        })
-      }, 300)
-    })
-  },
-
-  // Test Ratio Based mode
-  async testRatioBasedMode(product) {
-    return new Promise((resolve) => {
-      // Set calculation mode
-      const modeRadio = document.querySelector('input[name="calculation-mode"][value="ratio_based"]')
-      if (modeRadio) {
-        modeRadio.checked = true
-        modeRadio.dispatchEvent(new Event("change"))
-      }
-
-      // Set custom values
-      document.getElementById("ratio-2").value = "4"
-      document.getElementById("target-amount").value = "3"
-
-      // Click calculate
-      document.getElementById("calculate-btn").click()
-
-      setTimeout(() => {
-        const metricResult = document.getElementById("metric-result").textContent
-        const passed = metricResult.includes("12") && metricResult.includes("3")
-
-        resolve({
-          passed,
-          message: `Result: ${metricResult}`,
-        })
-      }, 300)
-    })
-  },
-
-  // Test Unit Conversion
-  async testUnitConversion(product) {
-    return new Promise((resolve) => {
-      // Set calculation mode
-      const modeRadio = document.querySelector('input[name="calculation-mode"][value="product_to_water"]')
-      if (modeRadio) {
-        modeRadio.checked = true
-        modeRadio.dispatchEvent(new Event("change"))
-      }
-
-      // Set initial values
-      document.getElementById("product-amount").value = "10"
-      document.getElementById("product-unit").value = "ml"
-      document.getElementById("water-amount").value = "1"
-      document.getElementById("water-unit").value = "l"
-
-      // Change units and trigger the change event properly
-      const waterUnitSelect = document.getElementById("water-unit")
-      waterUnitSelect.value = "gal_uk"
-
-      // Create and dispatch a proper change event
-      const changeEvent = new Event("change", { bubbles: true })
-      waterUnitSelect.dispatchEvent(changeEvent)
-
-      // Give it a bit more time to process the conversion
-      setTimeout(() => {
-        const waterAmount = document.getElementById("water-amount").value
-        const passed = Math.abs(Number.parseFloat(waterAmount) - 0.22) < 0.05 // Allow a bit more tolerance
-
-        resolve({
-          passed,
-          message: `Expected ~0.22 gallons, Got: ${waterAmount} gallons`,
-        })
-      }, 500) // Increased timeout to ensure conversion completes
-    })
-  },
-
-  // Test Rectangle Area Calculation
-  async testRectangleAreaCalculation(product) {
-    return new Promise((resolve) => {
-      // Set rectangle shape
-      const rectangleRadio = document.querySelector('input[name="area-shape"][value="rectangle"]')
-      if (rectangleRadio) {
-        rectangleRadio.checked = true
-        rectangleRadio.dispatchEvent(new Event("change"))
-      }
-
-      // Set dimensions
-      document.getElementById("length").value = "5"
-      document.getElementById("width").value = "4"
-      document.getElementById("area-unit").value = "m"
-
-      // Click calculate
-      document.getElementById("calculate-btn").click()
-
-      setTimeout(() => {
-        const totalAmountResult = document.getElementById("total-amount-result").textContent
-        const expectedAmount = product.defaultDosage * 20 // 5m × 4m = 20m²
-
-        // Check if the result contains the expected amount (allowing for some formatting differences)
-        const resultNumber = Number.parseFloat(totalAmountResult.replace(/[^\d.-]/g, ""))
-        const passed = Math.abs(resultNumber - expectedAmount) / expectedAmount < 0.05 // Within 5%
-
-        resolve({
-          passed,
-          message: `Expected ~${expectedAmount} ${product.defaultDosageUnit}, Got: ${totalAmountResult}`,
-        })
-      }, 300)
-    })
-  },
-
-  // Test Circle Area Calculation
-  async testCircleAreaCalculation(product) {
-    return new Promise((resolve) => {
-      // Set circle shape
-      const circleRadio = document.querySelector('input[name="area-shape"][value="circle"]')
-      if (circleRadio) {
-        circleRadio.checked = true
-        circleRadio.dispatchEvent(new Event("change"))
-      }
-
-      // Set dimensions
-      document.getElementById("diameter").value = "4"
-      document.getElementById("circle-unit").value = "m"
-
-      // Click calculate
-      document.getElementById("calculate-btn").click()
-
-      setTimeout(() => {
-        const totalAmountResult = document.getElementById("total-amount-result").textContent
-        const area = Math.PI * 2 * 2 // π × r²
-        const expectedAmount = product.defaultDosage * area
-
-        // Check if the result is approximately correct (within 5%)
-        const resultNumber = Number.parseFloat(totalAmountResult.replace(/[^\d.-]/g, ""))
-        const percentDifference = Math.abs((resultNumber - expectedAmount) / expectedAmount)
-        const passed = percentDifference < 0.05
-
-        resolve({
-          passed,
-          message: `Expected ~${expectedAmount.toFixed(1)} ${product.defaultDosageUnit}, Got: ${totalAmountResult}`,
-        })
-      }, 300)
-    })
-  },
-
-  // Test Rectangular Container Calculation
-  async testRectangularContainerCalculation(product) {
-    return new Promise((resolve) => {
-      // Set rectangular shape
-      const rectangularRadio = document.querySelector('input[name="container-shape"][value="rectangular"]')
-      if (rectangularRadio) {
-        rectangularRadio.checked = true
-        rectangularRadio.dispatchEvent(new Event("change"))
-      }
-
-      // Set dimensions
-      document.getElementById("dimension-unit").value = "m"
-      document.getElementById("container-length").value = "2"
-      document.getElementById("container-width").value = "1"
-      document.getElementById("container-height").value = "0.5"
-
-      // Click calculate
-      document.getElementById("calculate-btn").click()
-
-      setTimeout(() => {
-        const volumeResult = document.getElementById("volume-result").textContent
-        const totalAmountResult = document.getElementById("water-total-amount-result").textContent
-
-        const expectedVolume = 2 * 1 * 0.5 * 1000 // 1000 liters
-        const expectedAmount = (product.defaultDosage * expectedVolume) / 1000
-
-        // Extract numbers from the results
-        const volumeNumber = Number.parseFloat(volumeResult.replace(/[^\d.-]/g, ""))
-        const amountNumber = Number.parseFloat(totalAmountResult.replace(/[^\d.-]/g, ""))
-
-        const volumePassed = Math.abs(volumeNumber - expectedVolume) / expectedVolume < 0.05
-        const amountPassed = Math.abs(amountNumber - expectedAmount) / expectedAmount < 0.05
-
-        resolve({
-          passed: volumePassed && amountPassed,
-          message: `Volume: ${volumeResult}, Amount: ${totalAmountResult}`,
-        })
-      }, 300)
-    })
-  },
-
-  // Test Circular Container Calculation
-  async testCircularCalculation(product) {
-    return new Promise((resolve) => {
-      // Set circular shape
-      const circularRadio = document.querySelector('input[name="container-shape"][value="circular"]')
-      if (circularRadio) {
-        circularRadio.checked = true
-        circularRadio.dispatchEvent(new Event("change"))
-      }
-
-      // Set dimensions
-      document.getElementById("dimension-unit").value = "m"
-      document.getElementById("container-diameter").value = "2"
-      document.getElementById("container-depth").value = "0.5"
-
-      // Click calculate
-      document.getElementById("calculate-btn").click()
-
-      setTimeout(() => {
-        const volumeResult = document.getElementById("volume-result").textContent
-        const totalAmountResult = document.getElementById("water-total-amount-result").textContent
-
-        const expectedVolume = Math.PI * 1 * 1 * 0.5 * 1000 // π × r² × h × 1000
-        const expectedAmount = (product.defaultDosage * expectedVolume) / 1000
-
-        // Extract numbers from the results
-        const volumeNumber = Number.parseFloat(volumeResult.replace(/[^\d.-]/g, ""))
-        const amountNumber = Number.parseFloat(totalAmountResult.replace(/[^\d.-]/g, ""))
-
-        // Check if results are approximately correct (within 5%)
-        const volumePercentDiff = Math.abs((volumeNumber - expectedVolume) / expectedVolume)
-        const volumePassed = volumePercentDiff < 0.05
-
-        const amountPercentDiff = Math.abs((amountNumber - expectedAmount) / expectedAmount)
-        const amountPassed = amountPercentDiff < 0.05
-
-        resolve({
-          passed: volumePassed && amountPassed,
-          message: `Volume: ${volumeResult}, Amount: ${totalAmountResult}`,
-        })
-      }, 300)
-    })
-  },
-
-  // Test Manual Volume Entry
-  async testManualVolumeEntry(product) {
-    return new Promise((resolve) => {
-      // First, make sure we're not using a container shape
-      const noneRadio = document.createElement("input")
-      noneRadio.type = "radio"
-      noneRadio.name = "container-shape"
-      noneRadio.value = "none"
-      noneRadio.checked = true
-      document.body.appendChild(noneRadio)
-      noneRadio.dispatchEvent(new Event("change"))
-
-      // Set manual volume
-      document.getElementById("water-volume").value = "2000"
-      document.getElementById("water-volume-unit").value = "l"
-
-      // Click calculate
-      document.getElementById("calculate-btn").click()
-
-      setTimeout(() => {
-        const totalAmountResult = document.getElementById("water-total-amount-result").textContent
-        const expectedAmount = (product.defaultDosage * 2000) / 1000
-
-        // Extract number from the result
-        const resultNumber = Number.parseFloat(totalAmountResult.replace(/[^\d.-]/g, ""))
-        const passed = Math.abs(resultNumber - expectedAmount) / expectedAmount < 0.05
-
-        // Clean up the temporary radio button
-        document.body.removeChild(noneRadio)
-
-        resolve({
-          passed,
-          message: `Expected: ${expectedAmount} ${product.defaultDosageUnit}, Got: ${totalAmountResult}`,
-        })
-      }, 500)
-    })
-  },
-
-  // Helper function to log test results
-  logTestResult(testName, passed, message) {
-    this.results.total++
-
-    const testResults = document.getElementById("test-results")
-
-    if (passed) {
-      this.results.passed++
-      if (testResults) {
-        testResults.textContent += `  ✓ PASSED: ${testName}\n`
-        if (message) {
-          testResults.textContent += `    ${message}\n`
-        }
-      }
-    } else {
-      this.results.failed++
-      if (testResults) {
-        testResults.textContent += `  ✗ FAILED: ${testName}\n`
-        if (message) {
-          testResults.textContent += `    ${message}\n`
-        }
-      }
-    }
-
-    // Store test details
-    this.results.testDetails.push({
-      name: testName,
-      passed,
-      message,
-    })
-
-    // Scroll to bottom of test results
-    if (testResults) {
-      testResults.scrollTop = testResults.scrollHeight
-    }
-  },
-
-  // Report final results
-  reportResults() {
-    const passRate = ((this.results.passed / this.results.total) * 100).toFixed(2)
-    const duration = (this.results.endTime - this.results.startTime) / 1000
-
-    const testResults = document.getElementById("test-results")
-    if (testResults) {
-      testResults.textContent += "\n📊 TEST RESULTS SUMMARY 📊\n\n"
-      testResults.textContent += `Total Tests: ${this.results.total}\n`
-      testResults.textContent += `Passed Tests: ${this.results.passed}\n`
-      testResults.textContent += `Failed Tests: ${this.results.failed}\n`
-      testResults.textContent += `Pass Rate: ${passRate}%\n`
-      testResults.textContent += `Products Tested: ${this.results.productsTested}\n`
-      testResults.textContent += `Test Duration: ${duration.toFixed(2)} seconds\n\n`
-
-      testResults.textContent += "Products by Category:\n"
-      for (const [category, count] of Object.entries(this.results.productsByCategory)) {
-        testResults.textContent += `  ${category}: ${count}\n`
-      }
-
-      testResults.textContent += "\nTest Completed at: " + new Date().toLocaleString()
-
-      // Scroll to bottom of test results
-      testResults.scrollTop = testResults.scrollHeight
-    }
-  },
+ results: {
+   total: 0,
+   passed: 0,
+   failed: 0,
+   productsTested: 0,
+   productsByCategory: {},
+   testDetails: [],
+   startTime: null,
+   endTime: null,
+ },
+
+ // Run all tests
+ async runAllTests() {
+   const testResults = document.getElementById("test-results")
+   const progressBar = document.getElementById("test-progress-bar")
+   const progressText = document.getElementById("test-progress-text")
+
+   if (testResults) {
+     testResults.textContent = "🧪 STARTING COMPREHENSIVE TEST SUITE 🧪\n\n"
+     this.results = {
+       total: 0,
+       passed: 0,
+       failed: 0,
+       productsTested: 0,
+       productsByCategory: {},
+       testDetails: [],
+       startTime: new Date(),
+       endTime: null,
+     }
+   }
+
+   // Get all products from the database
+   const allProducts = [...COMMON_PRODUCTS, ...AREA_TREATMENT_PRODUCTS, ...WATER_TREATMENT_PRODUCTS]
+
+   // Count products by category and application method
+   this.countProductsByCategory(allProducts)
+
+   if (testResults) {
+     testResults.textContent += `Found ${allProducts.length} products to test.\n\n`
+     testResults.textContent += "Product counts by category:\n"
+     for (const [category, count] of Object.entries(this.results.productsByCategory)) {
+       testResults.textContent += `  ${category}: ${count}\n`
+     }
+     testResults.textContent += "\n"
+   }
+
+   // Test a representative sample of products from each category
+   const sampleSize = 2 // Test 2 products from each category to keep the test quick
+
+   // Get sample products from each category
+   const waterMixingProducts = COMMON_PRODUCTS.filter((p) => p.applicationMethod === "water_mixing").slice(
+     0,
+     sampleSize,
+   )
+   const directApplicationProducts = AREA_TREATMENT_PRODUCTS.filter(
+     (p) => p.applicationMethod === "direct_application",
+   ).slice(0, sampleSize)
+   const waterTreatmentProducts = WATER_TREATMENT_PRODUCTS.slice(0, sampleSize)
+
+   const totalProductsToTest =
+     waterMixingProducts.length + directApplicationProducts.length + waterTreatmentProducts.length
+   let productsCompleted = 0
+
+   // Test water mixing products
+   if (testResults) {
+     testResults.textContent += "📊 Testing Water Mixing Products\n"
+   }
+
+   for (const product of waterMixingProducts) {
+     await this.testWaterMixingProduct(product)
+     this.results.productsTested++
+     productsCompleted++
+
+     // Update progress
+     if (progressBar && progressText) {
+       const progress = Math.round((productsCompleted / totalProductsToTest) * 100)
+       progressBar.style.width = `${progress}%`
+       progressText.textContent = `${progress}%`
+     }
+   }
+
+   // Test direct application products
+   if (testResults) {
+     testResults.textContent += "\n🌱 Testing Direct Application Products\n"
+   }
+
+   for (const product of directApplicationProducts) {
+     await this.testDirectApplicationProduct(product)
+     this.results.productsTested++
+     productsCompleted++
+
+     // Update progress
+     if (progressBar && progressText) {
+       const progress = Math.round((productsCompleted / totalProductsToTest) * 100)
+       progressBar.style.width = `${progress}%`
+       progressText.textContent = `${progress}%`
+     }
+   }
+
+   // Test water treatment products
+   if (testResults) {
+     testResults.textContent += "\n💧 Testing Water Treatment Products\n"
+   }
+
+   for (const product of waterTreatmentProducts) {
+     await this.testWaterTreatmentProduct(product)
+     this.results.productsTested++
+     productsCompleted++
+
+     // Update progress
+     if (progressBar && progressText) {
+       const progress = Math.round((productsCompleted / totalProductsToTest) * 100)
+       progressBar.style.width = `${progress}%`
+       progressText.textContent = `${progress}%`
+     }
+   }
+
+   // Report results
+   this.results.endTime = new Date()
+   this.reportResults()
+ },
+
+ // Count products by category and application method
+ countProductsByCategory(allProducts) {
+   const counts = {}
+
+   allProducts.forEach((product) => {
+     const key = `${product.applicationMethod}_${product.type}`
+     counts[key] = (counts[key] || 0) + 1
+   })
+
+   this.results.productsByCategory = counts
+ },
+
+ // Test a water mixing product
+ async testWaterMixingProduct(product) {
+   const testResults = document.getElementById("test-results")
+   if (testResults) {
+     testResults.textContent += `\nTesting product: ${product.name} (${product.id})\n`
+   }
+
+   try {
+     // Setup calculator with this product
+     await this.setupCalculator("water_mixing", product.type, product.id)
+
+     // Test 1: Verify default values match manufacturer instructions
+     const defaultTest = await this.testProductDefaultValues(product)
+     this.logTestResult(`Default Values - ${product.name}`, defaultTest.passed, defaultTest.message)
+
+     // Test 2: Product to Water mode
+     const productToWaterTest = await this.testProductToWaterMode(product)
+     this.logTestResult(`Product to Water - ${product.name}`, productToWaterTest.passed, productToWaterTest.message)
+
+     // Test 3: Water to Product mode
+     const waterToProductTest = await this.testWaterToProductMode(product)
+     this.logTestResult(`Water to Product - ${product.name}`, waterToProductTest.passed, waterToProductTest.message)
+
+     // Test 4: Ratio Based mode
+     const ratioBasedTest = await this.testRatioBasedMode(product)
+     this.logTestResult(`Ratio Based - ${product.name}`, ratioBasedTest.passed, ratioBasedTest.message)
+
+     // Test 5: Unit conversion
+     const unitConversionTest = await this.testUnitConversion(product)
+     this.logTestResult(`Unit Conversion - ${product.name}`, unitConversionTest.passed, unitConversionTest.message)
+   } catch (error) {
+     console.error(`Error testing ${product.name}:`, error)
+     this.logTestResult(`Testing ${product.name}`, false, `Error: ${error.message}`)
+   }
+ },
+
+ // Test a direct application product
+ async testDirectApplicationProduct(product) {
+   const testResults = document.getElementById("test-results")
+   if (testResults) {
+     testResults.textContent += `\nTesting product: ${product.name} (${product.id})\n`
+   }
+
+   try {
+     // Setup calculator with this product
+     await this.setupCalculator("direct_application", product.type, product.id)
+
+     // Test 1: Verify default values match manufacturer instructions
+     const defaultTest = await this.testProductDefaultValues(product)
+     this.logTestResult(`Default Values - ${product.name}`, defaultTest.passed, defaultTest.message)
+
+     // Test 2: Rectangle area calculation
+     const rectangleTest = await this.testRectangleAreaCalculation(product)
+     this.logTestResult(`Rectangle Area - ${product.name}`, rectangleTest.passed, rectangleTest.message)
+
+     // Test 3: Circle area calculation
+     const circleTest = await this.testCircleAreaCalculation(product)
+     this.logTestResult(`Circle Area - ${product.name}`, circleTest.passed, circleTest.message)
+   } catch (error) {
+     console.error(`Error testing ${product.name}:`, error)
+     this.logTestResult(`Testing ${product.name}`, false, `Error: ${error.message}`)
+   }
+ },
+
+ // Test a water treatment product
+ async testWaterTreatmentProduct(product) {
+   const testResults = document.getElementById("test-results")
+   if (testResults) {
+     testResults.textContent += `\nTesting product: ${product.name} (${product.id})\n`
+   }
+
+   try {
+     // Setup calculator with this product
+     await this.setupCalculator("water_treatment", product.type, product.id)
+
+     // Test 1: Verify default values match manufacturer instructions
+     const defaultTest = await this.testProductDefaultValues(product)
+     this.logTestResult(`Default Values - ${product.name}`, defaultTest.passed, defaultTest.message)
+
+     // Test 2: Rectangular container calculation
+     const rectangularTest = await this.testRectangularContainerCalculation(product)
+     this.logTestResult(`Rectangular Container - ${product.name}`, rectangularTest.passed, rectangularTest.message)
+
+     // Test 3: Circular container calculation
+     const circularTest = await this.testCircularContainerCalculation(product)
+     this.logTestResult(`Circular Container - ${product.name}`, circularTest.passed, circularTest.message)
+
+     // Test 4: Manual volume entry
+     const manualVolumeTest = await this.testManualVolumeEntry(product)
+     this.logTestResult(`Manual Volume - ${product.name}`, manualVolumeTest.passed, manualVolumeTest.message)
+   } catch (error) {
+     console.error(`Error testing ${product.name}:`, error)
+     this.logTestResult(`Testing ${product.name}`, false, `Error: ${error.message}`)
+   }
+ },
+
+ // Helper function to setup calculator for testing
+ async setupCalculator(applicationMethod, productType, productId) {
+   return new Promise((resolve) => {
+     // Set application method
+     const applicationMethodSelect = document.getElementById("application-method")
+     applicationMethodSelect.value = applicationMethod
+     applicationMethodSelect.dispatchEvent(new Event("change"))
+
+     // Wait for product types to load
+     setTimeout(() => {
+       // Set product type
+       const productTypeSelect = document.getElementById("product-type")
+       productTypeSelect.value = productType
+       productTypeSelect.dispatchEvent(new Event("change"))
+
+       // Wait for product names to load
+       setTimeout(() => {
+         // Set product
+         const productNameSelect = document.getElementById("product-name-select")
+         productNameSelect.value = productId
+         productNameSelect.dispatchEvent(new Event("change"))
+
+         // Wait for product to load
+         setTimeout(resolve, 300)
+       }, 300)
+     }, 300)
+   })
+ },
+
+ // Test product default values
+ async testProductDefaultValues(product) {
+   return new Promise((resolve) => {
+     setTimeout(() => {
+       let passed = true
+       let message = ""
+
+       if (product.applicationMethod === "water_mixing") {
+         const productAmount = document.getElementById("product-amount").value
+         const productUnit = document.getElementById("product-unit").value
+         const waterAmount = document.getElementById("water-amount").value
+         const waterUnit = document.getElementById("water-unit").value
+
+         passed =
+           Math.abs(Number.parseFloat(productAmount) - product.defaultDosage) < 0.01 &&
+           productUnit === product.defaultDosageUnit &&
+           Math.abs(Number.parseFloat(waterAmount) - product.defaultWaterAmount) < 0.01 &&
+           waterUnit === product.defaultWaterUnit
+
+         message = `Expected: ${product.defaultDosage} ${product.defaultDosageUnit} for ${product.defaultWaterAmount} ${product.defaultWaterUnit}, Got: ${productAmount} ${productUnit} for ${waterAmount} ${waterUnit}`
+       } else if (product.applicationMethod === "direct_application") {
+         const applicationRate = document.getElementById("application-rate").value
+         const rateUnit = document.getElementById("rate-unit").value
+         const rateAreaUnit = document.getElementById("rate-area-unit").value
+
+         passed =
+           Math.abs(Number.parseFloat(applicationRate) - product.defaultDosage) < 0.01 &&
+           rateUnit === product.defaultDosageUnit &&
+           rateAreaUnit === product.defaultWaterUnit
+
+         message = `Expected: ${product.defaultDosage} ${product.defaultDosageUnit} per ${product.defaultWaterUnit}, Got: ${applicationRate} ${rateUnit} per ${rateAreaUnit}`
+       } else if (product.applicationMethod === "water_treatment") {
+         const dosageAmount = document.getElementById("dosage-amount").value
+         const dosageUnit = document.getElementById("dosage-unit").value
+
+         passed =
+           Math.abs(Number.parseFloat(dosageAmount) - product.defaultDosage) < 0.01 &&
+           dosageUnit === product.defaultDosageUnit
+
+         message = `Expected: ${product.defaultDosage} ${product.defaultDosageUnit}, Got: ${dosageAmount} ${dosageUnit}`
+       }
+
+       resolve({ passed, message })
+     }, 300)
+   })
+ },
+
+ // Test Product to Water mode
+ async testProductToWaterMode(product) {
+   return new Promise((resolve) => {
+     // Set calculation mode
+     const modeRadio = document.querySelector('input[name="calculation-mode"][value="product_to_water"]')
+     if (modeRadio) {
+       modeRadio.checked = true
+       modeRadio.dispatchEvent(new Event("change"))
+     }
+
+     // Set custom values
+     document.getElementById("product-amount").value = "10"
+     document.getElementById("water-amount").value = "2"
+
+     // Click calculate
+     document.getElementById("calculate-btn").click()
+
+     setTimeout(() => {
+       const metricResult = document.getElementById("metric-result").textContent
+       const passed = metricResult.includes("10") && metricResult.includes("2")
+
+       resolve({
+         passed,
+         message: `Result: ${metricResult}`,
+       })
+     }, 300)
+   })
+ },
+
+ // Test Water to Product mode
+ async testWaterToProductMode(product) {
+   return new Promise((resolve) => {
+     // Set calculation mode
+     const modeRadio = document.querySelector('input[name="calculation-mode"][value="water_to_product"]')
+     if (modeRadio) {
+       modeRadio.checked = true
+       modeRadio.dispatchEvent(new Event("change"))
+     }
+
+     // Set custom values
+     document.getElementById("water-amount-2").value = "5"
+     document.getElementById("ratio").value = "3"
+
+     // Click calculate
+     document.getElementById("calculate-btn").click()
+
+     setTimeout(() => {
+       const metricResult = document.getElementById("metric-result").textContent
+       const passed = metricResult.includes("15") && metricResult.includes("5")
+
+       resolve({
+         passed,
+         message: `Result: ${metricResult}`,
+       })
+     }, 300)
+   })
+ },
+
+ // Test Ratio Based mode
+ async testRatioBasedMode(product) {
+   return new Promise((resolve) => {
+     // Set calculation mode
+     const modeRadio = document.querySelector('input[name="calculation-mode"][value="ratio_based"]')
+     if (modeRadio) {
+       modeRadio.checked = true
+       modeRadio.dispatchEvent(new Event("change"))
+     }
+
+     // Set custom values
+     document.getElementById("ratio-2").value = "4"
+     document.getElementById("target-amount").value = "3"
+
+     // Click calculate
+     document.getElementById("calculate-btn").click()
+
+     setTimeout(() => {
+       const metricResult = document.getElementById("metric-result").textContent
+       const passed = metricResult.includes("12") && metricResult.includes("3")
+
+       resolve({
+         passed,
+         message: `Result: ${metricResult}`,
+       })
+     }, 300)
+   })
+ },
+
+ // Test Unit Conversion
+ async testUnitConversion(product) {
+   return new Promise((resolve) => {
+     // Set calculation mode
+     const modeRadio = document.querySelector('input[name="calculation-mode"][value="product_to_water"]')
+     if (modeRadio) {
+       modeRadio.checked = true
+       modeRadio.dispatchEvent(new Event("change"))
+     }
+
+     // Set initial values
+     document.getElementById("product-amount").value = "10"
+     document.getElementById("product-unit").value = "ml"
+     document.getElementById("water-amount").value = "1"
+     document.getElementById("water-unit").value = "l"
+
+     // Change units
+     document.getElementById("water-unit").value = "gal_uk"
+     document.getElementById("water-unit").dispatchEvent(new Event("change"))
+
+     setTimeout(() => {
+       const waterAmount = document.getElementById("water-amount").value
+       const passed = Math.abs(Number.parseFloat(waterAmount) - 0.22) < 0.01
+
+       resolve({
+         passed,
+         message: `Expected ~0.22 gallons, Got: ${waterAmount} gallons`,
+       })
+     }, 300)
+   })
+ },
+
+ // Test Rectangle Area Calculation
+ async testRectangleAreaCalculation(product) {
+   return new Promise((resolve) => {
+     // Set rectangle shape
+     const rectangleRadio = document.querySelector('input[name="area-shape"][value="rectangle"]')
+     if (rectangleRadio) {
+       rectangleRadio.checked = true
+       rectangleRadio.dispatchEvent(new Event("change"))
+     }
+
+     // Set dimensions
+     document.getElementById("length").value = "5"
+     document.getElementById("width").value = "4"
+     document.getElementById("area-unit").value = "m"
+
+     // Click calculate
+     document.getElementById("calculate-btn").click()
+
+     setTimeout(() => {
+       const totalAmountResult = document.getElementById("total-amount-result").textContent
+       const expectedAmount = product.defaultDosage * 20 // 5m × 4m = 20m²
+       const passed =
+         totalAmountResult.includes(expectedAmount.toString()) ||
+         totalAmountResult.includes(expectedAmount.toFixed(1)) ||
+         totalAmountResult.includes(expectedAmount.toFixed(2))
+
+       resolve({
+         passed,
+         message: `Expected ~${expectedAmount} ${product.defaultDosageUnit}, Got: ${totalAmountResult}`,
+       })
+     }, 300)
+   })
+ },
+
+ // Test Circle Area Calculation
+ async testCircleAreaCalculation(product) {
+   return new Promise((resolve) => {
+     // Set circle shape
+     const circleRadio = document.querySelector('input[name="area-shape"][value="circle"]')
+     if (circleRadio) {
+       circleRadio.checked = true
+       circleRadio.dispatchEvent(new Event("change"))
+     }
+
+     // Set dimensions
+     document.getElementById("diameter").value = "4"
+     document.getElementById("circle-unit").value = "m"
+
+     // Click calculate
+     document.getElementById("calculate-btn").click()
+
+     setTimeout(() => {
+       const totalAmountResult = document.getElementById("total-amount-result").textContent
+       const area = Math.PI * 2 * 2 // π × r²
+       const expectedAmount = product.defaultDosage * area
+
+       // Check if the result is approximately correct (within 5%)
+       const resultValue = Number.parseFloat(totalAmountResult)
+       const percentDifference = Math.abs((resultValue - expectedAmount) / expectedAmount)
+       const passed = percentDifference < 0.05
+
+       resolve({
+         passed,
+         message: `Expected ~${expectedAmount.toFixed(1)} ${product.defaultDosageUnit}, Got: ${totalAmountResult}`,
+       })
+     }, 300)
+   })
+ },
+
+// Test Rectangular Container\
+ async testRectangularContainerCalculation(product) {
+   return new Promise((resolve) => {
+     // Set rectangular shape
+     const rectangularRadio = document.querySelector('input[name="container-shape"][value="rectangular"]')
+     if (rectangularRadio) {
+       rectangularRadio.checked = true
+       rectangularRadio.dispatchEvent(new Event("change"))
+     }
+
+     // Set dimensions
+     document.getElementById("dimension-unit").value = "m"
+     document.getElementById("container-length").value = "2"
+     document.getElementById("container-width").value = "1"
+     document.getElementById("container-height").value = "0.5"
+
+     // Click calculate
+     document.getElementById("calculate-btn").click()
+
+     setTimeout(() => {
+       const volumeResult = document.getElementById("volume-result").textContent
+       const totalAmountResult = document.getElementById("water-total-amount-result").textContent
+
+       const expectedVolume = 2 * 1 * 0.5 * 1000 // 1000 liters
+       const expectedAmount = (product.defaultDosage * expectedVolume) / 1000
+
+       const volumePassed = volumeResult.includes("1000")
+       const amountPassed =
+         totalAmountResult.includes(expectedAmount.toString()) ||
+         totalAmountResult.includes(expectedAmount.toFixed(1)) ||
+         totalAmountResult.includes(expectedAmount.toFixed(2))
+
+       resolve({
+         passed: volumePassed && amountPassed,
+         message: `Volume: ${volumeResult}, Amount: ${totalAmountResult}`,
+       })
+     }, 300)
+   })
+ },
+
+ // Test Circular Container Calculation
+ async testCircularContainerCalculation(product) {
+   return new Promise((resolve) => {
+     // Set circular shape
+     const circularRadio = document.querySelector('input[name="container-shape"][value="circular"]')
+     if (circularRadio) {
+       circularRadio.checked = true
+       circularRadio.dispatchEvent(new Event("change"))
+     }
+
+     // Set dimensions
+     document.getElementById("dimension-unit").value = "m"
+     document.getElementById("container-diameter").value = "2"
+     document.getElementById("container-depth").value = "0.5"
+
+     // Click calculate
+     document.getElementById("calculate-btn").click()
+
+     setTimeout(() => {
+       const volumeResult = document.getElementById("volume-result").textContent
+       const totalAmountResult = document.getElementById("water-total-amount-result").textContent
+
+       const expectedVolume = Math.PI * 1 * 1 * 0.5 * 1000 // π × r² × h × 1000
+       const expectedAmount = (product.defaultDosage * expectedVolume) / 1000
+
+       // Check if results are approximately correct (within 5%)
+       const volumeValue = Number.parseFloat(volumeResult)
+       const volumePercentDiff = Math.abs((volumeValue - expectedVolume) / expectedVolume)
+       const volumePassed = volumePercentDiff < 0.05
+
+       const amountValue = Number.parseFloat(totalAmountResult)
+       const amountPercentDiff = Math.abs((amountValue - expectedAmount) / expectedAmount)
+       const amountPassed = amountPercentDiff < 0.05
+
+       resolve({
+         passed: volumePassed && amountPassed,
+         message: `Volume: ${volumeResult}, Amount: ${totalAmountResult}`,
+       })
+     }, 300)
+   })
+ },
+
+ // Test Manual Volume Entry
+ async testManualVolumeEntry(product) {
+   return new Promise((resolve) => {
+     // Set manual volume
+     document.getElementById("water-volume").value = "2000"
+     document.getElementById("water-volume-unit").value = "l"
+
+     // Click calculate
+     document.getElementById("calculate-btn").click()
+
+     setTimeout(() => {
+       const totalAmountResult = document.getElementById("water-total-amount-result").textContent
+       const expectedAmount = (product.defaultDosage * 2000) / 1000
+
+       const passed =
+         totalAmountResult.includes(expectedAmount.toString()) ||
+         totalAmountResult.includes(expectedAmount.toFixed(1)) ||
+         totalAmountResult.includes(expectedAmount.toFixed(2))
+
+       resolve({
+         passed,
+         message: `Expected: ${expectedAmount} ${product.defaultDosageUnit}, Got: ${totalAmountResult}`,
+       })
+     }, 300)
+   })
+ },
+
+ // Helper function to log test results
+ logTestResult(testName, passed, message) {
+   this.results.total++
+
+   if (passed) {
+     this.results.passed++
+     console.log(`%c✓ PASSED: ${testName}`, "color: green")
+   } else {
+     this.results.failed++
+     console.log(`%c✗ FAILED: ${testName}`, "color: red")
+   }
+
+   if (message) {
+     console.log(`  ${message}`)
+   }
+
+   // Add to test details
+   this.results.testDetails.push({
+     name: testName,
+     passed,
+     message,
+   })
+
+   // Update test results display
+   const testResults = document.getElementById("test-results")
+   if (testResults) {
+     testResults.textContent += `${passed ? "✓" : "✗"} ${testName}: ${passed ? "PASSED" : "FAILED"}\n`
+     if (message) {
+       testResults.textContent += `  ${message}\n`
+     }
+   }
+ },
+
+ // Report final results
+ reportResults() {
+   const passRate = ((this.results.passed / this.results.total) * 100).toFixed(2)
+   const duration = ((this.results.endTime - this.results.startTime) / 1000).toFixed(2)
+
+   console.log("%c📊 TEST RESULTS SUMMARY 📊", "font-size: 16px; font-weight: bold; color: #2e7d32;")
+   console.log(`Total Tests: ${this.results.total}`)
+   console.log(`Passed Tests: ${this.results.passed}`)
+   console.log(`Failed Tests: ${this.results.failed}`)
+   console.log(`Pass Rate: ${passRate}%`)
+   console.log(`Products Tested: ${this.results.productsTested}`)
+   console.log(`Duration: ${duration} seconds`)
+   console.log("Products by Category:", this.results.productsByCategory)
+
+   // Update test results display
+   const testResults = document.getElementById("test-results")
+   if (testResults) {
+     testResults.textContent += `\n📊 TEST RESULTS SUMMARY 📊\n`
+     testResults.textContent += `Total Tests: ${this.results.total}\n`
+     testResults.textContent += `Passed Tests: ${this.results.passed}\n`
+     testResults.textContent += `Failed Tests: ${this.results.failed}\n`
+     testResults.textContent += `Pass Rate: ${passRate}%\n`
+     testResults.textContent += `Products Tested: ${this.results.productsTested}\n`
+     testResults.textContent += `Duration: ${duration} seconds\n`
+   }
+ },
 }
-
-// Add event listener to run tests button - SIMPLIFIED VERSION
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("Setting up test button listener")
-
-  const testTrigger = document.getElementById("test-trigger")
-  const testContent = document.getElementById("test-content")
-
-  if (testTrigger && testContent) {
-    console.log("Test button and content found, adding click handler")
-
-    testTrigger.onclick = () => {
-      console.log("Test button clicked!")
-
-      // Toggle visibility
-      if (testContent.classList.contains("hidden")) {
-        testContent.classList.remove("hidden")
-        console.log("Test panel opened")
-
-        // Reset progress bar
-        const progressBar = document.getElementById("test-progress-bar")
-        const progressText = document.getElementById("test-progress-text")
-        if (progressBar && progressText) {
-          progressBar.style.width = "0%"
-          progressText.textContent = "0%"
-        }
-
-        // Clear previous test results
-        const testResults = document.getElementById("test-results")
-        if (testResults) {
-          testResults.textContent = "Running tests...\n\n"
-          console.log("Test results cleared")
-        }
-
-        // Run tests after a short delay
-        setTimeout(() => {
-          console.log("Starting test execution")
-          try {
-            TestRunner.runAllTests()
-          } catch (error) {
-            console.error("Error running tests:", error)
-            if (testResults) {
-              testResults.textContent += `\nError running tests: ${error.message}\n`
-            }
-          }
-        }, 100)
-      } else {
-        testContent.classList.add("hidden")
-        console.log("Test panel closed")
-      }
-    }
-  } else {
-    console.error("Test button or content not found")
-  }
-})
-// Modified script for iframe compatibility
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("Setting up iframe-compatible debug and test buttons")
-
-  // Direct click handlers instead of event listeners
-  setupDebugButton()
-  setupTestButton()
-
-  function setupDebugButton() {
-    const debugTrigger = document.getElementById("debug-trigger")
-    const debugContent = document.getElementById("debug-content")
-
-    if (debugTrigger && debugContent) {
-      // Remove any existing listeners and use direct onclick
-      debugTrigger.onclick = function () {
-        debugContent.classList.toggle("hidden")
-        const icon = this.querySelector(".icon")
-        if (icon) {
-          icon.textContent = debugContent.classList.contains("hidden") ? "▼" : "▲"
-        }
-
-        // Update debug info when opened
-        if (!debugContent.classList.contains("hidden")) {
-          updateDebugInfo()
-        }
-      }
-
-      console.log("Debug button handler attached")
-    }
-  }
-
-  function setupTestButton() {
-    const testTrigger = document.getElementById("test-trigger")
-    const testContent = document.getElementById("test-content")
-
-    if (testTrigger && testContent) {
-      // Remove any existing listeners and use direct onclick
-      testTrigger.onclick = function () {
-        testContent.classList.toggle("hidden")
-        const icon = this.querySelector(".icon")
-        if (icon) {
-          icon.textContent = testContent.classList.contains("hidden") ? "▼" : "▲"
-        }
-
-        // Run tests if panel is opened
-        if (!testContent.classList.contains("hidden")) {
-          // Reset progress bar
-          const progressBar = document.getElementById("test-progress-bar")
-          const progressText = document.getElementById("test-progress-text")
-          if (progressBar && progressText) {
-            progressBar.style.width = "0%"
-            progressText.textContent = "0%"
-          }
-
-          // Clear previous test results
-          const testResults = document.getElementById("test-results")
-          if (testResults) {
-            testResults.textContent = "Running tests...\n\n"
-          }
-
-          // Run tests after a short delay
-          setTimeout(() => {
-            try {
-              if (typeof TestRunner !== "undefined") {
-                TestRunner.runAllTests()
-              } else {
-                throw new Error("TestRunner is not defined")
-              }
-            } catch (error) {
-              console.error("Error running tests:", error)
-              if (testResults) {
-                testResults.textContent += "\nError running tests: " + error.message + "\n"
-              }
-            }
-          }, 100)
-        }
-      }
-
-      console.log("Test button handler attached")
-    }
-  }
-
-  // Dummy declarations to satisfy the linter.  These should be defined elsewhere.
-  function updateDebugInfo() {}
-  let TestRunner
-})
