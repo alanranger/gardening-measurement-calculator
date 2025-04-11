@@ -89,6 +89,8 @@ const APPLICATION_METHOD_DESCRIPTIONS = {
   water_mixing: "Products that need to be mixed with water before application",
   direct_application: "Products that are applied directly to soil or plants",
   water_treatment: "Products that are added directly to water bodies like ponds",
+  direct_application: "Products that are applied directly to soil or plants",
+  water_treatment: "Products that are added directly to water bodies like ponds",
 }
 
 // Product type hints
@@ -653,6 +655,83 @@ function setupEventListeners() {
     })
   })
 
+  // Test panel toggle - Direct click handler for iframe compatibility
+  const testTrigger = document.getElementById("test-trigger")
+  const testContent = document.getElementById("test-content")
+
+  if (testTrigger && testContent) {
+    testTrigger.onclick = function () {
+      testContent.classList.toggle("hidden")
+      const icon = this.querySelector(".icon")
+      if (icon) {
+        icon.textContent = testContent.classList.contains("hidden") ? "▼" : "▲"
+      }
+
+      // Run tests if panel is opened
+      if (!testContent.classList.contains("hidden")) {
+        // Reset progress bar
+        const progressBar = document.getElementById("test-progress-bar")
+        const progressText = document.getElementById("test-progress-text")
+        if (progressBar && progressText) {
+          progressBar.style.width = "0%"
+          progressText.textContent = "0%"
+        }
+
+        // Clear previous test results
+        const testResults = document.getElementById("test-results")
+        if (testResults) {
+          testResults.textContent = "Running tests...\n\n"
+        }
+
+        // Declare TestRunner before using it
+        let TestRunner
+
+        // Dynamically import the test runner module
+        import("./test-runner.js")
+          .then((module) => {
+            TestRunner = module.default // Assign the default export to TestRunner
+
+            // Run tests after a short delay
+            setTimeout(() => {
+              try {
+                TestRunner.runAllTests()
+              } catch (error) {
+                console.error("Error running tests:", error)
+                if (testResults) {
+                  testResults.textContent += "\nError running tests: " + error.message + "\n"
+                }
+              }
+            }, 100)
+          })
+          .catch((error) => {
+            console.error("Error importing test-runner.js:", error)
+            const testResults = document.getElementById("test-results")
+            if (testResults) {
+              testResults.textContent += "\nError importing test-runner.js: " + error.message + "\n"
+            }
+          })
+      }
+    }
+  }
+
+  // Copy test results button
+  const copyTestBtn = document.getElementById("copy-test-btn")
+  if (copyTestBtn) {
+    copyTestBtn.addEventListener("click", () => {
+      const testResults = document.getElementById("test-results")
+      if (testResults) {
+        navigator.clipboard
+          .writeText(testResults.textContent)
+          .then(() => {
+            alert("Test results copied to clipboard!")
+          })
+          .catch((err) => {
+            console.error("Could not copy text: ", err)
+          })
+      }
+    })
+  }
+
   // Check for debug parameter in URL
   const urlParams = new URLSearchParams(window.location.search)
   const debugMode = urlParams.get("debug") === "true"
@@ -663,179 +742,6 @@ function setupEventListeners() {
       debugContent.classList.remove("hidden")
       updateDebugInfo()
     }
-  }
-}
-
-// Function to set up product change listeners
-function setupProductChangeListeners() {
-  console.log("Setting up product change listeners")
-
-  // Product selection change
-  const productNameSelect = document.getElementById("product-name-select")
-  if (productNameSelect) {
-    productNameSelect.addEventListener("change", function () {
-      console.log("Product selection changed")
-      const selectedId = this.value
-      if (!selectedId) return
-
-      // Find the selected product
-      const allProducts = [...COMMON_PRODUCTS, ...AREA_TREATMENT_PRODUCTS, ...WATER_TREATMENT_PRODUCTS]
-      const selectedProduct = allProducts.find((p) => p.id === selectedId)
-
-      if (selectedProduct) {
-        // Display product instructions
-        const instructionsPanel = document.getElementById("product-instructions")
-        const instructionsText = document.getElementById("instructions-text")
-
-        if (instructionsPanel && instructionsText) {
-          instructionsText.textContent = selectedProduct.instructions
-          instructionsPanel.classList.remove("hidden")
-        }
-
-        // Set default values based on product
-        updateCalculatorInputs(selectedProduct)
-
-        // Trigger calculation to update results
-        performCalculation()
-      }
-    })
-  }
-
-  // Application method change
-  const applicationMethodSelect = document.getElementById("application-method")
-  if (applicationMethodSelect) {
-    applicationMethodSelect.addEventListener("change", function () {
-      console.log("Application method changed")
-      const selectedMethod = this.value
-
-      // Show the appropriate calculator inputs based on application method
-      showAppropriateCalculator(selectedMethod)
-
-      // Update product type options based on the selected application method
-      updateProductTypeOptions(selectedMethod)
-
-      // Clear results when changing application method
-      clearResults()
-    })
-  }
-
-  // Measurement type change
-  const measurementTypeRadios = document.querySelectorAll('input[name="measurement-type"]')
-  measurementTypeRadios.forEach((radio) => {
-    radio.addEventListener("change", function () {
-      console.log("Measurement type changed")
-      if (this.value === "cap") {
-        document.getElementById("cap-size-group").classList.remove("hidden")
-      } else {
-        document.getElementById("cap-size-group").classList.add("hidden")
-      }
-
-      // Update ratio labels
-      const productUnit = this.value === "weight" ? "g" : this.value === "cap" ? "cap" : "ml"
-      if (document.getElementById("water-unit-2")) {
-        updateRatioLabels(productUnit, document.getElementById("water-unit-2").value)
-      }
-      if (document.getElementById("target-unit")) {
-        updateRatioLabels(productUnit, document.getElementById("target-unit").value, true)
-      }
-
-      // Recalculate if values are already entered
-      if (document.getElementById("product-amount").value && document.getElementById("water-amount").value) {
-        performCalculation()
-      }
-    })
-  })
-
-  // Calculation mode change
-  const calculationModeRadios = document.querySelectorAll('input[name="calculation-mode"]')
-  calculationModeRadios.forEach((radio) => {
-    radio.addEventListener("change", () => {
-      // Recalculate when mode changes
-      if (
-        (document.getElementById("product-amount").value && document.getElementById("water-amount").value) ||
-        (document.getElementById("water-amount-2").value && document.getElementById("ratio").value) ||
-        (document.getElementById("target-amount").value && document.getElementById("ratio-2").value)
-      ) {
-        performCalculation()
-      }
-    })
-  })
-
-  // Add input listeners to auto-calculate when values change
-  const calculatorInputs = document.querySelectorAll('input[type="number"], select')
-  calculatorInputs.forEach((input) => {
-    input.addEventListener("change", () => {
-      // Don't automatically calculate on every change to avoid overwhelming the user
-      // This logic can be adjusted based on UX needs
-      const calculationMode =
-        document.querySelector('input[name="calculation-mode"]:checked')?.value || "product_to_water"
-
-      // Check if there are sufficient inputs to perform calculation
-      let shouldCalculate = false
-
-      if (calculationMode === "product_to_water") {
-        const productAmount = document.getElementById("product-amount").value
-        const waterAmount = document.getElementById("water-amount").value
-        shouldCalculate = productAmount && waterAmount
-      } else if (calculationMode === "water_to_product") {
-        const waterAmount = document.getElementById("water-amount-2").value
-        const ratio = document.getElementById("ratio").value
-        shouldCalculate = waterAmount && ratio
-      } else if (calculationMode === "ratio_based") {
-        const targetAmount = document.getElementById("target-amount").value
-        const ratio = document.getElementById("ratio-2").value
-        shouldCalculate = targetAmount && ratio
-      }
-
-      if (shouldCalculate) {
-        performCalculation()
-      }
-    })
-  })
-}
-
-// Function to clear results
-function clearResults() {
-  // Clear water mixing results
-  document.getElementById("metric-result").textContent = "-"
-  document.getElementById("imperial-result").textContent = "-"
-  document.getElementById("alternative-result").textContent = "-"
-  document.getElementById("cap-result-card").classList.add("hidden")
-  document.getElementById("scoop-result-card").classList.add("hidden")
-  document.getElementById("watering-can-section").classList.add("hidden")
-
-  // Clear direct application results
-  if (document.getElementById("total-amount-result")) {
-    document.getElementById("total-amount-result").textContent = "-"
-  }
-  if (document.getElementById("alternative-amount-result")) {
-    document.getElementById("alternative-amount-result").textContent = "-"
-  }
-  if (document.getElementById("metric-rate-result")) {
-    document.getElementById("metric-rate-result").textContent = "-"
-  }
-  if (document.getElementById("imperial-rate-result")) {
-    document.getElementById("imperial-rate-result").textContent = "-"
-  }
-
-  // Clear water treatment results
-  if (document.getElementById("water-total-amount-result")) {
-    document.getElementById("water-total-amount-result").textContent = "-"
-  }
-  if (document.getElementById("water-metric-dosage-result")) {
-    document.getElementById("water-metric-dosage-result").textContent = "-"
-  }
-  if (document.getElementById("water-imperial-dosage-result")) {
-    document.getElementById("water-imperial-dosage-result").textContent = "-"
-  }
-  if (document.getElementById("water-alternative-dosage-result")) {
-    document.getElementById("water-alternative-dosage-result").textContent = "-"
-  }
-
-  // Remove any warning messages
-  const warningElement = document.getElementById("ratio-warning")
-  if (warningElement) {
-    warningElement.remove()
   }
 }
 
@@ -1338,8 +1244,10 @@ function calculateWaterMixing() {
     document.getElementById("scoop-result-card").classList.add("hidden")
   }
 
+  // Get the user-specified watering can size
+  const wateringCanSize = Number.parseFloat(document.getElementById("watering-can-size").value || "9")
+
   // Calculate for standard watering can (8-10 litres)
-  const wateringCanSize = 9 // Average 9 litres
   let wateringCanAmount
 
   // Calculate the amount needed for a watering can based on the ratio
@@ -1432,10 +1340,10 @@ function calculateWaterMixing() {
   const userRequestedResult = document.createElement("div")
   userRequestedResult.className = "result-card"
   userRequestedResult.innerHTML = `
-   <h3>Your Requested Amount</h3>
-   <p>${productAmount.toFixed(2)} ${productUnit} for ${waterAmount} ${waterUnit}</p>
-   <p class="hint">Based on ${ratio.toFixed(3)} ${productUnit} per ${waterUnit}</p>
- `
+    <h3>Your Requested Amount</h3>
+    <p>${productAmount.toFixed(2)} ${productUnit} for ${waterAmount} ${waterUnit}</p>
+    <p class="hint">Based on ${ratio.toFixed(3)} ${productUnit} per ${waterUnit}</p>
+  `
 
   // Find the results container and add the new card
   const resultsContainer = document.querySelector("#water-mixing-results .results")
@@ -1596,7 +1504,7 @@ function calculateWaterTreatment() {
 
   // Calculate results
   const metricResult = `${productAmount.toFixed(precision)} ${getFormattedUnitDisplay(dosageUnit)} for ${finalVolume.toFixed(1)} litres`
-  const imperialResult = `${convertMetricToImperial(productAmount, dosageUnit).toFixed(precision)} ${getImperialUnit(dosageUnit)} for ${(finalVolume * 0.22).toFixed(2)} gallons (UK)`
+  const imperialResult = `${convertMetricToImperial(productAmount, dosageUnit).toFixed(precision)} ${getImperialUnit(dosageUnit)} for ${convertMetricToImperial(finalVolume, "l").toFixed(2)} gallons UK`
   const alternativeResult = `${convertToTeaspoons(productAmount, dosageUnit).toFixed(precision)} teaspoons for ${finalVolume.toFixed(1)} litres`
 
   // Update results
@@ -1757,7 +1665,7 @@ STEP 4: MEASUREMENT REQUIREMENTS
         } else if (waterUnit === "ml") {
           ratioPerLiter = ratio * 1000 // Convert from per ml to per liter
         } else if (waterUnit === "gal_uk") {
-          ratioPerLiter = ratio / 4.55 // Convert from per gallon to per liter
+          ratioPerLiter = ratio / 4.55 // Convert ratio from per gallon to per liter
         }
 
         // Convert water amount to liters for calculation
@@ -1790,7 +1698,7 @@ STEP 4: MEASUREMENT REQUIREMENTS
         } else if (waterUnit === "ml") {
           ratioPerLiter = ratio * 1000 // Convert from per ml to per liter
         } else if (waterUnit === "gal_uk") {
-          ratioPerLiter = ratio / 4.55 // Convert from per gallon to per liter
+          ratioPerLiter = ratio / 4.55 // Convert ratio from per gallon to per liter
         }
 
         // Convert water amount to liters for calculation
@@ -2029,15 +1937,9 @@ Calculation:
         } else {
           finalVolume = manualWaterVolume
         }
-        if (typeof finalVolume === "number" && !isNaN(finalVolume)) {
-          debugString += `Manual Water Volume: ${manualWaterVolume} ${getFormattedUnitDisplay(waterVolumeUnit)} (${finalVolume.toFixed(2)} litres)
+        debugString += `Manual Water Volume: ${manualWaterVolume} ${getFormattedUnitDisplay(waterVolumeUnit)} (${finalVolume.toFixed(2)} litres)
 
 `
-        } else {
-          debugString += `Manual Water Volume: Invalid volume
-
-`
-        }
       }
 
       // Calculate product amount
@@ -2151,4 +2053,24 @@ STEP 5: RESULTS
   }
 
   debugInfo.textContent = debugString
+}
+
+// Function to set up event listeners for product changes
+function setupProductChangeListeners() {
+  const productNameSelect = document.getElementById("product-name-select")
+
+  if (productNameSelect) {
+    productNameSelect.addEventListener("change", function () {
+      const selectedId = this.value
+
+      // Find the selected product
+      const allProducts = [...COMMON_PRODUCTS, ...AREA_TREATMENT_PRODUCTS, ...WATER_TREATMENT_PRODUCTS]
+      const selectedProduct = allProducts.find((p) => p.id === selectedId)
+
+      if (selectedProduct) {
+        // Update calculator inputs based on selected product
+        updateCalculatorInputs(selectedProduct)
+      }
+    })
+  }
 }
